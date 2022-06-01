@@ -23,18 +23,18 @@ class _ReportsState extends State<Reports> {
       body: DefaultTabController(
         length: 3,
         child: Scaffold(
-          backgroundColor: Constants.backgroundColorlight.withOpacity(1),
+          backgroundColor: Constants.backgroundColor,
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             toolbarHeight: 60,
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             flexibleSpace: ClipPath(
-              clipper: Customshape(),
+              // clipper: Customshape(),
               child: Container(
                 height: 200,
                 width: MediaQuery.of(context).size.width,
-                color: Constants.blue.withOpacity(0.7),
+                // color: Constants.blue.withOpacity(0.7),
                 child: TabBar(
                   indicatorColor: Constants.blue,
                   labelColor: Constants.white.withOpacity(0.8),

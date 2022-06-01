@@ -27,7 +27,7 @@ class _landingScreenState extends State<landingScreen> {
         showShadow: true,
         angle: 0.0,
         // clipMainScreen: true,
-        backgroundColor: Colors.grey,
+        // backgroundColor: Colors.grey,
         slideWidth: MediaQuery.of(context).size.width *  0.65, //(ZoomDrawer.isRTL() ? .45 :
         openCurve: Curves.fastOutSlowIn,
         closeCurve: Curves.bounceIn,

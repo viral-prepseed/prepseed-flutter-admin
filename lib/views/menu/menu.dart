@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:prepseed/views/execute/quantized_sheet.dart';
+import 'package:prepseed/views/execute/tests.dart';
 import 'package:prepseed/views/home/mainScreen.dart';
+import 'package:prepseed/views/login/prepseed_loginScreen.dart';
 import 'package:prepseed/views/stats_analysis/analysis/analysis.dart';
 import 'package:prepseed/views/stats_analysis/reports/reports.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +16,20 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  var username,role,email;
+
+  @override
+  void initState() {
+    fetchPref();
+  }
+
+  fetchPref() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    username = prefs.getString('username');
+    role = prefs.getString('role');
+    email = prefs.getString('email');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,11 +87,15 @@ class _MenuScreenState extends State<MenuScreen> {
               ListTile(
                 title: Text("Quantized Sheet", style: TextStyle(color: Constants.black,)),
                 onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => quantized_sheet()));
                 },
               ),
               ListTile(
                 title: Text("Tests", style: TextStyle(color: Constants.black,)),
                 onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => test()));
                 },
               ),
               SizedBox(
@@ -85,25 +107,30 @@ class _MenuScreenState extends State<MenuScreen> {
                 thickness: 1,
               ),
               SizedBox(
-                height:
-                20.0,
+                height: 20.0,
               ),
-              ListTile(
-                title: Text("Contact Us", style: TextStyle(color: Constants.black,)),
+              /*ListTile(
+                title: Text(username, style: TextStyle(color: Constants.black,)),
                 onTap: () {
                 },
               ),
               ListTile(
-                title: Text("About Us", style: TextStyle(color: Constants.black,)),
+                title: Text(email, style: TextStyle(color: Constants.black,)),
                 onTap: () {
                 },
-              ),
+              ),*/
               Container(
                 margin: EdgeInsets.only(right: 300.0),
                 child: ListTile(
                   tileColor: Constants.black,
                   title: Text("Logout", style: TextStyle(color: Colors.red,)),
-                  // onTap: () => _handleLogout(context)
+                  onTap: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.clear();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => prepSeed_login()
+                    ));
+                  }
 
                 ),
               ),

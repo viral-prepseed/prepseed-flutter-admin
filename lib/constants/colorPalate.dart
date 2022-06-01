@@ -54,7 +54,7 @@ class Constants {
 
 
   static const Color dark_grey = Color(0xFFEDF0F2);
-  static const Color grey = Color(0xFFFFFFFF);
+  static const Color grey = Color(0xff9e9e9e);
   static const Color nearlyBlue = Color(0xFF00B6F0);
   static const Color nearlyBlack = Color(0xFF213333);
   static const Color primaryBlue = Color(0xFF0576B4);

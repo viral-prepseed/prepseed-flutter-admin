@@ -8,12 +8,21 @@ import 'package:prepseed/views/home/landingScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/strings.dart';
 import '../../constants/colorPalate.dart';
+import 'prepseed_loginScreen.dart';
 
+extension EmailValidator on String {
+  bool isValidEmail() {
+    return RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(this);
+  }
+}
 
 class signIn_signUp extends StatefulWidget{
   final String clientname;
+  final String clientlogo;
 
-  signIn_signUp({required this.clientname});
+  signIn_signUp({required this.clientname, required this.clientlogo});
 
   @override
   State<StatefulWidget> createState() {
@@ -27,7 +36,8 @@ class _signIn_signUp extends State<signIn_signUp>{
 
   String? errormsg;
   bool? error, showprogress;
-  String? username, password;
+  bool _passwordVisible = false;
+  String? email, password;
 
   var _username = TextEditingController();
   var _password = TextEditingController();
@@ -37,55 +47,65 @@ class _signIn_signUp extends State<signIn_signUp>{
 
 
   startLogin() async {
-    String apiurl = Strings.otp_url;
-    // print(password);
-    username = _username.text.trim();
+    String apiurl = Strings.signIn;
+    email = _username.text.trim();
+    password = _password.text.trim();
 
-    var response = await http.post(Uri.parse(apiurl), body: {
-      'mobile_no': username, //get the username text
-      'activated': 'false'
-    });
+    print(email);
+    print(password);
+
+   var bodydata = {
+      "user":
+        {
+          "email":email,
+          "password": password
+        },
+      "portal":"preparation"
+    };
+
+    Map headers = {
+      'Content-type' : 'application/json',
+    };
+
+    var response = await http.post(Uri.parse(apiurl),
+        headers: {
+          'Content-type' : 'application/json',
+        },
+        body: json.encode(bodydata));
 
     if(response.body.isNotEmpty) {
-      print(json.decode(response.body).toString());
+      var jsondatas = (response.statusCode);
+      print(jsondatas);
     }
     if(response.statusCode == 200){
       var jsondata = json.decode(response.body);
-      // print(jsondata);
-      if(jsondata["error"]){
-        setState(() {
-          showprogress = false;
-          error = true;
-          errormsg = jsondata["message"];
-        });
-      }else{
-        if(jsondata["success"]){
-          setState(() {
-            error = false;
-            showprogress = false;
-          });
+      print(jsondata);
+
+      setState(() {
+        error = false;
+        showprogress = false;
+      });
 
 
 
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString('${username!}_otpsent', '${jsondata["value"]}');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('username',jsondata["user"]["username"]);
+      prefs.setString('userId',jsondata["user"]["_id"]);
+      prefs.setString('role',jsondata["user"]["role"]);
+      prefs.setString('email',jsondata["user"]["email"]);
+      prefs.setString('email',jsondata["user"]["email"]);
+      prefs.setString('token',jsondata["token"]);
+        prefs.setString('phaseId',jsondata["user"]["subscriptions"][0]["subgroups"][0]["phases"][0]["phase"]["_id"]);
 
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => landingScreen()
+      ));
 
-/*          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => otpPage(mobile_no: username!,)
-          ));*/
-
-        }else{
-          showprogress = false; //don't show progress indicator
-          error = true;
-          errormsg = "Something went wrong.";
-        }
-      }
     }else{
       setState(() {
         showprogress = false; //don't show progress indicator
         error = true;
-        errormsg = "Error during connecting to server.";
+        errormsg = "Please enter correct credentials.";
       });
     }
 
@@ -96,17 +116,13 @@ class _signIn_signUp extends State<signIn_signUp>{
 
   @override
   void initState() {
-
-
-    username = "";
+    email = "";
     password = "";
     errormsg = "";
     error = false;
     showprogress = false;
-
-
+    _passwordVisible = false;
     super.initState();
-
   }
 
   @override
@@ -123,14 +139,13 @@ class _signIn_signUp extends State<signIn_signUp>{
           _passwordFocusNode.unfocus();
         },
         child: Scaffold(
-          backgroundColor: Constants.backgroundColor,
+          // backgroundColor: Constants.backgroundColor,
           body: Stack(
             children: [
               SingleChildScrollView(
                 child: Container(
                   constraints: BoxConstraints(
                       minHeight:MediaQuery.of(context).size.height
-                    //set minimum height equal to 100% of VH
                   ),
                   width:MediaQuery.of(context).size.width,
                   //make width of outer wrapper to 100%
@@ -148,43 +163,42 @@ class _signIn_signUp extends State<signIn_signUp>{
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children:<Widget>[
                         SizedBox(height: 70,),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Wanna change Institute/Collage/Academy?'),
+                            TextButton(onPressed: () async {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              await prefs.clear();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) => prepSeed_login()
+                              ));
+                            }, child: Text('here'),)
+                          ],
+                        ),
+
                         Container(
                           width: 100,
                           height: 100,
                           decoration: BoxDecoration(
-                            color: Colors.blue
+                            // color: Colors.blue
                           ),
-                          child: Text('Client Logo'),
+                          child: Image(
+                            image: NetworkImage(widget.clientlogo),
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                        /*Image(
-                          image: NetworkImage("https:///API/app_icons/task-dark.png"),
-                          fit: BoxFit.fill,
-                        ),*/
+                        /**/
                         Padding(
                           padding: const EdgeInsets.only(left: 25,right: 25),
                           child: Container(
                             child: Text("Sign in to "+widget.clientname,style: GoogleFonts.poppins(
-                                color: Constants.white.withOpacity(1),fontWeight: FontWeight.w500, fontSize: 25
+                                color: Constants.white.withOpacity(1),fontWeight: FontWeight.w500, fontSize: 20
                             ),),
                           ),
                         ),
-                        /*Container(
-                    child: Image(
-                      image: NetworkImage("https:///API/app_icons/task-dark.png"),
-                      fit: BoxFit.fill,
-                    )
-                  ),*/
-
-                        /* Padding(
-                    padding: const EdgeInsets.only(top: 15,bottom: 15, left: 28.0,right: 28.0),
-                    child: Container(
-                      margin: EdgeInsets.only(top:10),
-                      child: Text("Login", style: GoogleFonts.poppins(
-                          color:Constants.white.withOpacity(1),fontSize: 25,fontWeight: FontWeight.bold
-                      ),), //subtitle text
-                    ),
-                  ),*/
-                        // SizedBox(height: 70,),
                         Form(
                           key: _signIn_signUpFormKey,
                           child: Column(
@@ -206,15 +220,15 @@ class _signIn_signUp extends State<signIn_signUp>{
                                       //else set empty container as child
                                     ),
 
-                                    Text('Email', style: GoogleFonts.poppins(color: Constants.black,fontWeight: FontWeight.w500,fontSize: 18),),
+                                    Text('Email', style: GoogleFonts.poppins(color: Constants.black,fontWeight: FontWeight.w500,fontSize: 16),),
                                     TextFormField(
                                       controller: _username,
                                       focusNode: _usernameFocusNode,
-                                      validator: (value) => value!.isEmpty ? 'mobile number cannot be blank' : (value.length < 10) ?
-                                      'Please enter valid mobile number' : null,
-                                      keyboardType: TextInputType.number,
+                                      validator: (value) => value!.isEmpty ? 'Email cannot be blank' : (value.isValidEmail()) ?
+                                      null : 'Please enter valid email ID',
+                                      keyboardType: TextInputType.text,
                                       cursorColor: Constants.white,
-                                      style: GoogleFonts.poppins(fontSize: 19,color: Constants.white,
+                                      style: GoogleFonts.poppins(fontSize: 17,color: Constants.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       onChanged: (String value) {
@@ -227,12 +241,12 @@ class _signIn_signUp extends State<signIn_signUp>{
                                         enabledBorder: UnderlineInputBorder(
                                           borderRadius: BorderRadius.circular(6.0),
                                           borderSide: const BorderSide(
-                                            color: Colors.white,
+                                            color: Constants.grey,
                                           ),
                                         ),
                                         counterText: '',
                                         hintText: "julie@example.com",
-                                        hintStyle: GoogleFonts.poppins(fontSize: 19,color: Constants.white,
+                                        hintStyle: GoogleFonts.poppins(fontSize: 17,color: Constants.white,
                                           fontWeight: FontWeight.w500,
                                         ),
                                         errorBorder: UnderlineInputBorder(
@@ -250,12 +264,12 @@ class _signIn_signUp extends State<signIn_signUp>{
                                       //show error message here
                                       margin: EdgeInsets.only(top:30),
                                       padding: EdgeInsets.all(5),
-                                      child: (error == true) ? errmsg(errormsg!):Container(),
+                                      // child: (error == true) ? errmsg(errormsg!):Container(),
                                       //if error == true then show error message
                                       //else set empty container as child
                                     ),
 
-                                    Text('Password', style: GoogleFonts.poppins(color: Constants.black,fontWeight: FontWeight.w500,fontSize: 18),),
+                                    Text('Password', style: GoogleFonts.poppins(color: Constants.black,fontWeight: FontWeight.w500,fontSize: 16),),
                                     TextFormField(
                                       controller: _password,
                                       focusNode: _passwordFocusNode,
@@ -263,7 +277,9 @@ class _signIn_signUp extends State<signIn_signUp>{
                                       'Please enter valid password' : null,
                                       keyboardType: TextInputType.text,
                                       cursorColor: Constants.white,
-                                      style: GoogleFonts.poppins(fontSize: 19,color: Constants.white,
+                                      obscureText: !_passwordVisible,
+                                      obscuringCharacter: '*',
+                                      style: GoogleFonts.poppins(fontSize: 17,color: Constants.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       onChanged: (String value) {
@@ -273,15 +289,25 @@ class _signIn_signUp extends State<signIn_signUp>{
                                       },
                                       decoration: InputDecoration(
                                         // border: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            _passwordVisible
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                            color: Theme.of(context).primaryColorDark,
+                                          ), onPressed: () { setState(() {
+                                          _passwordVisible = !_passwordVisible;
+                                        }); },
+                                        ),
                                         enabledBorder: UnderlineInputBorder(
                                           borderRadius: BorderRadius.circular(6.0),
                                           borderSide: const BorderSide(
-                                            color: Colors.white,
+                                            color: Constants.grey,
                                           ),
                                         ),
                                         counterText: '',
                                         hintText: "Enter your password",
-                                        hintStyle: GoogleFonts.poppins(fontSize: 19,color: Constants.white,
+                                        hintStyle: GoogleFonts.poppins(fontSize: 17,color: Constants.white,
                                           fontWeight: FontWeight.w500,
                                         ),
                                         errorBorder: UnderlineInputBorder(
@@ -292,24 +318,6 @@ class _signIn_signUp extends State<signIn_signUp>{
                                         ),
                                       ),
                                     ),
-
-                                    /*CustomFormField(
-                                isLabelEnabled: false,
-                                controller: _username,
-                                focusNode: _usernameFocusNode,
-                                keyboardType: TextInputType.number,
-                                inputAction: TextInputAction.next,
-                                label: 'Mobile No.',
-                                hint: 'Enter Mobile No.',
-                                validator: (value) => Validator.validateField(
-                                  value: value,
-                                ),
-                              ),*/
-
-
-                                    // SizedBox(height:  MediaQuery.of(context).size.height - 500,),
-
-
                                   ],
                                 ),
                               ),
@@ -317,20 +325,6 @@ class _signIn_signUp extends State<signIn_signUp>{
                             ],
                           ),
                         ),
-
-
-                        /*Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.only(top:20),
-                    child: InkResponse(
-                        onTap:(){
-                          print('tapped...');
-                        },
-                        child:Text("Forgot Password? Troubleshoot",
-                          style: TextStyle(color:Colors.white, fontSize:18),
-                        )
-                    ),
-                  )*/
                       ]),
                 ),
               ),
@@ -349,20 +343,11 @@ class _signIn_signUp extends State<signIn_signUp>{
                         elevation: 0,
                         onPressed: (){
                           setState(() {
-                            //show progress indicator on click
-                            // if (_signIn_signUpFormKey.currentState!.validate()) {
-                              // startLogin();
+                            if (_signIn_signUpFormKey.currentState!.validate()) {
                               showprogress = true;
-
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) => landingScreen()
-                              ));
-                            // }
-
+                              startLogin();
+                            }
                           });
-
-
-
                         },
                         child: (showprogress == true)?
                         SizedBox(

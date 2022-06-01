@@ -16,23 +16,22 @@ class Analysis extends StatefulWidget {
 class _AnalysisState extends State<Analysis> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DefaultTabController(
+    return Scaffold(
+      body: DefaultTabController(
         length: 2,
         child: Scaffold(
-          backgroundColor: Constants.backgroundColorlight.withOpacity(1),
+          backgroundColor: Constants.backgroundColor,
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             toolbarHeight: 60,
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             flexibleSpace: ClipPath(
-              clipper: Customshape(),
+              // clipper: Customshape(),
               child: Container(
                 height: 200,
                 width: MediaQuery.of(context).size.width,
-                color: Constants.blue.withOpacity(0.7),
+                // color: Constants.blue.withOpacity(0.7),
                 child: TabBar(
                   indicatorColor: Constants.blue,
                   labelColor: Constants.white.withOpacity(0.8),
@@ -93,7 +92,6 @@ class Customshape extends CustomClipper<Path>{
   }
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
     return true;
   }
 }
