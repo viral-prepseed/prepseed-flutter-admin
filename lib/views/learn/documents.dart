@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:prepseed/views/menu/menu_widget.dart';
+import '../../constants/colorPalate.dart';
 
 class documents extends StatefulWidget {
   const documents({Key? key}) : super(key: key);
@@ -10,6 +12,13 @@ class documents extends StatefulWidget {
 class _documentsState extends State<documents> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Constants.backgroundColor,
+        elevation: 0,
+        leading: MenuWidget(),
+      ),
+      body: Container(),
+    );
   }
 }

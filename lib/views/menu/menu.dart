@@ -1,16 +1,48 @@
+import 'dart:ffi';
 import 'package:flutter/material.dart';
-import 'package:prepseed/views/execute/quantized_sheet.dart';
-import 'package:prepseed/views/execute/tests.dart';
-import 'package:prepseed/views/home/mainScreen.dart';
-import 'package:prepseed/views/login/prepseed_loginScreen.dart';
-import 'package:prepseed/views/stats_analysis/analysis/analysis.dart';
-import 'package:prepseed/views/stats_analysis/reports/reports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../main.dart';
+import '../../model/menuItem.dart';
+import '../login/prepseed_loginScreen.dart';
+
+class MenuItems{
+  static const home = MenuItem('Home',Icons.widgets_outlined);
+  static const analysis = MenuItem('Analysis',Icons.analytics_outlined);
+  static const reports = MenuItem('Reports',Icons.article_outlined);
+  static const videos = MenuItem('Videos',Icons.video_call_outlined);
+  static const documents = MenuItem('Documents',Icons.wysiwyg_outlined);
+  static const assignments = MenuItem('Assignments',Icons.book_outlined);
+  static const practice = MenuItem('Practice',Icons.document_scanner_rounded);
+  static const quantizedSheet = MenuItem('Quantized Sheet',Icons.assignment_outlined);
+  static const Tests = MenuItem('Tests',Icons.assignment_outlined);
+  // static const logout = MenuItem('Logout',Icons.logout);
+
+  static const all = <MenuItem>[
+    home,
+    analysis,
+    reports,
+    videos,
+    documents,
+    assignments,
+    practice,
+    quantizedSheet,
+    Tests,
+    // logout
+  ];
+
+}
+
+
 class MenuScreen extends StatefulWidget {
+  final MenuItem currentItem;
+  final ValueChanged<MenuItem> onSelectedItem;
+
+  const MenuScreen({Key? key, required this.currentItem, required this.onSelectedItem}) : super(key: key);
+
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
@@ -22,6 +54,18 @@ class _MenuScreenState extends State<MenuScreen> {
   void initState() {
     fetchPref();
   }
+
+  Widget buildMenuItem(MenuItem item) => ListTileTheme(
+    selectedColor: Colors.black87,
+    child: ListTile(
+      selectedTileColor: Constants.backgroundColorTrans,
+      selected: widget.currentItem == item,
+      minLeadingWidth: 20,
+      leading: Icon(item.icon),
+      title: Text(item.title),
+      onTap: () => widget.onSelectedItem(item),
+    ),
+  );
 
   fetchPref() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -45,7 +89,86 @@ class _MenuScreenState extends State<MenuScreen> {
                 ],
               )
           ),
-          child: ListView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Spacer(),
+              ...MenuItems.all.map(buildMenuItem).toList(),
+              Divider(),
+              ListTile(
+                selectedTileColor: Constants.backgroundColorTrans,
+                // selected: widget.currentItem == item,
+                minLeadingWidth: 20,
+                leading: Icon(Icons.logout),
+                title: Text('Logout'),
+                onTap: () {
+                  logout();
+                },
+              ),
+              Spacer(),
+            ],
+          )
+        ),
+      ),
+    );
+  }
+}
+
+logout() {
+  Future.delayed(Duration.zero, () async {
+    return showDialog(context: navigatorKey.currentContext!, builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+        elevation: 16,
+        child: Wrap(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  Text('Are you Sure?',style: GoogleFonts.poppins(color: Constants.black,),),
+                  Divider(color: Constants.black,thickness: 1,),
+                  IntrinsicHeight(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            style: ButtonStyle(elevation: MaterialStateProperty.all<double>(0.0),
+                                foregroundColor: MaterialStateProperty.all<Color>(Constants.black),
+                                backgroundColor:  MaterialStateProperty.all<Color>(Colors.transparent)),
+                            onPressed: () { Navigator.of(context).pop(); },
+                            child: const Text('Cancel')),
+                        VerticalDivider(color: Constants.black,thickness: 1,),
+                        ElevatedButton(onPressed: () async {
+                          /*setState(() {
+                          currentItem = MenuItems.home;
+                        });*/
+                          SharedPreferences prefs = await SharedPreferences
+                              .getInstance();
+                          await prefs.clear();
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => prepSeed_login()
+                          ));
+                        },
+                            style: ButtonStyle(elevation: MaterialStateProperty.all<double>(0.0),
+                                foregroundColor: MaterialStateProperty.all<Color>(Constants.black),
+                                backgroundColor:  MaterialStateProperty.all<Color>(Colors.transparent)),
+                            child: const Text('Yes'))
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  });
+}
+
+/*ListView(
             padding: EdgeInsets.symmetric(vertical: 70),
             children: <Widget>[
 
@@ -82,6 +205,13 @@ class _MenuScreenState extends State<MenuScreen> {
               ListTile(
                 title: Text("Assignments", style: TextStyle(color: Constants.black,)),
                 onTap: () {
+                },
+              ),
+              ListTile(
+                title: Text("Practice", style: TextStyle(color: Constants.black,)),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => quantized_sheet()));
                 },
               ),
               ListTile(
@@ -139,9 +269,4 @@ class _MenuScreenState extends State<MenuScreen> {
                 20.0,
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+          ),*/

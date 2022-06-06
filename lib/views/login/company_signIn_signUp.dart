@@ -8,6 +8,7 @@ import 'package:prepseed/views/home/landingScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/strings.dart';
 import '../../constants/colorPalate.dart';
+import '../../helper/api/functions.dart';
 import 'prepseed_loginScreen.dart';
 
 extension EmailValidator on String {
@@ -85,8 +86,8 @@ class _signIn_signUp extends State<signIn_signUp>{
         error = false;
         showprogress = false;
       });
-
-
+      var topicId = '5d641d2d2e8a7c5406d44465';
+      functions().getObjectsById(jsondata,topicId);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('username',jsondata["user"]["username"]);
@@ -95,9 +96,9 @@ class _signIn_signUp extends State<signIn_signUp>{
       prefs.setString('email',jsondata["user"]["email"]);
       prefs.setString('email',jsondata["user"]["email"]);
       prefs.setString('token',jsondata["token"]);
-        prefs.setString('phaseId',jsondata["user"]["subscriptions"][0]["subgroups"][0]["phases"][0]["phase"]["_id"]);
+      prefs.setString('phaseId',jsondata["user"]["subscriptions"][0]["subgroups"][0]["phases"][0]["phase"]["_id"]);
 
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) => landingScreen()
       ));
 

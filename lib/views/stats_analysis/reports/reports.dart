@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prepseed/constants/colorPalate.dart';
+import 'package:prepseed/views/menu/menu_widget.dart';
 import 'package:prepseed/views/stats_analysis/reports/videoScreen.dart';
 
 import 'attendenceScreen.dart';
@@ -20,6 +21,11 @@ class _ReportsState extends State<Reports> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Constants.backgroundColor,
+        elevation: 0,
+        leading: MenuWidget(),
+      ),
       body: DefaultTabController(
         length: 3,
         child: Scaffold(

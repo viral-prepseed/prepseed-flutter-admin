@@ -1,13 +1,12 @@
+import 'package:prepseed/views/menu/menu_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:prepseed/constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 class mainScreen extends StatefulWidget {
-  final zoomController;
-
-  const mainScreen({Key? key, this.zoomController}) : super(key: key);
 
   @override
   _mainScreenState createState() => _mainScreenState();
@@ -51,11 +50,8 @@ class _mainScreenState extends State<mainScreen> {
                       children: [
                         Row(
                           children: [
-                            InkWell(
-                              onTap: () => widget.zoomController.toggle(),
-                              child: Icon(Icons.menu),
-                            ),
-                            Text(username,style: GoogleFonts.poppins(color: Constants.black),),
+                            MenuWidget(),
+                            // Text(username,style: GoogleFonts.poppins(color: Constants.black),),
                           ],
                         ),
                         Text(

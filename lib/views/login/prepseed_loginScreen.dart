@@ -30,13 +30,6 @@ class _prepSeed_loginState extends State<prepSeed_login> {
   List<Clients> _categoryList = [];
   String? selectedid;
   List<Map> _myJson = [] ;
-
-
-/*[{"id":0,"name":"<New>",
-    "logo": "https://s3.ap-south-1.amazonaws.com/prepleaf/prod/ldoc/annoucements/u/628db7a514b24d0f6dc12eb6/RHGWEJ47iim8lHaUcpAiPuYR/scientia[1].png"},
-    {"id":1,"name":"Test Practice",
-    "logo": "https://static.prepseed.com/brand/resonance/resonance-logo-landscape.png"}
-    ]*/
   dynamic dropdownValue;
 
   @override
