@@ -26,6 +26,10 @@ class Constants {
   static final buttontextcolor = Color(0xffb18d57);
   static final buttontappedtextcolor = Color(0x88b18d57);
 
+  static final green = Color(0xe650c346);
+  static final red = Color(0x99ff3232);
+  static final lightblue = Color(0xFF546E7A);
+
 
   static final btnshade1 = Color(0xc4f39e75);
   static final btnshade2 = Color(0xc4bd856c);
@@ -55,6 +59,7 @@ class Constants {
 
   static const Color dark_grey = Color(0xFFEDF0F2);
   static const Color grey = Color(0xff9e9e9e);
+  static const Color greytxt = Color(0xff656363);
   static const Color nearlyBlue = Color(0xFF00B6F0);
   static const Color nearlyBlack = Color(0xFF213333);
   static const Color primaryBlue = Color(0xFF0576B4);

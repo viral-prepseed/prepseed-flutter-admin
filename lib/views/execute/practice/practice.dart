@@ -1,15 +1,12 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:prepseed/helper/api/callAPI.dart';
 import 'package:prepseed/views/menu/menu_widget.dart';
 
-import '../../constants/colorPalate.dart';
-import '../../constants/strings.dart';
-import '../../helper/api/functions.dart';
+import '../../../constants/colorPalate.dart';
+import '../../../helper/api/functions.dart';
 import 'package:http/http.dart' as http;
 
-import '../../helper/sharedPref.dart';
+import '../../../helper/sharedPref.dart';
 
 class practice extends StatefulWidget {
   const practice({Key? key}) : super(key: key);
@@ -38,7 +35,7 @@ class _practiceState extends State<practice> {
   callAPI() async{
 
     var topicId = '5d641d2d2e8a7c5406d44465';
-    functions().getObjectsById(signinlist,topicId);
+    functions().getObjectsById(topicId);
   }
 
   @override

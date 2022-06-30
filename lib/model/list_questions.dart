@@ -231,15 +231,15 @@ class Core {
 }
 
 class Syllabus {
-  List<Topics>? topics;
+  List<syllTopics>? topics;
 
   Syllabus({this.topics});
 
   Syllabus.fromJson(Map<String, dynamic> json) {
     if (json['topics'] != null) {
-      topics = <Topics>[];
+      topics = <syllTopics>[];
       json['topics'].forEach((v) {
-        topics!.add(new Topics.fromJson(v));
+        topics!.add(new syllTopics.fromJson(v));
       });
     }
   }
@@ -253,14 +253,14 @@ class Syllabus {
   }
 }
 
-class Topics {
+class syllTopics {
   List<SubTopics>? subTopics;
   String? sId;
   String? id;
 
-  Topics({this.subTopics, this.sId, this.id});
+  syllTopics({this.subTopics, this.sId, this.id});
 
-  Topics.fromJson(Map<String, dynamic> json) {
+  syllTopics.fromJson(Map<String, dynamic> json) {
     if (json['subTopics'] != null) {
       subTopics = <SubTopics>[];
       json['subTopics'].forEach((v) {
@@ -525,7 +525,7 @@ class Question {
 }
 
 class Content {
-  String? rawContent;
+  dynamic rawContent;
 
   Content({this.rawContent});
 
@@ -540,6 +540,96 @@ class Content {
   }
 }
 
+
+class RawContent {
+  List<Blocks>? blocks;
+
+  RawContent({this.blocks});
+
+  RawContent.fromJson(Map<String, dynamic> json) {
+    if (json['blocks'] != null) {
+      blocks = <Blocks>[];
+      json['blocks'].forEach((v) {
+        blocks!.add(new Blocks.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.blocks != null) {
+      data['blocks'] = this.blocks!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Blocks {
+  String? key;
+  String? text;
+  String? type;
+  int? depth;
+  List<InlineStyleRanges>? inlineStyleRanges;
+  // List<Null>? entityRanges;
+
+  Blocks(
+      {this.key,
+        this.text,
+        this.type,
+        this.depth,
+        this.inlineStyleRanges,});
+
+  Blocks.fromJson(Map<String, dynamic> json) {
+    key = json['key'];
+    text = json['text'];
+    type = json['type'];
+    depth = json['depth'];
+    if (json['inlineStyleRanges'] != null) {
+      inlineStyleRanges = <InlineStyleRanges>[];
+      json['inlineStyleRanges'].forEach((v) {
+        inlineStyleRanges!.add(new InlineStyleRanges.fromJson(v));
+      });
+    }
+
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['key'] = this.key;
+    data['text'] = this.text;
+    data['type'] = this.type;
+    data['depth'] = this.depth;
+    if (this.inlineStyleRanges != null) {
+      data['inlineStyleRanges'] =
+          this.inlineStyleRanges!.map((v) => v.toJson()).toList();
+    }
+
+    return data;
+  }
+}
+
+class InlineStyleRanges {
+  int? offset;
+  int? length;
+  String? style;
+
+  InlineStyleRanges({this.offset, this.length, this.style});
+
+  InlineStyleRanges.fromJson(Map<String, dynamic> json) {
+    offset = json['offset'];
+    length = json['length'];
+    style = json['style'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['offset'] = this.offset;
+    data['length'] = this.length;
+    data['style'] = this.style;
+    return data;
+  }
+
+}
 class MultiOptions {
   String? id;
 
@@ -558,16 +648,22 @@ class MultiOptions {
 
 class Options {
   String? sId;
+  Content? content;
 
-  Options({this.sId});
+  Options({this.sId,this.content});
 
   Options.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    content =
+    json['content'] != null ? new Content.fromJson(json['content']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
+    if (this.content != null) {
+      data['content'] = this.content!.toJson();
+    }
     return data;
   }
 }
@@ -596,8 +692,8 @@ class Statistics {
 }
 
 class PerfectTimeLimits {
-  double? min;
-  double? max;
+  dynamic min;
+  dynamic max;
 
   PerfectTimeLimits({this.min, this.max});
 

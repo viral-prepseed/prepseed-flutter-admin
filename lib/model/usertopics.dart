@@ -25,7 +25,7 @@ class Topics {
   String? sId;
   String? name;
   Difficulty? difficulty;
-  List<SubTopics>? subTopics;
+  List<SubTopicsUsr>? subTopics;
   dynamic percentComplete;
 
   Topics(
@@ -42,9 +42,9 @@ class Topics {
         ? new Difficulty.fromJson(json['difficulty'])
         : null;
     if (json['sub_topics'] != null) {
-      subTopics = <SubTopics>[];
+      subTopics = <SubTopicsUsr>[];
       json['sub_topics'].forEach((v) {
-        subTopics!.add(new SubTopics.fromJson(v));
+        subTopics!.add(new SubTopicsUsr.fromJson(v));
       });
     }
     percentComplete = json['percent_complete'];
@@ -87,7 +87,7 @@ class Difficulty {
   }
 }
 
-class SubTopics {
+class SubTopicsUsr {
   String? sId;
   int? id;
   String? name;
@@ -96,7 +96,7 @@ class SubTopics {
   dynamic percentComplete;
   bool? hide;
 
-  SubTopics(
+  SubTopicsUsr(
       {this.sId,
         this.id,
         this.name,
@@ -105,7 +105,7 @@ class SubTopics {
         this.percentComplete,
         this.hide});
 
-  SubTopics.fromJson(Map<String, dynamic> json) {
+  SubTopicsUsr.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     id = json['id'];
     name = json['name'];

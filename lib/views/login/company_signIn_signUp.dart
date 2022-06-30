@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:prepseed/helper/sharedPref.dart';
 import 'package:prepseed/views/home/landingScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/strings.dart';
 import '../../constants/colorPalate.dart';
 import '../../helper/api/functions.dart';
 import 'prepseed_loginScreen.dart';
+import 'package:prepseed/model/usertopics.dart';
 
 extension EmailValidator on String {
   bool isValidEmail() {
@@ -80,14 +82,14 @@ class _signIn_signUp extends State<signIn_signUp>{
     }
     if(response.statusCode == 200){
       var jsondata = json.decode(response.body);
+      sharedPref().setSharedPref('topics', json.encode(jsondata['topics']));
       print(jsondata);
 
       setState(() {
         error = false;
         showprogress = false;
       });
-      var topicId = '5d641d2d2e8a7c5406d44465';
-      functions().getObjectsById(jsondata,topicId);
+
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('username',jsondata["user"]["username"]);

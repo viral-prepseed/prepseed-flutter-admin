@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:prepseed/main.dart';
 import 'package:prepseed/model/menuItem.dart';
-import 'package:prepseed/views/execute/practice.dart';
+import 'package:prepseed/views/adventure/liveTest.dart';
+import 'package:prepseed/views/execute/practice/practice.dart';
+import 'package:prepseed/views/execute/test/test_.dart';
 import 'package:prepseed/views/home/mainScreen.dart';
 import 'package:prepseed/views/learn/assignments.dart';
 import 'package:prepseed/views/learn/documents.dart';
 import 'package:prepseed/views/learn/videos.dart';
 import 'package:prepseed/views/menu/menu.dart';
 import 'package:prepseed/views/stats_analysis/analysis/analysis.dart';
-import 'package:prepseed/views/execute/quantized_sheet.dart';
-import 'package:prepseed/views/execute/tests.dart';
+import 'package:prepseed/views/execute/quantized_sheet/quantized_sheet.dart';
+import 'package:prepseed/views/execute/test/tests.dart';
 import 'package:prepseed/views/home/mainScreen.dart';
 import 'package:prepseed/views/login/prepseed_loginScreen.dart';
 import 'package:prepseed/views/stats_analysis/analysis/analysis.dart';
@@ -73,7 +75,7 @@ class _landingScreenState extends State<landingScreen> {
       case MenuItems.reports :
         return Reports();
       case MenuItems.videos :
-        return videos();
+        return livetest();
       case MenuItems.documents :
         return documents();
       case MenuItems.assignments :

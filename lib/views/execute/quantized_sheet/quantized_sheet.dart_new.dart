@@ -7,11 +7,12 @@ import 'package:prepseed/helper/sharedPref.dart';
 import 'package:prepseed/model/getwrapper.dart';
 import 'package:collection/collection.dart';
 
-import '../../constants/colorPalate.dart';
+import '../../../constants/colorPalate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-import '../../constants/strings.dart';
+import '../../../constants/strings.dart';
+
 
 class quantized_sheet_new extends StatefulWidget {
   const quantized_sheet_new({Key? key}) : super(key: key);

@@ -1,4 +1,19 @@
-class getwrappers {
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+
+
+dynamic getwrappersFromJson(String str) =>
+    List<getwrappers>.from(json.decode(str).map((x) => getwrappers.fromJson(x)));
+String getwrappersToJson(List<getwrappers> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+List<AssessmentWrappers> assessmentWrappersFromJson(String str) =>
+    List<AssessmentWrappers>.from(json.decode(str).map((x) => AssessmentWrappers.fromJson(x)));
+String assessmentWrappersToJson(List<AssessmentWrappers> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class getwrappers with ChangeNotifier {
   bool? success;
   List<AssessmentWrappers>? assessmentWrappers;
 
@@ -25,7 +40,7 @@ class getwrappers {
   }
 }
 
-class AssessmentWrappers {
+class AssessmentWrappers with ChangeNotifier {
   String? slang;
   String? series;
   String? topic;
@@ -143,7 +158,7 @@ class AssessmentWrappers {
   }
 }
 
-class Core {
+class Core with ChangeNotifier {
   Syllabus? syllabus;
   List<Instructions>? instructions;
   List<Null>? customInstructions;
@@ -219,7 +234,7 @@ class Core {
   }
 }
 
-class Syllabus {
+class Syllabus with ChangeNotifier {
   List<Topics>? topics;
 
   Syllabus({this.topics});
@@ -242,7 +257,7 @@ class Syllabus {
   }
 }
 
-class Topics {
+class Topics with ChangeNotifier {
   List<SubTopics>? subTopics;
   String? sId;
   String? id;
@@ -271,7 +286,7 @@ class Topics {
   }
 }
 
-class SubTopics {
+class SubTopics with ChangeNotifier{
   String? sId;
   String? id;
 
@@ -290,7 +305,7 @@ class SubTopics {
   }
 }
 
-class Instructions {
+class Instructions with ChangeNotifier{
   String? type;
   String? instruction;
   List<SubInstructions>? subInstructions;
@@ -320,7 +335,7 @@ class Instructions {
   }
 }
 
-class SubInstructions {
+class SubInstructions with ChangeNotifier {
   String? type;
   String? instruction;
 
@@ -339,7 +354,7 @@ class SubInstructions {
   }
 }
 
-class Phases {
+class Phases with ChangeNotifier {
   String? name;
   String? slang;
   String? sId;
@@ -367,7 +382,7 @@ class Phases {
   }
 }
 
-class Tags {
+class Tags with ChangeNotifier{
   String? sId;
   String? key;
   String? value;

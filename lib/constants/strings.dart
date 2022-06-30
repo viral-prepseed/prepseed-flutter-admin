@@ -2,17 +2,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Strings {
   static String STATIC_URL = "https://static.prepseed.com";
-  static String BASEURL = 'https://napi.prepseed.com';
+  static String BASEURL = 'https://napi.prepseed.com'; //'http://192.168.29.254:4040/api';
 
   static String CLIENT_BASE = BASEURL + "/clients";
   static String USER_BASE = BASEURL + "/users";
   static String ASSESSMENT_BASE = BASEURL + "/assessment";
   //getwrappers/
 
-
   static String listNames = CLIENT_BASE + '/listNames';
   static String signIn = USER_BASE + '/signin';
   static String getWrappers = ASSESSMENT_BASE + '/getwrappers';
+  static String getWrapper = ASSESSMENT_BASE + '/getwrapper';
+  static String listQuestions = ASSESSMENT_BASE;
+  static String syncFlow = ASSESSMENT_BASE + '/syncFlow';
+  static String getAnalysis = ASSESSMENT_BASE + '/getAnalysis';
 
 /*
   static String logo_icon = BASEURL.replaceAll('/API/', '/')+'assets/img/logomob.png';

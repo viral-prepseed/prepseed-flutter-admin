@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:prepseed/views/menu/menu_widget.dart';
-import '../../constants/colorPalate.dart';
 
-class videos extends StatefulWidget {
-  const videos({Key? key}) : super(key: key);
+import '../../constants/colorPalate.dart';
+import '../menu/menu_widget.dart';
+
+class Videos extends StatefulWidget {
+  const Videos({Key? key}) : super(key: key);
 
   @override
-  _videosState createState() => _videosState();
+  _VideosState createState() => _VideosState();
 }
 
-class _videosState extends State<videos> {
+class _VideosState extends State<Videos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
