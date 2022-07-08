@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prepseed/helper/sharedPref.dart';
-import 'package:prepseed/model/getwrapper.dart';
+import 'package:prepseed/model/assesments/getwrapper.dart';
 import 'package:collection/collection.dart';
 
 import '../../../constants/colorPalate.dart';

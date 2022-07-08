@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:prepseed/helper/provider/userDerailsProvider.dart';
 import 'package:prepseed/helper/sharedPref.dart';
 import 'package:prepseed/views/home/landingScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,7 @@ import '../../constants/strings.dart';
 import '../../constants/colorPalate.dart';
 import '../../helper/api/functions.dart';
 import 'prepseed_loginScreen.dart';
+import 'package:provider/provider.dart';
 import 'package:prepseed/model/usertopics.dart';
 
 extension EmailValidator on String {
@@ -54,8 +56,10 @@ class _signIn_signUp extends State<signIn_signUp>{
     email = _username.text.trim();
     password = _password.text.trim();
 
-    print(email);
-    print(password);
+/*    Future.microtask(() async => {
+      await Provider.of<UserClass>(context, listen: false)
+          .apiCall(email,password),
+    });*/
 
    var bodydata = {
       "user":
@@ -83,7 +87,8 @@ class _signIn_signUp extends State<signIn_signUp>{
     if(response.statusCode == 200){
       var jsondata = json.decode(response.body);
       sharedPref().setSharedPref('topics', json.encode(jsondata['topics']));
-      print(jsondata);
+      sharedPref().setSharedPref('stats', json.encode(jsondata['user']['stats']));
+      // print(jsondata);
 
       setState(() {
         error = false;

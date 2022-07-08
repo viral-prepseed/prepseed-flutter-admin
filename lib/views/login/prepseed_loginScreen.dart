@@ -10,8 +10,6 @@ import 'package:http/http.dart' as http;
 
 import '../../constants/strings.dart';
 
-/*https://stackoverflow.com/questions/51553962/how-to-create-dropdownbutton-with-a-list-of-json-data-and-i-want-it-to-populate*/
-
 class prepSeed_login extends StatefulWidget {
   const prepSeed_login({Key? key}) : super(key: key);
 

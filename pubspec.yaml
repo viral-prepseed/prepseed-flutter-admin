@@ -57,6 +57,8 @@ dev_dependencies:
   flutter_math_fork: ^0.6.0
   katex_flutter: ^4.0.0+24
   flutter_tex: ^4.0.3+1
+  flutter_svg: ^1.0.3
+  flutter_spinkit: ^5.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

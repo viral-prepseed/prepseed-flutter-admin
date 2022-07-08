@@ -44,7 +44,7 @@ class Submission with ChangeNotifier{
   String? assessmentWrapper;
   AssessmentCore? assessmentCore;
   WrapperAnalysis? wrapperAnalysis;
-  CoreAnalysis? coreAnalysis;
+  // CoreAnalysis? coreAnalysis;
   String? user;
   Response? response;
   Response? originalResponse;
@@ -67,7 +67,7 @@ class Submission with ChangeNotifier{
         this.assessmentWrapper,
         this.assessmentCore,
         this.wrapperAnalysis,
-        this.coreAnalysis,
+        // this.coreAnalysis,
         this.user,
         this.response,
         this.originalResponse,
@@ -104,9 +104,9 @@ class Submission with ChangeNotifier{
     wrapperAnalysis = json['wrapperAnalysis'] != null
         ? new WrapperAnalysis.fromJson(json['wrapperAnalysis'])
         : null;
-    coreAnalysis = json['coreAnalysis'] != null
+    /*coreAnalysis = json['coreAnalysis'] != null
         ? new CoreAnalysis.fromJson(json['coreAnalysis'])
-        : null;
+        : null;*/
     user = json['user'];
     response = json['response'] != null
         ? new Response.fromJson(json['response'])
@@ -143,9 +143,9 @@ class Submission with ChangeNotifier{
     if (this.wrapperAnalysis != null) {
       data['wrapperAnalysis'] = this.wrapperAnalysis!.toJson();
     }
-    if (this.coreAnalysis != null) {
+/*    if (this.coreAnalysis != null) {
       data['coreAnalysis'] = this.coreAnalysis!.toJson();
-    }
+    }*/
     data['user'] = this.user;
     if (this.response != null) {
       data['response'] = this.response!.toJson();
@@ -1212,6 +1212,7 @@ class wrapperAnalysisSections {
     return data;
   }
 }
+/*
 
 class CoreAnalysis {
   Difficulty? difficulty;
@@ -1318,6 +1319,7 @@ class CoreAnalysis {
     return data;
   }
 }
+*/
 
 class coreAnalysisSections {
   dynamic incorrect;
@@ -1503,7 +1505,7 @@ class ResponseSections {
 class ResSecQuestions {
   String? sId;
   dynamic time;
-  String? answer;
+  dynamic answer;
   dynamic state;
 
   ResSecQuestions({this.sId, this.time, this.answer, this.state});

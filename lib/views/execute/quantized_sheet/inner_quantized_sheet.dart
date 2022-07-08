@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prepseed/constants/colorPalate.dart';
 import 'package:prepseed/helper/sharedPref.dart';
-import 'package:prepseed/model/getwrapper.dart';
+import 'package:prepseed/model/assesments/getwrapper.dart';
 
 class inner_quantized_sheet extends StatefulWidget {
   final List<AssessmentWrappers> tabvaluedata;

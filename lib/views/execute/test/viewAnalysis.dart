@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prepseed/helper/provider/analysisProvider.dart';
 import 'package:prepseed/helper/sharedPref.dart';
@@ -35,6 +36,8 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
   TabController? _tabController;
   List<ChartSampleData>? chartData;
   List<ChartData>? timeUsagechartData;
+  List<ChartData>? academicChartData;
+  List<ChartSampleData>? topicChartData;
 
   @override
   void initState() {
@@ -46,6 +49,46 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
       ChartData('Incorrect', 6.2, Constants.red),
       ChartData('Unattempted', 28.2, Constants.lightblue),
     ];
+
+    academicChartData = [
+      ChartData('You', 40, Constants.primaryBlue),
+      ChartData('Average', 80, Constants.yellow),
+    ];
+
+
+    topicChartData = <ChartSampleData>[
+      ChartSampleData(
+          x: 'Geometric Optics',
+          y: 10,
+          secondSeriesYValue: 1,
+          thirdSeriesYValue: 14),
+      ChartSampleData(
+          x: 'Electrostatics',
+          y: 1,
+          secondSeriesYValue: 0,
+          thirdSeriesYValue: 0),
+      ChartSampleData(
+          x: 'Friction',
+          y: 1,
+          secondSeriesYValue: 0,
+          thirdSeriesYValue: 0),
+      ChartSampleData(
+          x: 'S Block',
+          y: 2,
+          secondSeriesYValue: 1,
+          thirdSeriesYValue: 5),
+      ChartSampleData(
+          x: 'Mole Concept',
+          y: 7,
+          secondSeriesYValue: 0,
+          thirdSeriesYValue: 0),
+      ChartSampleData(
+          x: 'General Organic Chemistry',
+          y: 1,
+          secondSeriesYValue: 0,
+          thirdSeriesYValue: 5),
+    ];
+
     chartData = <ChartSampleData>[
       ChartSampleData(
           x: DateTime(2006), y: 0.01, yValue: -0.03, secondSeriesYValue: 0.10,),
@@ -91,6 +134,10 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
     return Scaffold(
       body: Consumer<AnalysisClass>(builder: (context, myModel, child){
         List<GASections> sectionList = myModel.sectionList;
+        double correctTime = (myModel.submissionObj!.meta!.correctTime/60) ?? 0.0;
+        double incorrectTime = (myModel.submissionObj!.meta!.incorrectTime/60) ?? 0.0;
+        double unattemptedTime = (myModel.submissionObj!.meta!.unattemptedTime/60) ?? 0.0;
+        // print(myModel.core!.hist);
         return SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -108,7 +155,7 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
                             children: [
                               Text('Test Held On',style: GoogleFonts.poppins(color: Constants.black,fontSize: 13,fontWeight: FontWeight.w600),),
                               SizedBox(height: 5,),
-                              Text('21-11-2021',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12),),
+                              Text('${myModel.heldOn_dt}',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12),),
                             ],
                           ),
                           VerticalDivider(color: Constants.grey,),
@@ -116,7 +163,7 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
                             children: [
                               Text('Test Submitted On',style: GoogleFonts.poppins(color: Constants.black,fontSize: 13,fontWeight: FontWeight.w600),),
                               SizedBox(height: 5,),
-                              Text('21-06-2022',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12),),
+                              Text('${myModel.submittedOn_dt}',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12),),
                             ],
                           )
                         ],
@@ -291,16 +338,19 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
 
                   const SizedBox(height: 10,),
                   SfCartesianChart(
-                      primaryXAxis: CategoryAxis(
-                        /*maximum: 100,
-                        minimum: 0,*/
-                        interval: 10
+                      primaryXAxis: NumericAxis(
+                        isVisible: false
+                          /*minimum: 0,
+                          maximum: 100,
+                          interval: 10*/
                       ),
 
-                      primaryYAxis: NumericAxis(
-                          /*maximum: 15.00,
-                          minimum: 0.0,*/
-                        // numberFormat: NumberFormat.percentPattern()
+                      primaryYAxis:NumericAxis(
+                          minimum: 0,
+                          interval: 10,
+                          labelFormat: '{value}%',
+                          axisLine: const AxisLine(width: 0),
+                          minorTickLines: const MinorTickLines(size: 0)
                       ),
                       enableAxisAnimation: true,
 
@@ -312,25 +362,31 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
                       // tooltipBehavior: _tooltipBehavior,
 
                       series: <ChartSeries>[
-                          SplineAreaSeries<Percentage, String>(
+                          SplineAreaSeries<Percentage, int>(
                           borderWidth: 3,
                           borderColor: Constants.primaryBlue,
                           color: Constants.primaryBlue.withOpacity(0.25),
                           splineType: SplineType.cardinal,
-                            dataSource:  [
-                              /*Percentage(100, 4),
+                            dataSource:
+
+                            List.generate(myModel.core!.hist!.length, (index) =>
+                                Percentage(index, myModel.core!.hist!.elementAt(index) ),
+                            )
+                              /*[
+                              *//*Percentage(100, 4),
                               Percentage(10, 3),
                               Percentage(50, 11),
                               Percentage(50, 10),
                               Percentage(70, 2),
-                              Percentage(90, 2),*/
+                              Percentage(90, 2),*//*
+
                               Percentage(' ', 4),
                               Percentage('Feb', 3),
                               Percentage('March', 11),
                               Percentage('Apr', 10),
                               Percentage('May', 2),
                               Percentage('June', 2),
-                            ],
+                            ]*/,
                             xValueMapper: (Percentage sales, _) => sales.student,
                             yValueMapper: (Percentage sales, _) => sales.marks,
                             // Enable data label
@@ -353,63 +409,74 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
                     color: Constants.grey.withOpacity(0.25),
                     elevation: 0,
                     child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
                       // width: MediaQuery.of(context).size.width / 3,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Weak categories',style: GoogleFonts.poppins(color: Constants.black,fontSize: 13,fontWeight: FontWeight.w600),),
                               SizedBox(height: 5,),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                child: Column(
-                                  children: [
-                                    ListTile(
-                                      tileColor: Constants.backgroundColorlight,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
+                              Column(
+                                children: [
+                                  ListTile(
+                                    // tileColor: Constants.backgroundColorlight,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        color: Constants.black,
+                                        width: 1
                                       ),
-                                      title: Text('Math for physics',style: GoogleFonts.poppins(color: Constants.black,fontSize: 14,fontWeight: FontWeight.w600),),
-                                      subtitle: Text('Physics',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12,fontWeight: FontWeight.w600),),
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
-                                    SizedBox(height: 10,),
-                                    ListTile(
-                                      tileColor: Constants.backgroundColorlight,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
+                                    title: Text('Math for physics',style: GoogleFonts.poppins(color: Constants.black,fontSize: 14,fontWeight: FontWeight.w600),),
+                                    subtitle: Text('Physics',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12,fontWeight: FontWeight.w600),),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  ListTile(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Constants.black,
+                                          width: 1
                                       ),
-                                      title: Text('Math for physics',style: GoogleFonts.poppins(color: Constants.black,fontSize: 14,fontWeight: FontWeight.w600),),
-                                      subtitle: Text('Physics',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12,fontWeight: FontWeight.w600),),
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
-                                    SizedBox(height: 10,),
-                                    ListTile(
-                                      tileColor: Constants.backgroundColorlight,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
+                                    title: Text('Math for physics',style: GoogleFonts.poppins(color: Constants.black,fontSize: 14,fontWeight: FontWeight.w600),),
+                                    subtitle: Text('Physics',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12,fontWeight: FontWeight.w600),),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  ListTile(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Constants.black,
+                                          width: 1
                                       ),
-                                      title: Text('Math for physics',style: GoogleFonts.poppins(color: Constants.black,fontSize: 14,fontWeight: FontWeight.w600),),
-                                      subtitle: Text('Physics',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12,fontWeight: FontWeight.w600),),
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
-                                  ],
-                                ),
+                                    title: Text('Math for physics',style: GoogleFonts.poppins(color: Constants.black,fontSize: 14,fontWeight: FontWeight.w600),),
+                                    subtitle: Text('Physics',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12,fontWeight: FontWeight.w600),),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20,),
+                              Text('Behaviour needed',style: GoogleFonts.poppins(color: Constants.black,fontSize: 13,fontWeight: FontWeight.w600),),
+                              SizedBox(height: 5,),
+                              Text('Intent',style: GoogleFonts.poppins(color: Constants.black,fontSize: 15,fontWeight: FontWeight.w600),),
+                              SizedBox(height: 5,),
+                              Container(
+                                // padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text('''You need to attempt questions properly and spend more time in each question to improve your performance.'
+You have made too many bluffs in the assessment.
+You haven\'t attempted many questions in the assessment.
+You have finished the assessment too early.''',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12),),
                               )
                             ],
                           ),
                           // VerticalDivider(color: Constants.grey,),
                           Column(
                             children: [
-                              Text('Behaviour needed',style: GoogleFonts.poppins(color: Constants.black,fontSize: 13,fontWeight: FontWeight.w600),),
-                              SizedBox(height: 5,),
-                              Text('Intent',style: GoogleFonts.poppins(color: Constants.black,fontSize: 15,fontWeight: FontWeight.w600),),
-                              SizedBox(height: 5,),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                child: Text('''You need to attempt questions properly and spend more time in each question to improve your performance.'
-You have made too many bluffs in the assessment.
-You haven\'t attempted many questions in the assessment.
-You have finished the assessment too early.''',style: GoogleFonts.poppins(color: Constants.greytxt,fontSize: 12),),
-                              )
+
                             ],
                           )
                         ],
@@ -480,17 +547,149 @@ You have finished the assessment too early.''',style: GoogleFonts.poppins(color:
                   const SizedBox(height: 10,),
                   SfCartesianChart(
                       primaryXAxis: CategoryAxis(),
+                    primaryYAxis: NumericAxis(
+                        labelFormat: '{value} min',
+                        axisLine: const AxisLine(width: 0),
+                    ),
                       series: <CartesianSeries>[
                         ColumnSeries<ChartData, String>(
                           dataLabelSettings: const DataLabelSettings(
                               isVisible: true, labelAlignment: ChartDataLabelAlignment.outer),
-                            dataSource: timeUsagechartData!,
+                            dataSource: //timeUsagechartData!,
+                            [
+                              ChartData('Correct', double.parse(correctTime.toStringAsFixed(2)), Constants.green),
+                              ChartData('Incorrect', double.parse(incorrectTime.toStringAsFixed(2)), Constants.red),
+                              ChartData('Unattempted', double.parse(unattemptedTime.toStringAsFixed(2)), Constants.lightblue),
+                            ],
                             xValueMapper: (ChartData data, _) => data.x,
                             yValueMapper: (ChartData data, _) => data.y,
                             pointColorMapper: (ChartData data, _) => data.color,
                           borderRadius: BorderRadius.circular(5),
                         )
                       ]
+                  ),
+                  const SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Optional Question Selection', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14),)
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    color: Constants.grey.withOpacity(0.25),
+                    elevation: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Table(
+                        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                        // columnWidths: {0: FractionColumnWidth(.4)},
+                        border: TableBorder.symmetric(inside: BorderSide.none),
+                        children: [
+                          TableRow(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Section'),
+                            ),
+                            Column(children: [Text('Best \nChoices'),],),
+                            Column(children: [Text('Worst \nChoices'),],),
+                            Column(children: [Text('Selectivity'),],),
+                          ]),
+
+                          TableRow(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Physics'),
+                            ),
+                            Wrap(children: List.generate(3, (index) => Container(
+                              margin: EdgeInsets.all(4),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(index.toString()),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Constants.green,
+                                borderRadius: BorderRadius.circular(50)
+                              ),
+                            )),),
+                            Wrap(children: List.generate(5, (index) => Container(
+                              margin: EdgeInsets.all(4),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(index.toString()),
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Constants.red,
+                                  borderRadius: BorderRadius.circular(50)
+                              ),
+                            )),),
+                            Column(children: [
+                              Text('80%'),],),
+                          ]),
+
+
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Academic Knowledge', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14),)
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  SfCartesianChart(
+                      legend: Legend(
+                        isVisible: false,
+                      ),
+                      primaryXAxis: CategoryAxis(
+                        title: AxisTitle(
+                          text: 'Medium'
+                        )
+                      ),
+                      primaryYAxis: NumericAxis(
+                          labelFormat: '{value}%',
+                          interval: 10,
+                          axisLine: const AxisLine(width: 0),
+                          minorTickLines: const MinorTickLines(size: 0)),
+                      series: <CartesianSeries>[
+                        ColumnSeries<ChartData, String>(
+                          dataLabelSettings: const DataLabelSettings(
+                              isVisible: true, labelAlignment: ChartDataLabelAlignment.outer),
+                          dataSource: academicChartData!,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          pointColorMapper: (ChartData data, _) => data.color,
+                          borderRadius: BorderRadius.circular(5),
+                        )
+                      ]
+                  ),
+                  const SizedBox(height: 10,),
+                  SfCartesianChart(
+                    legend: Legend(
+                      isVisible: false,
+                    ),
+                    plotAreaBorderWidth: 0,
+                    primaryXAxis: CategoryAxis(
+                      majorGridLines: const MajorGridLines(width: 0),
+                    ),
+                    palette: <Color>[
+                      Constants.green,
+                      Constants.red,
+                      Constants.lightblue,
+                    ],
+                    primaryYAxis: NumericAxis(
+                      isVisible: false,
+                        majorGridLines: const MajorGridLines(width: 0),
+                        numberFormat: NumberFormat.compact()),
+                    series: _getDefaultBarSeries(),
+                    tooltipBehavior: TooltipBehavior(enable: true),
                   )
                 ],
               ),
@@ -502,18 +701,32 @@ You have finished the assessment too early.''',style: GoogleFonts.poppins(color:
   }
 
 
-/*  List<ScatterSeries<ChartSampleData, DateTime>> _getDefaultScatterSeries() {
-    return <ScatterSeries<ChartSampleData, DateTime>>[
-
+  List<BarSeries<ChartSampleData, String>> _getDefaultBarSeries() {
+    return <BarSeries<ChartSampleData, String>>[
+      BarSeries<ChartSampleData, String>(
+          dataSource: topicChartData!,
+          xValueMapper: (ChartSampleData sales, _) => sales.x as String,
+          yValueMapper: (ChartSampleData sales, _) => sales.y,
+          name: 'Correct'),
+      BarSeries<ChartSampleData, String>(
+          dataSource: topicChartData!,
+          xValueMapper: (ChartSampleData sales, _) => sales.x as String,
+          yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
+          name: 'Incorrect'),
+      BarSeries<ChartSampleData, String>(
+          dataSource: topicChartData!,
+          xValueMapper: (ChartSampleData sales, _) => sales.x as String,
+          yValueMapper: (ChartSampleData sales, _) => sales.thirdSeriesYValue,
+          name: 'Unattempted')
     ];
-  }*/
+  }
 
 }
 
 class Percentage {
   Percentage(this.student, this.marks);
-  final String student;
-  final double marks;
+  final int student;
+  final num marks;
 }
 
 ///Chart sample data

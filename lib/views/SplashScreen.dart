@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:prepseed/init/InitializeProviderScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/strings.dart';
 import '../constants/colorPalate.dart';
@@ -48,7 +49,8 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     Timer(Duration(seconds: 1), () => Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (BuildContext context) =>
         ((InstituteName == null) || (InstituteLogo == null) || (username == null)) ? prepSeed_login() :
-        (username == null || username == '') ? signIn_signUp(clientname: InstituteName,clientlogo: InstituteLogo,) :landingScreen())));
+        (username == null || username == '') ? signIn_signUp(clientname: InstituteName,clientlogo: InstituteLogo,) :
+        landingScreen()  )));
   }
 
   @override

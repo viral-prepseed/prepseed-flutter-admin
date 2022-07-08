@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:prepseed/constants/colorPalate.dart';
 import 'package:prepseed/views/menu/menu_widget.dart';
 import 'package:prepseed/views/stats_analysis/analysis/testlevel.dart';
+import 'package:provider/provider.dart';
 
+import '../../../helper/provider/leadershipProvider.dart';
 import 'overall.dart';
 
 
@@ -15,6 +17,15 @@ class Analysis extends StatefulWidget {
 }
 
 class _AnalysisState extends State<Analysis> {
+
+  @override
+  void initState() {
+/*    Future.microtask(() async => {
+      await Provider.of<LeadershipClass>(context, listen: false)
+          .apiCall(),
+    });*/
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

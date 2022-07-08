@@ -399,7 +399,7 @@ class ResponseSections {
 class Questions {
   String? sId;
   dynamic time;
-  String? answer;
+  dynamic answer;
   int? state;
 
   Questions({this.sId, this.time, this.answer, this.state});

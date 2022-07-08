@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:prepseed/model/getwrapper.dart';
+import 'package:prepseed/model/assesments/getwrapper.dart';
 import 'package:prepseed/views/learn/assignments.dart';
 
 import '../../constants/strings.dart';

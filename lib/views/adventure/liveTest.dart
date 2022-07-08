@@ -8,7 +8,7 @@ import 'package:prepseed/views/menu/menu_widget.dart';
 
 import '../../../constants/colorPalate.dart';
 import '../../../helper/provider/testsProvider.dart';
-import '../../../model/getwrapper.dart';
+import '../../model/assesments/getwrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 

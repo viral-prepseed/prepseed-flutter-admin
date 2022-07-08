@@ -15,7 +15,7 @@ import '../../../constants/strings.dart';
 import '../../../helper/api/functions.dart';
 import '../../../helper/provider/testsProvider.dart';
 import '../../../helper/sharedPref.dart';
-import '../../../model/getwrapper.dart';
+import '../../../model/assesments/getwrapper.dart';
 import '../../login/prepseed_loginScreen.dart';
 import 'AttemptTest.dart';
 import 'package:provider/provider.dart';

@@ -29,6 +29,10 @@ class Constants {
   static final green = Color(0xe650c346);
   static final red = Color(0x99ff3232);
   static final lightblue = Color(0xFF546E7A);
+  static final primaryBlue = Color(0x99039BE5);
+  static final yellow = Color(0x99FFAB40);
+
+  static final darkGreen = Color(0xFF3ED7AC);
 
 
   static final btnshade1 = Color(0xc4f39e75);
@@ -62,7 +66,7 @@ class Constants {
   static const Color greytxt = Color(0xff656363);
   static const Color nearlyBlue = Color(0xFF00B6F0);
   static const Color nearlyBlack = Color(0xFF213333);
-  static const Color primaryBlue = Color(0xFF0576B4);
+  // static const Color primaryBlue = Color(0xFF0576B4);
   static const Color notWhite = Color(0xFF2C384A);//0xFF313A44
 
   static const Color darkText = Color(0xFF253840);

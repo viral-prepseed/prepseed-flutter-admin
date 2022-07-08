@@ -11,7 +11,6 @@ import 'package:http/http.dart' as http;
 class functions{
 
 
-
   /*============================== TOPIC ==============================*/
 
   Future<List<Topics>> getObjectsById( String topicId) async{
@@ -27,6 +26,7 @@ class functions{
         // print(usertopics.name);
       }
     }
+    // print(listObj.length);
     return listObj;
   }
 
@@ -47,6 +47,8 @@ class functions{
     }
     return listObj;
   }
+
+
 
 
   postFlowLogs(Map<dynamic, dynamic> postmap) async{

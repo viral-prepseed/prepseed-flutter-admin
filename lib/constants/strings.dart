@@ -7,15 +7,21 @@ class Strings {
   static String CLIENT_BASE = BASEURL + "/clients";
   static String USER_BASE = BASEURL + "/users";
   static String ASSESSMENT_BASE = BASEURL + "/assessment";
+  static String LEADERBOARD_BASE = BASEURL + "/leaderboard";
   //getwrappers/
 
   static String listNames = CLIENT_BASE + '/listNames';
   static String signIn = USER_BASE + '/signin';
+  static String reports = USER_BASE + '/get-reports?newReport=1';
   static String getWrappers = ASSESSMENT_BASE + '/getwrappers';
   static String getWrapper = ASSESSMENT_BASE + '/getwrapper';
   static String listQuestions = ASSESSMENT_BASE;
   static String syncFlow = ASSESSMENT_BASE + '/syncFlow';
   static String getAnalysis = ASSESSMENT_BASE + '/getAnalysis';
+  static String getSubmissionDetails = ASSESSMENT_BASE + '/getSubmissionDetails';
+  static String getSubmissions = ASSESSMENT_BASE + '/getsubmissions';
+  static String getranks = LEADERBOARD_BASE + '/getranks';
+  static String getPhaseLeaderBoard = LEADERBOARD_BASE + '/getphaseleaderboard';
 
 /*
   static String logo_icon = BASEURL.replaceAll('/API/', '/')+'assets/img/logomob.png';
