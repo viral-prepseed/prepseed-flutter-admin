@@ -67,7 +67,9 @@ class _livetestState extends State<livetest> {
                             fontWeight: FontWeight.w600,
                             fontSize: 17
                         ),
-                        tabs: List.generate(myModel.tabLength, (index) {  return Tab(text: '${context.watch<TestProviderClass>().tabValues.elementAt(index)}',); }
+                        tabs: List.generate(myModel.tabLength, (index) {
+                          return Tab(text: '${context.watch<TestProviderClass>().tabValues.elementAt(index)}',);
+                        }
 
                         /*[
 
@@ -255,7 +257,7 @@ class _livetestState extends State<livetest> {
                           ),
                         ],
                       ),
-                      Container(child: Text('smdfnjskfb'),),
+                      // Container(child: Text('smdfnjskfb'),),
                     ],
                   ))
                 ],

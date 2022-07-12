@@ -9,12 +9,21 @@ class ReportClass extends ChangeNotifier {
 
   bool isLoading = false;
   List<Map> allList = [];
+  List<Items>? itemsList;
   List testNames = [];
 
   List<Map> get listOfColumns => allList;
+  List<Items> get items => itemsList!;
 
   set listOfColumns(List<Map> value) {
     allList = value;
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  set items(List<Items> value) {
+    itemsList = value;
 
     isLoading = false;
     notifyListeners();
@@ -39,6 +48,10 @@ class ReportClass extends ChangeNotifier {
     if (200 == response.statusCode) {
 
       Report _reports = Report.fromJson(responseJson);
+      List<Items>? _items = _reports.items;
+
+      items = _items!;
+
 
       List<Map> _listOfColumns = [];
       List _repAllList = [];
@@ -48,11 +61,15 @@ class ReportClass extends ChangeNotifier {
       Map mapUserSelf = {};
       Map mapTopperHigh = {};
       Map mapStatsAvg = {};
+      Map mapStatsMax = {};
       // Map mapStatsPercentile = {};
+      Map allPercentage = {};
       Map allMarksSelf = {};
       Map allMarksHigh = {};
+      Map allMarksTopper = {};
       Map allMarksAvg = {};
-      Map allMaxCP = {};
+      Map allPercentile = {};
+      Map allCP = {};
 
       for(var rep in _reports.items!){
         List listData = rep.user!.toJson().keys.toList();
@@ -67,14 +84,23 @@ class ReportClass extends ChangeNotifier {
         mapUserSelf = rep.user!.toJson();
         mapTopperHigh = rep.topper!.toJson();
         mapStatsAvg = rep.statsBySection!.toJson();
-        // print(mapStatsAvg);
+        mapStatsMax = rep.maxMarks!.toJson();
+        // print(mapStatsMax);
 
+        for(var elements in mapUserSelf.keys){
+          var calval = (Overall.fromJson(mapUserSelf[elements]).marks! / mapStatsMax[elements]) * 100;
+          allPercentage[elements] = double.parse(calval.toString()).toStringAsFixed(2);
+        }
 
         for(var elements in mapUserSelf.keys){
           // allMarksSelf = {elements : mapUserSelf[elements]};
           allMarksSelf[elements] = Overall.fromJson(mapUserSelf[elements]).marks;
         }
 
+        for(var elements in mapTopperHigh.keys){
+          // allMarksSelf = {elements : mapUserSelf[elements]};
+          allMarksTopper[elements] = Overall.fromJson(mapTopperHigh[elements]).marks;
+        }
 
         for(var elements in mapStatsAvg.keys){
           // allMarksHigh = {elements : mapTopperHigh[elements]};
@@ -88,7 +114,12 @@ class ReportClass extends ChangeNotifier {
 
         for(var elements in mapStatsAvg.keys){
           // allMarksAvg = {elements : StatsBySectionOverall.fromJson(mapStatsAvg[elements]).averageMarks};
-          allMaxCP[elements] = StatsBySectionOverall.fromJson(mapStatsAvg[elements]).percentile;
+          allPercentile[elements] = StatsBySectionOverall.fromJson(mapStatsAvg[elements]).percentile;
+        }
+
+        for(var elements in mapStatsAvg.keys){
+          // allMarksAvg = {elements : StatsBySectionOverall.fromJson(mapStatsAvg[elements]).averageMarks};
+          allCP[elements] = StatsBySectionOverall.fromJson(mapStatsAvg[elements]).cumulativePercentile;
         }
 
 
@@ -123,17 +154,18 @@ class ReportClass extends ChangeNotifier {
         // print(finalMapData);
       }
 
-
-
       listOfColumns = _listOfColumns;
 
 
 
-/*      print(allMarksSelf);
-      print(allMarksHigh);
+      print(allMarksSelf);
+      print(allPercentage);
       print(allMarksAvg);
-      print(allMaxCP);
-      print(_repAllList);*/
+      print(allMarksHigh);
+      print(allMarksTopper);
+      print(allPercentile);
+      print(allCP);
+      print(_repAllList);
 
 
 

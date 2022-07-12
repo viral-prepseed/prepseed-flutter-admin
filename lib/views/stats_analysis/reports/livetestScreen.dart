@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prepseed/helper/provider/analysis/report.dart';
+import 'package:prepseed/model/assesments/reports.dart';
 import 'package:provider/provider.dart';
 import 'package:prepseed/constants/colorPalate.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -15,6 +16,7 @@ class liveScreen extends StatefulWidget {
 class _liveScreenState extends State<liveScreen> {
   late TooltipBehavior _tooltipBehavior;
   List<Map> listOfColumns = [];
+  List<Items> listOfItems = [];
 
   @override
   void initState(){
@@ -31,7 +33,8 @@ class _liveScreenState extends State<liveScreen> {
   @override
   Widget build(BuildContext context) {
     listOfColumns = Provider.of<ReportClass>(context).listOfColumns;
-    print(listOfColumns);
+    listOfItems = Provider.of<ReportClass>(context).items;
+    // print(listOfColumns);
     return SingleChildScrollView(
       child: Container(
         child: Padding(
@@ -63,48 +66,60 @@ class _liveScreenState extends State<liveScreen> {
                     )
                   ]
               ),
-              SizedBox(height: 35,),
-              Text('Path Finder_MCT-1_12-07-2021_Test paper',style: GoogleFonts.poppins(fontSize: 20),),
-              SizedBox(height: 15,),
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    border: TableBorder.all(
-                        width: 1,
-                        color: Constants.grey
-                    ),
-                    columns:
-                    // List.generate(listOfColumns!.elementAt(0).length, (index) => DataColumn(label: Text(listOfColumns!.elementAt(0).keys.elementAt(index))),),
+              SizedBox(height: 10,),
 
 
-                    [
-                      DataColumn(label: Text('Name')),
-                      DataColumn(label: Text('Date')),
-                      DataColumn(label: Text('Overall')),
-                      DataColumn(label: Text('physics	')),
-                      DataColumn(label: Text('chemistry	')),
-                      DataColumn(label: Text('mathematics	')),
-                    ],
-                    rows:
-                    listOfColumns // Loops through dataColumnText, each iteration assigning the value to element
-                        .map(
-                      ((element) => DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text(element["Name"]!)), //Extracting from Map element the value
-                          DataCell(Text(element["Date"]!)),
-                          DataCell(Text(element["overall"].elementAt(1).toString())),
-                          DataCell(Text(element["physics"].elementAt(1).toString())),
-                          DataCell(Text(element["chemistry"].elementAt(1).toString())),
-                          DataCell(Text(element["mathematics"].elementAt(1).toString())),
-                        ],
-                      )),
-                    )
-                        .toList(),
-                  ),
-                ),
-              )
+              ListView.separated(
+                separatorBuilder: (context, index) => SizedBox(height: 20,),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: listOfItems.length,
+                  itemBuilder: (context, idx){
+                  var _items = listOfItems.elementAt(idx);
+                    return Wrap(
+                      children: [
+                        Text(_items.details![0].name!,style: GoogleFonts.poppins(fontSize: 20),),
+                        SizedBox(height: 15,),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              border: TableBorder.all(
+                                  width: 1,
+                                  color: Constants.grey
+                              ),
+                              columns:
+                              [
+                                DataColumn(label: Text('Name')),
+                                DataColumn(label: Text('Date')),
+                                DataColumn(label: Text('Overall')),
+                                DataColumn(label: Text('physics	')),
+                                DataColumn(label: Text('chemistry	')),
+                                DataColumn(label: Text('mathematics	')),
+                              ],
+                              rows:
+                              listOfColumns // Loops through dataColumnText, each iteration assigning the value to element
+                                  .map(
+                                ((element) => DataRow(
+                                  cells: <DataCell>[
+                                    DataCell(Text(element["Name"]!)), //Extracting from Map element the value
+                                    DataCell(Text(element["Date"]!)),
+                                    DataCell(Text(element["overall"].elementAt(1).toString())),
+                                    DataCell(Text(element["physics"].elementAt(1).toString())),
+                                    DataCell(Text(element["chemistry"].elementAt(1).toString())),
+                                    DataCell(Text(element["mathematics"].elementAt(1).toString())),
+                                  ],
+                                )),
+                              )
+                                  .toList(),
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+              })
+
             ],
           ),
         )
