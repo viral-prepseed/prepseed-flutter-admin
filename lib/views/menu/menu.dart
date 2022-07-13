@@ -10,18 +10,18 @@ import '../../model/menuItem.dart';
 import '../login/prepseed_loginScreen.dart';
 
 class MenuItems{
-  static const home = MenuItem('Home',Icons.widgets_outlined);
-  static const analysis = MenuItem('Analysis',Icons.analytics_outlined);
-  static const reports = MenuItem('Reports',Icons.article_outlined);
-  static const videos = MenuItem('Videos',Icons.video_call_outlined);
-  static const documents = MenuItem('Documents',Icons.wysiwyg_outlined);
-  static const assignments = MenuItem('Assignments',Icons.book_outlined);
-  static const practice = MenuItem('Practice',Icons.document_scanner_rounded);
-  static const quantizedSheet = MenuItem('Quantized Sheet',Icons.assignment_outlined);
-  static const Tests = MenuItem('Tests',Icons.assignment_outlined);
+  static const home = MainMenuItems('Home',Icons.widgets_outlined);
+  static const analysis = MainMenuItems('Analysis',Icons.analytics_outlined);
+  static const reports = MainMenuItems('Reports',Icons.article_outlined);
+  static const videos = MainMenuItems('Videos',Icons.video_call_outlined);
+  static const documents = MainMenuItems('Documents',Icons.wysiwyg_outlined);
+  static const assignments = MainMenuItems('Assignments',Icons.book_outlined);
+  static const practice = MainMenuItems('Practice',Icons.document_scanner_rounded);
+  static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
+  static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
   // static const logout = MenuItem('Logout',Icons.logout);
 
-  static const all = <MenuItem>[
+  static const all = <MainMenuItems>[
     home,
     analysis,
     reports,
@@ -38,8 +38,8 @@ class MenuItems{
 
 
 class MenuScreen extends StatefulWidget {
-  final MenuItem currentItem;
-  final ValueChanged<MenuItem> onSelectedItem;
+  final MainMenuItems currentItem;
+  final ValueChanged<MainMenuItems> onSelectedItem;
 
   const MenuScreen({Key? key, required this.currentItem, required this.onSelectedItem}) : super(key: key);
 
@@ -55,7 +55,7 @@ class _MenuScreenState extends State<MenuScreen> {
     fetchPref();
   }
 
-  Widget buildMenuItem(MenuItem item) => ListTileTheme(
+  Widget buildMenuItem(MainMenuItems item) => ListTileTheme(
     selectedColor: Colors.black87,
     child: ListTile(
       selectedTileColor: Constants.backgroundColorTrans,

@@ -7,21 +7,25 @@ import 'package:prepseed/model/assesments/getwrapper.dart';
 import 'package:prepseed/views/learn/assignments.dart';
 
 import '../../constants/strings.dart';
-import '../../model/list_questions.dart';
+import '../../model/execute/tests/list_questions.dart';
 import '../sharedPref.dart';
 class TestProviderClass extends ChangeNotifier {
 
   bool isLoading = false;
   List<AssessmentWrappers> post = [];
+  list_questions? _assessment;
   List TabValues = [];
   List<AssessmentWrappers> TabContainList = [];
   Map<dynamic, dynamic> TabContainMap = {};
   List<AssessmentWrappers> get listData => post;
+  list_questions get assessment => _assessment!;
 
   get listLength => listData.length;
 
   get tabLength => TabValues.toSet().toList().length;
   get tabValues => TabValues.toSet().toList();
+
+
 
 /*  get tabLength => TabValues.toSet().toList().length;
   get tabValues => TabValues.toSet().toList();*/
@@ -44,6 +48,15 @@ class TestProviderClass extends ChangeNotifier {
       TabContainMap[tabval] = TabContainList;
       TabContainList = [];
     }
+
+    // print(TabContainMap);
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  set assessment(list_questions value) {
+    _assessment = value;
 
     isLoading = false;
     notifyListeners();
@@ -85,6 +98,44 @@ class TestProviderClass extends ChangeNotifier {
     } catch (e) {
       print(e);
       return [];
+    }
+  }
+
+
+  Future<list_questions?> assessments(assessmentWrapperId) async {
+    //function to call API using Http package
+    var token = await sharedPref().getSharedPref('token');
+    var phaseId = await sharedPref().getSharedPref('phaseId');
+    var url = Strings.ASSESSMENT_BASE+'/'+assessmentWrapperId;
+    try {
+      final response = await http.get(Uri.parse(url), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'authorization': 'Bearer $token',
+      });
+      if (200 == response.statusCode) {
+        // print(response.body);
+        List<list_questions>? _assessmentList = [];
+        var responseJson = json.decode(response.body);
+        list_questions _listQue = list_questions.fromJson(responseJson);
+        print(_listQue.core!.sections!.elementAt(0).questions!.elementAt(0).question!.type);
+
+
+/*
+        for (var element in resbodyWrapper.assessmentWrappers!) {
+          _assessment.add(element);
+        }
+*/
+
+        assessment = _listQue;
+        // print(listData);
+        return _assessment;
+      } else {
+        // return [];
+      }
+    } catch (e) {
+      print(e);
+      // return [];
     }
   }
 

@@ -1,4 +1,6 @@
-class list_questions {
+import 'package:flutter/material.dart';
+
+class list_questions with ChangeNotifier {
   Wrapper? wrapper;
   Core? core;
   String? startTime;
@@ -28,7 +30,7 @@ class list_questions {
   }
 }
 
-class Wrapper {
+class Wrapper with ChangeNotifier {
   bool? graded;
   int? cost;
   List? visibleForServices;
@@ -136,7 +138,7 @@ class Phases {
   }
 }
 
-class Core {
+class Core with ChangeNotifier {
   Syllabus? syllabus;
   MarkingScheme? markingScheme;
   Config? config;
@@ -396,9 +398,9 @@ class SubInstructions {
   }
 }
 
-class Sections {
+class Sections with ChangeNotifier {
   int? duration;
-  List<Null>? questionGroups;
+  List? questionGroups;
   List<Questions>? questions;
   String? name;
 

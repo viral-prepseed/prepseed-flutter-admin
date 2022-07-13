@@ -29,7 +29,7 @@ class landingScreen extends StatefulWidget {
 
 class _landingScreenState extends State<landingScreen> {
   final _drawerController = ZoomDrawerController();
-  MenuItem currentItem = MenuItems.home;
+  MainMenuItems currentItem = MenuItems.home;
 
   @override
   Widget build(BuildContext context) {

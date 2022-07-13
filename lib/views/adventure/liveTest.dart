@@ -55,7 +55,7 @@ class _livetestState extends State<livetest> {
             // backgroundColor: Constants.backgroundColor,
             body: Consumer<TestProviderClass>(builder: (context, myModel, child){
               return DefaultTabController(
-                length: 4,
+                length: myModel.tabLength,
                 child: Scaffold(
                   body: Column(
                     children: [
@@ -98,7 +98,7 @@ class _livetestState extends State<livetest> {
                                 padding: const EdgeInsets.only(left: 25,right: 25),
                                 child: Card(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius:  BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                   elevation: 2,
                                   child: Container(
@@ -149,7 +149,9 @@ class _livetestState extends State<livetest> {
                                                 return ElevatedButton(onPressed: (){
                                                   var assessmentWrapperId = asw.elementAt(idx).sId;
                                                   sharedPref().setSharedPref('assessmentWrapperId', assessmentWrapperId);
-
+                                                  Future.microtask(() async => {
+                                                    Provider.of<TestProviderClass>(context, listen: false).assessments(assessmentWrapperId),
+                                                  });
                                                   showDialogBox();
                                                   /*var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
                                                   Navigator.of(context).push(route);*/
@@ -251,12 +253,16 @@ class _livetestState extends State<livetest> {
                                 // activeSession = true;
                               });
                               Navigator.of(context).pop();
+
+
+
                               var route = MaterialPageRoute(builder: (BuildContext context) => attempt_liveTest());
                               Navigator.of(context).push(route);
                             }, child: const Text('Begin Test')),
                           ),
                         ],
                       ),
+                      Container()
                       // Container(child: Text('smdfnjskfb'),),
                     ],
                   ))

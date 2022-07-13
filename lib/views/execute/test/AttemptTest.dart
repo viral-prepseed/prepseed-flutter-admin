@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:prepseed/helper/api/functions.dart';
 import 'package:prepseed/helper/api/functions/execute.dart';
 import 'package:prepseed/helper/sharedPref.dart';
-import 'package:prepseed/model/list_questions.dart';
+import 'package:prepseed/model/execute/tests/list_questions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../constants/colorPalate.dart';

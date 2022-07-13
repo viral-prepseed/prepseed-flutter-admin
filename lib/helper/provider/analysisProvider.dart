@@ -12,7 +12,7 @@ import 'package:prepseed/views/learn/assignments.dart';
 
 import '../../constants/strings.dart';
 import '../../model/getAnalysis/analysis.dart';
-import '../../model/list_questions.dart';
+import '../../model/execute/tests/list_questions.dart';
 import '../../views/execute/test/viewAnalysis.dart';
 import '../sharedPref.dart';
 class AnalysisClass extends ChangeNotifier {

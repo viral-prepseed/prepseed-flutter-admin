@@ -52,7 +52,7 @@ class AssessmentWrappersClass extends ChangeNotifier {
     var responseJson = json.decode(response.body);
     if (200 == response.statusCode) {
 
-      List<dynamic> _asw =  (responseJson['assessmentWrappers']);
+      List<dynamic> _asw = (responseJson['assessmentWrappers']);
 
       List<AssessmentWrappers> _aswAllList = [];
       List<AssessmentWrappers> _aswlist = [];
