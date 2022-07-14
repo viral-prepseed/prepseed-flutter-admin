@@ -732,7 +732,7 @@ class _AttemptTestState extends State<AttemptTest> with SingleTickerProviderStat
                                var optionImage = '';
                                var optionText = '';
                                if(quedata?.question?.options![idx].content?.rawContent.runtimeType == String){
-                                  convertstr = json.decode(quedata?.question?.options![idx].content?.rawContent);
+                                  // convertstr = json.decode(quedata?.question?.options![idx].content?.rawContent);
                                }
                                else{
                                  convertstr = (quedata?.question?.options![idx].content?.rawContent);
@@ -806,10 +806,11 @@ class _AttemptTestState extends State<AttemptTest> with SingleTickerProviderStat
 
     if(dummyopetions.runtimeType == String)
       {
-        resjson = json.decode(dummyopetions!);
+        // resjson = json.decode(dummyopetions!);
       }else{
-      resjson = (dummyopetions!);
+      // resjson = (dummyopetions!);
     }
+    resjson = {};
 
     // Map resjsonoptions = json.decode(quedata?.question?.options![0].content?.rawContent);
     List<dynamic> listelezero = resjson.values.elementAt(0);

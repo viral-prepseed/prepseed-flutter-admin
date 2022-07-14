@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:prepseed/helper/api/functions.dart';
 import 'package:prepseed/model/execute/tests/list_questions.dart';
+import 'package:prepseed/model/questions.dart';
 
 import '../../constants/colorPalate.dart';
 
@@ -30,6 +31,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   var setQID;
   List tabValues = [];
   List topicQue = [];
+  final questions = [];
 
   @override
   void initState() {
@@ -182,7 +184,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
             ),
           ),
         ),
-        questionWidget(queId: setQID),
+        // questionWidget(queId: setQID),
       ],
     );
   }
@@ -339,7 +341,14 @@ class _questionWidgetState extends State<questionWidget> {
   @override
   Widget build(BuildContext context) {
     // return Container();
-    return Center(child: Container(child:
-    Text(widget.queId.toString(),style: GoogleFonts.poppins(color: Constants.black)),));
+    return buildQuestion(widget.queId);
   }
+}
+
+buildQuestion(QuestionClass question){
+  return Column(
+    children: [
+      Text(question.text, style: GoogleFonts.poppins(fontSize: 25),)
+    ],
+  );
 }

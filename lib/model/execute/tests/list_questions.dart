@@ -634,11 +634,13 @@ class InlineStyleRanges {
 }
 class MultiOptions {
   String? id;
+  dynamic content;
 
-  MultiOptions({this.id});
+  MultiOptions({this.id,this.content});
 
   MultiOptions.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
+    content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
