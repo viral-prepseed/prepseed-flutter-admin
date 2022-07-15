@@ -16,10 +16,12 @@ class TestProviderClass extends ChangeNotifier {
   List<AssessmentWrappers> post = [];
   list_questions? _assessment;
   List TabValues = [];
+  List<QuestionClass> questions = [];
   List<AssessmentWrappers> TabContainList = [];
   Map<dynamic, dynamic> TabContainMap = {};
   List<AssessmentWrappers> get listData => post;
   list_questions get assessment => _assessment!;
+  List<QuestionClass> get questionsList => questions;
 
   get listLength => listData.length;
 
@@ -108,7 +110,7 @@ class TestProviderClass extends ChangeNotifier {
     var token = await sharedPref().getSharedPref('token');
     var phaseId = await sharedPref().getSharedPref('phaseId');
     var url = Strings.ASSESSMENT_BASE+'/'+assessmentWrapperId;
-    try {
+    // try {
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -122,11 +124,12 @@ class TestProviderClass extends ChangeNotifier {
         // print(_listQue.core!.sections!.elementAt(0).questions!.elementAt(0).question!.type);
 
         List listType = [];
-        List<QuestionClass> questions = [];
-        List<Option> _options = [];
+        List<QuestionClass> _questions = [];
+
 
         for (var element in _listQue.core!.sections!) {
           element.questions!.forEach((elementQue) {
+            List<Option> _options = [];
             // print(elementQue.question!.type);
             listType.add(elementQue.question!.type);
             if(elementQue.question!.type != "RANGE"){
@@ -137,31 +140,40 @@ class TestProviderClass extends ChangeNotifier {
               if(elementQue.question!.type == "MULTIPLE_CHOICE_MULTIPLE_CORRECT"){
 
                 elementQue.question!.multiOptions!.forEach((multiOp) {
-                  _options.add(Option(text: multiOp.content['rawContent']['blocks'][0]['text']
-                  /*( multiOp.content == null)?
-                  multiOp.content['rawContent']['blocks'][0]['text'] : {}*/
+                  var opCont = multiOp.content['rawContent'];
+                  if(opCont.runtimeType.toString() == 'String'){
+                    opCont = json.decode(multiOp.content['rawContent']);
+                  }
+                  _options.add(Option(text: opCont['blocks'][0]['text']
                   ));
                 });
 
 
               }
-              // print(rawCont.runtimeType);
-              questions.add(QuestionClass(text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
+
+              if(elementQue.question!.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
+
+                elementQue.question!.options!.forEach((multiOp) {
+                  var opCont = multiOp.content!.rawContent;
+                  if(opCont.runtimeType.toString() == 'String'){
+                    opCont = json.decode(opCont);
+                  }
+                  _options.add(Option(text: opCont['blocks'][0]['text']
+                  ));
+                });
+              }
+              _questions.add(QuestionClass(text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
                 options: _options
               ));
               // print(questions.toList().first.text);
             }
             // questions.add(QuestionClass().text = )
           });
-          questions.forEach((element) {
-            print(element.options);
-          });
         }
         // print(listType.toSet().toList());
 
 
-
-
+        questions = _questions;
 
         assessment = _listQue;
         // print(listData);
@@ -169,10 +181,10 @@ class TestProviderClass extends ChangeNotifier {
       } else {
         // return [];
       }
-    } catch (e) {
+/*    } catch (e) {
       print(e);
       // return [];
-    }
+    }*/
   }
 
 

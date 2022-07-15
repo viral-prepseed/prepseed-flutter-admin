@@ -10,6 +10,8 @@ import '../../constants/colorPalate.dart';
 import 'package:provider/provider.dart';
 import '../../helper/provider/testsProvider.dart';
 import '../menu/menu_widget.dart';
+import 'package:flutter_tex/flutter_tex.dart';
+import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class attempt_liveTest extends StatefulWidget {
@@ -31,10 +33,11 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   var setQID;
   List tabValues = [];
   List topicQue = [];
-  final questions = [];
+  List<QuestionClass> questions = [];
 
   @override
   void initState() {
+    questions = Provider.of<TestProviderClass>(context, listen: false).questionsList;
     list_questions lq = Provider.of<TestProviderClass>(context, listen: false).assessment;
     lq.core!.sections!.forEach((element) {
       tabValues.add(element.name);
@@ -51,7 +54,14 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
     setQID = _controller!.index;
     countdownDuration1 = Duration(hours: hours1, minutes: mints1, seconds: secs1);
     reset1();
+/*    questions.forEach((element) {
+      (element.options!.forEach((element) {
+        print(element.text);
+      }));
+    });*/
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +194,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
             ),
           ),
         ),
-        // questionWidget(queId: setQID),
+        questionWidget(queId: questions[setQID]),
       ],
     );
   }
@@ -346,9 +356,22 @@ class _questionWidgetState extends State<questionWidget> {
 }
 
 buildQuestion(QuestionClass question){
-  return Column(
-    children: [
-      Text(question.text, style: GoogleFonts.poppins(fontSize: 25),)
-    ],
+  var quesText = question.text.replaceAll('\$', '');
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: [
+
+        Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
+        Column(
+          children: List.generate(question.options!.length, (index) {
+            return ListTile(
+              title: Text(question.options!.elementAt(index).text),
+            );
+          }),
+
+        )
+      ],
+    ),
   );
 }

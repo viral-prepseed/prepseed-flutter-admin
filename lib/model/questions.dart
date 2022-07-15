@@ -1,6 +1,6 @@
 class QuestionClass{
   final String text;
-  dynamic options;
+  List<Option>? options;
   bool isMarked;
   Option? selectedOption;
 
