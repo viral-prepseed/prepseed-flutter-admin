@@ -19,9 +19,11 @@ class TestProviderClass extends ChangeNotifier {
   List<QuestionClass> questions = [];
   List<AssessmentWrappers> TabContainList = [];
   Map<dynamic, dynamic> TabContainMap = {};
+  Map mapTopic = {};
   List<AssessmentWrappers> get listData => post;
   list_questions get assessment => _assessment!;
   List<QuestionClass> get questionsList => questions;
+  Map get listTopics => mapTopic;
 
   get listLength => listData.length;
 
@@ -64,6 +66,13 @@ class TestProviderClass extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+
+  // set mapTopic(Map value) {
+  //   mapTopic = value;
+  //
+  //   isLoading = false;
+  //   notifyListeners();
+  // }
 
   ProviderClass() {
     post = [];
@@ -123,20 +132,24 @@ class TestProviderClass extends ChangeNotifier {
         list_questions _listQue = list_questions.fromJson(responseJson);
         // print(_listQue.core!.sections!.elementAt(0).questions!.elementAt(0).question!.type);
 
+        Map _mapTopic = {};
         List listType = [];
-        List<QuestionClass> _questions = [];
+
 
 
         for (var element in _listQue.core!.sections!) {
-          element.questions!.forEach((elementQue) {
+          List<QuestionClass> _questions = [];
+          for (var elementQue in element.questions!) {
+            print(element.questions!.length);
             List<Option> _options = [];
             // print(elementQue.question!.type);
             listType.add(elementQue.question!.type);
+            var rawCont = elementQue.question!.content!.rawContent!;
+            if(rawCont.runtimeType.toString() == "String"){
+              rawCont = json.decode(elementQue.question!.content!.rawContent!);
+            }
             if(elementQue.question!.type != "RANGE"){
-              var rawCont = elementQue.question!.content!.rawContent!;
-              if(rawCont.runtimeType.toString() == "String"){
-                rawCont = json.decode(elementQue.question!.content!.rawContent!);
-              }
+
               if(elementQue.question!.type == "MULTIPLE_CHOICE_MULTIPLE_CORRECT"){
 
                 elementQue.question!.multiOptions!.forEach((multiOp) {
@@ -153,27 +166,28 @@ class TestProviderClass extends ChangeNotifier {
 
               if(elementQue.question!.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
 
-                elementQue.question!.options!.forEach((multiOp) {
+                for (var multiOp in elementQue.question!.options!) {
                   var opCont = multiOp.content!.rawContent;
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(opCont);
                   }
                   _options.add(Option(text: opCont['blocks'][0]['text']
                   ));
-                });
+                }
               }
-              _questions.add(QuestionClass(text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
-                options: _options
-              ));
+
               // print(questions.toList().first.text);
             }
-            // questions.add(QuestionClass().text = )
-          });
+            _questions.add(QuestionClass(
+                type: elementQue.question!.type!, text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
+                options: _options
+            ));
+          }
+          _mapTopic[element.name] = _questions;
         }
         // print(listType.toSet().toList());
-
-
-        questions = _questions;
+        mapTopic = _mapTopic;
+        // questions = _questions;
 
         assessment = _listQue;
         // print(listData);

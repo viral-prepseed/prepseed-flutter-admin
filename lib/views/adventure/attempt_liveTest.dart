@@ -30,14 +30,17 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   static var countdownDuration1 = Duration(minutes: 10);
 
   late List list_que_tab = [];
-  var setQID;
+  var setQID = 0;
   List tabValues = [];
   List topicQue = [];
   List<QuestionClass> questions = [];
+  Map listTopics = {};
 
   @override
   void initState() {
-    questions = Provider.of<TestProviderClass>(context, listen: false).questionsList;
+    listTopics = Provider.of<TestProviderClass>(context, listen: false).listTopics;
+    // questions = Provider.of<TestProviderClass>(context, listen: false).questionsList;
+    questions = listTopics.values.elementAt(0);
     list_questions lq = Provider.of<TestProviderClass>(context, listen: false).assessment;
     lq.core!.sections!.forEach((element) {
       tabValues.add(element.name);
@@ -54,12 +57,20 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
     setQID = _controller!.index;
     countdownDuration1 = Duration(hours: hours1, minutes: mints1, seconds: secs1);
     reset1();
+    _controller!.addListener(() {
+      questions = listTopics.values.elementAt(_controller!.index);
+      setState(() {
+        questions;
+        print(questions.elementAt(_controller!.index).text);
+      });
+    });
 /*    questions.forEach((element) {
       (element.options!.forEach((element) {
         print(element.text);
       }));
     });*/
 
+    // print(listTopics.values.elementAt(0));
   }
 
 
@@ -169,6 +180,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                           // print(postmap);
                           setState(() {
                             setQID = data[index]['id'];
+                            // print(questions.length);
                           });
                         },
                         title: Align(
@@ -194,7 +206,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
             ),
           ),
         ),
-        questionWidget(queId: questions[setQID]),
+        questionWidget(queId: questions.elementAt(setQID)),
       ],
     );
   }
@@ -356,21 +368,23 @@ class _questionWidgetState extends State<questionWidget> {
 }
 
 buildQuestion(QuestionClass question){
-  var quesText = question.text.replaceAll('\$', '');
+  // var quesText = question.text.replaceAll('\$', '');
+  // print(question.type);
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-
         Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
-        Column(
-          children: List.generate(question.options!.length, (index) {
+        (question.type != 'RANGE') ? Column(
+          children: List.generate(question.options.length, (index) {
             return ListTile(
-              title: Text(question.options!.elementAt(index).text),
+              title: Text(question.options.elementAt(index).text),
             );
           }),
-
-        )
+        ) : const TextField(
+          decoration: InputDecoration(labelText: "Your Answer"),
+          keyboardType: TextInputType.number,
+          )
       ],
     ),
   );

@@ -1,12 +1,14 @@
 class QuestionClass{
+  final String type;
   final String text;
-  List<Option>? options;
+  final List<Option> options;
   bool isMarked;
   Option? selectedOption;
 
   QuestionClass({
+    required this.type,
     required this.text,
-    this.options,
+    required this.options,
     this.isMarked = false,
     this.selectedOption
   });
