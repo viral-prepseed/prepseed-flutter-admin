@@ -1,6 +1,7 @@
 class QuestionClass{
   final String type;
   final String text;
+  dynamic linkedText;
   final List<Option> options;
   bool isMarked;
   Option? selectedOption;
@@ -8,6 +9,7 @@ class QuestionClass{
   QuestionClass({
     required this.type,
     required this.text,
+    this.linkedText,
     required this.options,
     this.isMarked = false,
     this.selectedOption

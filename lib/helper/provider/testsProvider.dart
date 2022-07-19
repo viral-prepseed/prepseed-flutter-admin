@@ -134,6 +134,7 @@ class TestProviderClass extends ChangeNotifier {
 
         Map _mapTopic = {};
         List listType = [];
+        dynamic _linkTextMain;
 
 
 
@@ -150,36 +151,34 @@ class TestProviderClass extends ChangeNotifier {
             }
             if(elementQue.question!.type != "RANGE"){
 
-              if(elementQue.question!.type == "MULTIPLE_CHOICE_MULTIPLE_CORRECT"){
-
+              if(elementQue.question!.type == "MULTIPLE_CHOICE_MULTIPLE_CORRECT" ||
+                  elementQue.question!.type == "MULTIPLE_CHOICE_SINGLE_CORRECT"){
                 elementQue.question!.multiOptions!.forEach((multiOp) {
                   var opCont = multiOp.content['rawContent'];
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(multiOp.content['rawContent']);
                   }
-                  _options.add(Option(text: opCont['blocks'][0]['text']
-                  ));
+                  _options.add(Option(text: opCont['blocks'][0]['text']));
                 });
-
-
               }
 
               if(elementQue.question!.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
-
+                _linkTextMain = elementQue.question!.linkQuestions ?? '';
                 for (var multiOp in elementQue.question!.options!) {
                   var opCont = multiOp.content!.rawContent;
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(opCont);
                   }
-                  _options.add(Option(text: opCont['blocks'][0]['text']
-                  ));
+                  _options.add(Option(text: opCont['blocks'][0]['text']));
                 }
               }
 
               // print(questions.toList().first.text);
             }
             _questions.add(QuestionClass(
-                type: elementQue.question!.type!, text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
+                type: elementQue.question!.type!,
+                text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
+                linkedText: _linkTextMain,
                 options: _options
             ));
           }

@@ -465,6 +465,7 @@ class Questions {
 }
 
 class Question {
+  dynamic linkQuestions;
   String? type;
   String? dataType;
   String? sId;
@@ -474,7 +475,9 @@ class Question {
   Statistics? statistics;
 
   Question(
-      {this.type,
+      {
+        this.linkQuestions,
+        this.type,
         this.dataType,
         this.sId,
         this.content,
@@ -483,6 +486,7 @@ class Question {
         this.statistics});
 
   Question.fromJson(Map<String, dynamic> json) {
+    linkQuestions = json['link'] != null ? new LinkQuestions.fromJson(json['link']) : null;
     type = json['type'];
     dataType = json['dataType'];
     sId = json['_id'];
@@ -713,3 +717,31 @@ class PerfectTimeLimits {
     return data;
   }
 }
+class LinkQuestions {
+  Content? content;
+  String? id;
+  int? sequenceNo;
+  int? totalQuestions;
+
+  LinkQuestions({this.content, this.id, this.sequenceNo, this.totalQuestions});
+
+  LinkQuestions.fromJson(Map<String, dynamic> json) {
+    content =
+    json['content'] != null ? new Content.fromJson(json['content']) : null;
+    id = json['id'];
+    sequenceNo = json['sequence_no'];
+    totalQuestions = json['total_questions'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.content != null) {
+      data['content'] = this.content!.toJson();
+    }
+    data['id'] = this.id;
+    data['sequence_no'] = this.sequenceNo;
+    data['total_questions'] = this.totalQuestions;
+    return data;
+  }
+}
+

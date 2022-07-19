@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:prepseed/helper/api/functions.dart';
@@ -61,6 +62,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
       questions = listTopics.values.elementAt(_controller!.index);
       setState(() {
         questions;
+        setQID = 0;
         print(questions.elementAt(_controller!.index).text);
       });
     });
@@ -88,9 +90,6 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
       ),
     );
   }
-
-
-
 
   /*==================================================== buildTopicTabs  ============================================================*/
   buildTopicTabs(){
@@ -122,9 +121,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
     );
   }
 
-
   /*==================================================== List Questions ============================================================*/
-
   Widget selectQueList(){
     final List<Map> data = List.generate(topicQue.elementAt(_controller!.index),
             (index) => {'id': index, 'name': 'Item $index', 'isSelected': false});
@@ -155,9 +152,9 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                     Card(
 
                       key: ValueKey(data[index]['name']),
-                      color: /*(tappedIndex == index)
+                      color: (setQID == index)
                           ? Colors.green
-                          :*/ Colors.white,
+                          : Colors.white,
                       elevation: 5,
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(
@@ -367,24 +364,85 @@ class _questionWidgetState extends State<questionWidget> {
   }
 }
 
+linked_ques(QuestionClass question){
+  LinkQuestions _linkQue;
+
+  if(question.linkedText != null && question.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
+    _linkQue = question.linkedText;
+    var rawCont = _linkQue.content!.rawContent!;
+    if(rawCont.runtimeType.toString() == "String"){
+      rawCont = json.decode(_linkQue.content!.rawContent!);
+    }
+    var _linkText = QuestionContents.fromJson(rawCont).blocks!.first.text ?? '';
+
+  return Column(
+    children: [
+      Text(_linkText, style: GoogleFonts.poppins(fontSize: 13),),
+      SizedBox(height: 10,)
+    ],
+  );
+  }
+  return Container();
+}
+
 buildQuestion(QuestionClass question){
   // var quesText = question.text.replaceAll('\$', '');
   // print(question.type);
+  String? optionVal;
+
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
+        Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
+        SizedBox(height: 10,),
+        linked_ques(question),
         Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
-        (question.type != 'RANGE') ? Column(
+
+
+        (question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT') ?
+        Column(
+          children: List.generate(question.options.length, (index) {
+            return ListTile(
+              leading: Radio(
+                  value: "123",
+                  groupValue: optionVal,
+                  onChanged: (value){
+                    /*setState(() {
+                      gender = value.toString();
+                    });*/
+                  }),
+              title: Text(question.options.elementAt(index).text),
+            );
+          }),
+        ):
+        (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT') ?
+        Column(
+          children: List.generate(question.options.length, (index) {
+            return ListTile(
+              title: Text(question.options.elementAt(index).text),
+              leading: Radio(
+                  value: "123",
+                  groupValue: optionVal,
+                  onChanged: (value){
+                    /*setState(() {
+                      gender = value.toString();
+                    });*/
+                  }),
+            );
+          }),
+        )
+        : (question.type == 'RANGE') ?
+        const TextField(
+          decoration: InputDecoration(labelText: "Your Answer"),
+          keyboardType: TextInputType.number,
+        ) : Column(
           children: List.generate(question.options.length, (index) {
             return ListTile(
               title: Text(question.options.elementAt(index).text),
             );
           }),
-        ) : const TextField(
-          decoration: InputDecoration(labelText: "Your Answer"),
-          keyboardType: TextInputType.number,
-          )
+        )
       ],
     ),
   );
