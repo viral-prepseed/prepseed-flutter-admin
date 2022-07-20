@@ -151,8 +151,7 @@ class TestProviderClass extends ChangeNotifier {
             }
             if(elementQue.question!.type != "RANGE"){
 
-              if(elementQue.question!.type == "MULTIPLE_CHOICE_MULTIPLE_CORRECT" ||
-                  elementQue.question!.type == "MULTIPLE_CHOICE_SINGLE_CORRECT"){
+              if(elementQue.question!.type == "MULTIPLE_CHOICE_MULTIPLE_CORRECT" ){
                 elementQue.question!.multiOptions!.forEach((multiOp) {
                   var opCont = multiOp.content['rawContent'];
                   if(opCont.runtimeType.toString() == 'String'){
@@ -173,11 +172,43 @@ class TestProviderClass extends ChangeNotifier {
                 }
               }
 
+              if(elementQue.question!.type == "MULTIPLE_CHOICE_SINGLE_CORRECT"){
+
+
+                  for (var multiOp in elementQue.question!.options!) {
+                    var _isimageopt = multiOp.content;
+                    if(_isimageopt == null){
+                      _options.add(Option(text: 'ABC'));
+                    }else{
+                      var opCont = multiOp.content!.rawContent;
+                      if(opCont.runtimeType.toString() == 'String'){
+                        opCont = json.decode(opCont);
+                      }
+                      _options.add(Option(text: opCont['blocks'][0]['text']));
+                    }
+                  }
+
+
+              }
+
               // print(questions.toList().first.text);
             }
+            var _queImage = '';
+            var em = rawCont;
+            if(em['entityMap'] != null){
+              if(em['entityMap']['0'] != null){
+                _queImage = em['entityMap']['0']['data']['url'] ?? '';
+              }
+            }
+
+            // print(em['entityMap']);
+            /*if(em['entityMap'] != null){
+
+            }*/
             _questions.add(QuestionClass(
                 type: elementQue.question!.type!,
                 text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
+                queImage: _queImage,
                 linkedText: _linkTextMain,
                 options: _options
             ));
