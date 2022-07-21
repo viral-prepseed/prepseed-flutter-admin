@@ -107,7 +107,7 @@ class _testState extends State<test> {
         for (var topicmockele in topicmock.keys) {
           if(topicmockele.type!.isNotEmpty){
             if(topicmockele.type == 'FULL-MOCK'){
-              print(topicmockele);
+              // print(topicmockele);
               var spaceGroup = topicmockele;//groupBy(originCountryGroup[originCountry]!, (obj) => (obj as AssessmentWrappers).type);
               topicmockmap[topicmockele] = spaceGroup;
             }

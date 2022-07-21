@@ -359,10 +359,96 @@ class questionWidget extends StatefulWidget {
 }
 
 class _questionWidgetState extends State<questionWidget> {
+  String? optionVal;
+  var selectedIndexes = [];
+  Map<String, dynamic> linkNum= {
+    'A' : 0,
+    'B' : 1,
+    'C' : 2,
+    'D' : 3,
+    "E" : 4,
+    "/" : " ",
+  };
+
   @override
   Widget build(BuildContext context) {
     // return Container();
-    return buildQuestion(widget.queId);
+    // return buildQuestion(widget.queId);
+    QuestionClass question = widget.queId;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
+          SizedBox(height: 10,),
+          linked_ques(question),
+          Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
+          (question.queImage != '')?
+          Image(image: NetworkImage(question.queImage)) :
+          Container(),
+
+
+          (question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT') ?
+          Column(
+            children: List.generate(question.options.length, (index) {
+              return CheckboxListTile(
+                title: Text(question.options.elementAt(index).text),
+                // subtitle: Text(this.noteList[position].actn_on),
+                value: selectedIndexes.contains(question.options.elementAt(index).text),
+                onChanged: (_) {
+                  if (selectedIndexes.contains(question.options.elementAt(index).text)) {
+                    selectedIndexes.remove(question.options.elementAt(index).text);   // unselect
+                  } else {
+                    selectedIndexes.add(question.options.elementAt(index).text);  // select
+                  }
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+              );
+            }),
+          ):
+          (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
+              question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'
+          ) ?
+          Column(
+            children: List.generate(question.options.length, (index) {
+              return RadioListTile(
+                title: Text(question.options.elementAt(index).text.toString()),
+                  value: question.options.elementAt(index).text.toString(),
+                  groupValue: optionVal,
+                  onChanged: (value){
+                    setState(() {
+                    optionVal = value.toString();
+                    });
+                  });
+
+              /*return ListTile(
+                title: Text((question.options.elementAt(index).text != 'ABC')?
+                question.options.elementAt(index).text : '${linkNum.values.where((element) => element == index)}'),
+                leading: Radio(
+                    value: question.options.elementAt(index).text.toString(),
+                    groupValue: optionVal,
+                    onChanged: (value){
+                      setState(() {
+                        optionVal = value.toString();
+                      });
+                    }),
+              );*/
+            }),
+          )
+              : (question.type == 'RANGE') ?
+          const TextField(
+            decoration: InputDecoration(labelText: "Your Answer"),
+            keyboardType: TextInputType.number,
+          ) : Column(
+            children: List.generate(question.options.length, (index) {
+              return ListTile(
+                title: Text(question.options.elementAt(index).text),
+              );
+            }),
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -387,15 +473,15 @@ linked_ques(QuestionClass question){
   return Container();
 }
 
-buildQuestion(QuestionClass question){
+ /*Widget buildQuestion(QuestionClass question){
   // var quesText = question.text.replaceAll('\$', '');
   // print(question.type);
   Map<String, dynamic> linkNum= {
-    'A' : 1,
-    'B' : 2,
-    'C' : 3,
-    'D' : 4,
-    "E" : 5,
+    'A' : 0,
+    'B' : 1,
+    'C' : 2,
+    'D' : 3,
+    "E" : 4,
     "/" : " ",
   };
   String? optionVal;
@@ -421,9 +507,9 @@ buildQuestion(QuestionClass question){
                   value: "123",
                   groupValue: optionVal,
                   onChanged: (value){
-                    /*setState(() {
+                    setState(() {
                       gender = value.toString();
-                    });*/
+                    });
                   }),
               title: Text(question.options.elementAt(index).text),
             );
@@ -441,9 +527,9 @@ buildQuestion(QuestionClass question){
                   value: "123",
                   groupValue: optionVal,
                   onChanged: (value){
-                    /*setState(() {
+                    *//*setState(() {
                       gender = value.toString();
-                    });*/
+                    });*//*
                   }),
             );
           }),
@@ -462,4 +548,4 @@ buildQuestion(QuestionClass question){
       ],
     ),
   );
-}
+}*/

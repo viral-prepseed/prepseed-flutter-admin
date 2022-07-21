@@ -136,24 +136,33 @@ class TestProviderClass extends ChangeNotifier {
         List listType = [];
         dynamic _linkTextMain;
 
-
+        var _optImage = '';
 
         for (var element in _listQue.core!.sections!) {
           List<QuestionClass> _questions = [];
           for (var elementQue in element.questions!) {
-            print(element.questions!.length);
+            // print(element.questions!.length);
             List<Option> _options = [];
             // print(elementQue.question!.type);
             listType.add(elementQue.question!.type);
             var rawCont = elementQue.question!.content!.rawContent!;
+            /* Convert to Json Object */
             if(rawCont.runtimeType.toString() == "String"){
               rawCont = json.decode(elementQue.question!.content!.rawContent!);
             }
+
+            /* List of Options */
             if(elementQue.question!.type != "RANGE"){
 
               if(elementQue.question!.type == "MULTIPLE_CHOICE_MULTIPLE_CORRECT" ){
+
                 elementQue.question!.multiOptions!.forEach((multiOp) {
                   var opCont = multiOp.content['rawContent'];
+                  /*if(opCont['entityMap'] != null){
+                    if(opCont['entityMap']['0'] != null){
+                      _optImage = opCont['entityMap']['0']['data']['url'] ?? '';
+                    }
+                  }*/
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(multiOp.content['rawContent']);
                   }
@@ -163,7 +172,7 @@ class TestProviderClass extends ChangeNotifier {
 
               if(elementQue.question!.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
                 _linkTextMain = elementQue.question!.linkQuestions ?? '';
-                for (var multiOp in elementQue.question!.options!) {
+                for(var multiOp in elementQue.question!.options!) {
                   var opCont = multiOp.content!.rawContent;
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(opCont);
@@ -209,6 +218,7 @@ class TestProviderClass extends ChangeNotifier {
                 type: elementQue.question!.type!,
                 text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
                 queImage: _queImage,
+                optImage: _optImage,
                 linkedText: _linkTextMain,
                 options: _options
             ));

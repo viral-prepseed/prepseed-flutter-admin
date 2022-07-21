@@ -2,6 +2,7 @@ class QuestionClass{
   final String type;
   final String text;
   dynamic queImage;
+  dynamic optImage;
   dynamic linkedText;
   final List<Option> options;
   bool isMarked;
@@ -11,6 +12,7 @@ class QuestionClass{
     required this.type,
     required this.text,
     this.queImage,
+    this.optImage,
     this.linkedText,
     required this.options,
     this.isMarked = false,

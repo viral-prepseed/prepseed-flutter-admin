@@ -82,7 +82,7 @@ class _signIn_signUp extends State<signIn_signUp>{
 
     if(response.body.isNotEmpty) {
       var jsondatas = (response.statusCode);
-      print(jsondatas);
+      // print(jsondatas);
     }
     if(response.statusCode == 200){
       var jsondata = json.decode(response.body);
