@@ -125,86 +125,88 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   Widget selectQueList(){
     final List<Map> data = List.generate(topicQue.elementAt(_controller!.index),
             (index) => {'id': index, 'name': 'Item $index', 'isSelected': false});
-    return Column(
-      children: [
-        Container(
-          // width: double.maxFinite,
-          height: 60,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GridView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 780,
-                  childAspectRatio: 2 / 2,
-                  crossAxisSpacing: 50,
-                  mainAxisSpacing: 10
-              ),
-              // physics: NeverScrollableScrollPhysics(),
-              itemCount: data.length,
-              itemBuilder: (context, index)
-              {
-                // isMarked = false;
-                return Stack(
-                  // key: _stackkey,
-                  children: [
-                    Card(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            // width: double.maxFinite,
+            height: 60,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 780,
+                    childAspectRatio: 2 / 2,
+                    crossAxisSpacing: 50,
+                    mainAxisSpacing: 10
+                ),
+                // physics: NeverScrollableScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (context, index)
+                {
+                  // isMarked = false;
+                  return Stack(
+                    // key: _stackkey,
+                    children: [
+                      Card(
 
-                      key: ValueKey(data[index]['name']),
-                      color: (setQID == index)
-                          ? Colors.green
-                          : Colors.white,
-                      elevation: 5,
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 0.0),
-                        onTap: () {
+                        key: ValueKey(data[index]['name']),
+                        color: (setQID == index)
+                            ? Colors.green
+                            : Colors.white,
+                        elevation: 5,
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 0.0, horizontal: 0.0),
+                          onTap: () {
 
-                          // print(data[index]['id'] + 1);
-                          /*Map postmap = {
-                            "flow":[
-                              {
-                                "section": _controller!.index,
-                                "question": tappedIndex,
-                                "response": (_value > 0) ? quedata?.question?.options![_value].sId : null,
-                                "time": totalTimeTaken,
-                                "state": 1
-                              }
-                            ]
-                          };*/
-                          // functions().postFlowLogs(postmap);
-                          // print(postmap);
-                          setState(() {
-                            setQID = data[index]['id'];
-                            // print(questions.length);
-                          });
-                        },
-                        title: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              (_controller!.index != 0)?
-                                  calLength((data[index]['id'] + 1))
-                              : (data[index]['id'] + 1).toString(),
-                              style: GoogleFonts.poppins(fontSize: 11),
-                            )),
+                            // print(data[index]['id'] + 1);
+                            /*Map postmap = {
+                              "flow":[
+                                {
+                                  "section": _controller!.index,
+                                  "question": tappedIndex,
+                                  "response": (_value > 0) ? quedata?.question?.options![_value].sId : null,
+                                  "time": totalTimeTaken,
+                                  "state": 1
+                                }
+                              ]
+                            };*/
+                            // functions().postFlowLogs(postmap);
+                            // print(postmap);
+                            setState(() {
+                              setQID = data[index]['id'];
+                              // print(questions.length);
+                            });
+                          },
+                          title: Align(
+                              alignment: Alignment.topCenter,
+                              child: Text(
+                                (_controller!.index != 0)?
+                                    calLength((data[index]['id'] + 1))
+                                : (data[index]['id'] + 1).toString(),
+                                style: GoogleFonts.poppins(fontSize: 11),
+                              )),
+                        ),
                       ),
-                    ),
-                    /*(index == tappedIndex)? const Positioned(
-                      child: Icon(Icons.remove_red_eye_outlined, size: 12,),
-                      right: 0,
-                      top: -26,
-                      bottom: 0,
-                    ) :*/
+                      /*(index == tappedIndex)? const Positioned(
+                        child: Icon(Icons.remove_red_eye_outlined, size: 12,),
+                        right: 0,
+                        top: -26,
+                        bottom: 0,
+                      ) :*/
 
-                  ],
-                ); },
+                    ],
+                  ); },
 
+              ),
             ),
           ),
-        ),
-        questionWidget(queId: questions.elementAt(setQID)),
-      ],
+          questionWidget(queId: questions.elementAt(setQID)),
+        ],
+      ),
     );
   }
   calLength(dataIndex){
@@ -357,10 +359,96 @@ class questionWidget extends StatefulWidget {
 }
 
 class _questionWidgetState extends State<questionWidget> {
+  String? optionVal;
+  var selectedIndexes = [];
+  Map<String, dynamic> linkNum= {
+    'A' : 0,
+    'B' : 1,
+    'C' : 2,
+    'D' : 3,
+    "E" : 4,
+    "/" : " ",
+  };
+
   @override
   Widget build(BuildContext context) {
     // return Container();
-    return buildQuestion(widget.queId);
+    // return buildQuestion(widget.queId);
+    QuestionClass question = widget.queId;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
+          SizedBox(height: 10,),
+          linked_ques(question),
+          Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
+          (question.queImage != '')?
+          Image(image: NetworkImage(question.queImage)) :
+          Container(),
+
+
+          (question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT') ?
+          Column(
+            children: List.generate(question.options.length, (index) {
+              return CheckboxListTile(
+                title: Text(question.options.elementAt(index).text),
+                // subtitle: Text(this.noteList[position].actn_on),
+                value: selectedIndexes.contains(question.options.elementAt(index).text),
+                onChanged: (_) {
+                  if (selectedIndexes.contains(question.options.elementAt(index).text)) {
+                    selectedIndexes.remove(question.options.elementAt(index).text);   // unselect
+                  } else {
+                    selectedIndexes.add(question.options.elementAt(index).text);  // select
+                  }
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+              );
+            }),
+          ):
+          (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
+              question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'
+          ) ?
+          Column(
+            children: List.generate(question.options.length, (index) {
+              return RadioListTile(
+                title: Text(question.options.elementAt(index).text.toString()),
+                  value: question.options.elementAt(index).text.toString(),
+                  groupValue: optionVal,
+                  onChanged: (value){
+                    setState(() {
+                    optionVal = value.toString();
+                    });
+                  });
+
+              /*return ListTile(
+                title: Text((question.options.elementAt(index).text != 'ABC')?
+                question.options.elementAt(index).text : '${linkNum.values.where((element) => element == index)}'),
+                leading: Radio(
+                    value: question.options.elementAt(index).text.toString(),
+                    groupValue: optionVal,
+                    onChanged: (value){
+                      setState(() {
+                        optionVal = value.toString();
+                      });
+                    }),
+              );*/
+            }),
+          )
+              : (question.type == 'RANGE') ?
+          const TextField(
+            decoration: InputDecoration(labelText: "Your Answer"),
+            keyboardType: TextInputType.number,
+          ) : Column(
+            children: List.generate(question.options.length, (index) {
+              return ListTile(
+                title: Text(question.options.elementAt(index).text),
+              );
+            }),
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -385,9 +473,17 @@ linked_ques(QuestionClass question){
   return Container();
 }
 
-buildQuestion(QuestionClass question){
+ /*Widget buildQuestion(QuestionClass question){
   // var quesText = question.text.replaceAll('\$', '');
   // print(question.type);
+  Map<String, dynamic> linkNum= {
+    'A' : 0,
+    'B' : 1,
+    'C' : 2,
+    'D' : 3,
+    "E" : 4,
+    "/" : " ",
+  };
   String? optionVal;
 
   return Padding(
@@ -398,6 +494,9 @@ buildQuestion(QuestionClass question){
         SizedBox(height: 10,),
         linked_ques(question),
         Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
+        (question.queImage != '')?
+            Image(image: NetworkImage(question.queImage)) :
+        Container(),
 
 
         (question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT') ?
@@ -408,26 +507,29 @@ buildQuestion(QuestionClass question){
                   value: "123",
                   groupValue: optionVal,
                   onChanged: (value){
-                    /*setState(() {
+                    setState(() {
                       gender = value.toString();
-                    });*/
+                    });
                   }),
               title: Text(question.options.elementAt(index).text),
             );
           }),
         ):
-        (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT') ?
+        (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
+            question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'
+        ) ?
         Column(
           children: List.generate(question.options.length, (index) {
             return ListTile(
-              title: Text(question.options.elementAt(index).text),
+              title: Text((question.options.elementAt(index).text != 'ABC')?
+              question.options.elementAt(index).text : '${linkNum.values.where((element) => element == index)}'),
               leading: Radio(
                   value: "123",
                   groupValue: optionVal,
                   onChanged: (value){
-                    /*setState(() {
+                    *//*setState(() {
                       gender = value.toString();
-                    });*/
+                    });*//*
                   }),
             );
           }),
@@ -446,4 +548,4 @@ buildQuestion(QuestionClass question){
       ],
     ),
   );
-}
+}*/
