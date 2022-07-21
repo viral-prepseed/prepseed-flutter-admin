@@ -1,11 +1,12 @@
-import 'package:learning_module/model/playlist_model/playlists.dart';
-import 'package:learning_module/constant/theme/style.dart';
-import 'package:learning_module/view/common/appbar.dart';
-import 'package:learning_module/view/common/drawer.dart';
-import 'package:learning_module/repository/playlist_provider/videos_provider.dart';
-import 'package:learning_module/view/videos/vimeo.dart';
+import '../../constants/colorPalate.dart';
+import '../../model/playlist_model/playlists.dart';
+import '../../constants/theme/style.dart';
+import '../../repository/playlist_provider/videos_provider.dart';
+import '../../views/videos/vimeo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../menu/menu_widget.dart';
 
 class PlaylistVideos extends StatefulWidget {
   Playlists? list;
@@ -28,8 +29,11 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
   Widget build(BuildContext context) {
     final provMdl = Provider.of<VideosProvider>(context);
     return Scaffold(
-      appBar: const AppBarItems(),
-      drawer: const SideBar(),
+      appBar: AppBar(
+        backgroundColor: Constants.backgroundColor,
+        elevation: 0,
+        leading: MenuWidget(),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(

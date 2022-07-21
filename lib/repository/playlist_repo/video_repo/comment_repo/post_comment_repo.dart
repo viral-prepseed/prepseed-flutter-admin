@@ -3,15 +3,20 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../../../constant/strings/string.dart';
+import '../../../../constants/strings/string.dart';
+import '../../../../helper/sharedPref.dart';
 import '../../../../model/playlist_model/video_model/comment/post_comment.dart';
 
 class PostCommentRepo{
 
   Future<PostComment> uploadComment(String title, String id) async {
 
+    var token = await sharedPref().getSharedPref('token');
     var url = Uri.parse(StringValue.commentPostUrl);
-    var response = await http.post(url, headers: StringValue().header,
+    var response = await http.post(url, headers: {
+      'Content-type' : 'application/json',
+      'authorization': 'Bearer $token',
+    },
       body: jsonEncode(<String, String>{
         'text': title,
         'videoId' : id,

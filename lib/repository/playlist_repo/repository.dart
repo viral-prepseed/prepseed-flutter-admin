@@ -3,16 +3,22 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'package:learning_module/constant/strings/string.dart';
-import 'package:learning_module/model/playlist_model/playlists.dart';
+import '../../constants/strings/string.dart';
+import '../../helper/sharedPref.dart';
+import '../../model/playlist_model/playlists.dart';
 
 class Provider{
 
   Future<playlist_model>getPlaylist(context) async {
 
     playlist_model _model;
+
+    var token = await sharedPref().getSharedPref('token');
     var url = Uri.parse(StringValue.playlistUrl);
-    var response = await http.get(url, headers:StringValue().header);
+    var response = await http.get(url, headers: {
+      'Content-type' : 'application/json',
+      'authorization': 'Bearer $token',
+    },);
     if (response.statusCode == 200) {
     /*  _model = List<playlist_model>.from(
           json.decode(response.body).map((x) => playlist_model.fromJson(x))).toList();

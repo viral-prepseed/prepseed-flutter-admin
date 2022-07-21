@@ -25,7 +25,7 @@ class PhaseLeaderboard {
 }
 
 class Leaderboard {
-  double? rating;
+  dynamic rating;
   String? sId;
   User? user;
   String? lastUpdated;

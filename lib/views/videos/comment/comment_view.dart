@@ -1,6 +1,6 @@
-import 'package:learning_module/model/playlist_model/video_model/videoPlaylistModel.dart';
-import 'package:learning_module/constant/theme/style.dart';
-import 'package:learning_module/repository/playlist_provider/videos_provider.dart';
+import '../../../model/playlist_model/video_model/videoPlaylistModel.dart';
+import '../../../constants/theme/style.dart';
+import '../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';

@@ -3,7 +3,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../../../constant/strings/string.dart';
+import '../../../../constants/strings/string.dart';
+import '../../../../helper/sharedPref.dart';
 import '../../../../model/playlist_model/video_model/comment/comment_model.dart';
 
 class CommentRepo{
@@ -12,8 +13,12 @@ class CommentRepo{
 
 
     CommentModel _model;
+    var token = await sharedPref().getSharedPref('token');
     var url = Uri.parse(StringValue.commentUrl + id);
-    var response = await http.get(url, headers:StringValue().header);
+    var response = await http.get(url, headers: {
+      'Content-type' : 'application/json',
+      'authorization': 'Bearer $token',
+    },);
     if (response.statusCode == 200) {
       /*  _model = List<playlist_model>.from(
           json.decode(response.body).map((x) => playlist_model.fromJson(x))).toList();

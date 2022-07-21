@@ -1,11 +1,12 @@
-import 'package:learning_module/constant/theme/style.dart';
-import 'package:learning_module/view/Documents/resource_document_list.dart';
-import 'package:learning_module/view/common/appbar.dart';
-import 'package:learning_module/view/common/drawer.dart';
-import 'package:learning_module/repository/playlist_provider/videos_provider.dart';
+import '../../constants/colorPalate.dart';
+import '../../constants/theme/style.dart';
+import '../../views/Documents/resource_document_list.dart';
+import '../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
+import '../menu/menu_widget.dart';
 
 class DocumentHomeScreen extends StatefulWidget {
 
@@ -25,8 +26,11 @@ class _DocumentHomeScreenState extends State<DocumentHomeScreen> {
     final provMdl = Provider.of<VideosProvider>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: const AppBarItems(),
-      drawer: const SideBar(),
+      appBar: AppBar(
+        backgroundColor: Constants.backgroundColor,
+        elevation: 0,
+        leading: MenuWidget(),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

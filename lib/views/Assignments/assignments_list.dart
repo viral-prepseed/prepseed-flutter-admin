@@ -1,10 +1,11 @@
-import 'package:learning_module/model/playlist_model/playlists.dart';
-import 'package:learning_module/view/Assignments/assignment.dart';
-import 'package:learning_module/view/common/appbar.dart';
-import 'package:learning_module/view/common/drawer.dart';
-import 'package:learning_module/repository/playlist_provider/videos_provider.dart';
+import '../../constants/colorPalate.dart';
+import '../../model/playlist_model/playlists.dart';
+import '../../views/Assignments/assignment.dart';
+import '../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../menu/menu_widget.dart';
 
 class AssignmentsList extends StatefulWidget {
   Playlists assi = Playlists();
@@ -27,8 +28,11 @@ class _AssignmentsListState extends State<AssignmentsList> {
     final provMdl = Provider.of<VideosProvider>(context);
     //final size = MediaQuery.of(context).size;
     return  Scaffold(
-      appBar: const AppBarItems(),
-      drawer: const SideBar(),
+      appBar: AppBar(
+        backgroundColor: Constants.backgroundColor,
+        elevation: 0,
+        leading: MenuWidget(),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(

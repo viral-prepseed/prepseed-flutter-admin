@@ -4,6 +4,7 @@ import 'package:prepseed/helper/provider/analysis/report.dart';
 import 'package:prepseed/helper/provider/leadershipProvider.dart';
 import 'package:prepseed/helper/provider/sectionProvider.dart';
 import 'package:prepseed/helper/provider/userDerailsProvider.dart';
+import 'package:prepseed/repository/playlist_provider/videos_provider.dart';
 import 'package:prepseed/views/SplashScreen.dart';
 import 'package:prepseed/views/execute/test/test_.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ProviderClass>(create: (_) => ProviderClass(),),
         ChangeNotifierProvider<TestProviderClass>(create: (_) => TestProviderClass(),),
         // ChangeNotifierProvider<sectionProviderClass>(create: (_) => sectionProviderClass(),),
+        ChangeNotifierProvider<VideosProvider>(create: (_) => VideosProvider(),),
         ChangeNotifierProvider<AnalysisClass>(create: (_) => AnalysisClass(),),
         ChangeNotifierProvider<LeadershipClass>(create: (_) => LeadershipClass(),),
         ChangeNotifierProvider<AssessmentWrappersClass>(create: (_) => AssessmentWrappersClass(),),

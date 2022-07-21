@@ -1,11 +1,11 @@
-import 'package:learning_module/model/playlist_model/assignment_model/assignment_model.dart';
-import 'package:learning_module/model/playlist_model/video_model/comment/comment_model.dart';
-import 'package:learning_module/model/playlist_model/playlists.dart';
-import 'package:learning_module/model/playlist_model/video_model/comment/post_comment.dart';
-import 'package:learning_module/model/playlist_model/document_model/resource_document_model.dart';
-import 'package:learning_module/model/playlist_model/assignment_model/upload_assi_model.dart';
-import 'package:learning_module/model/playlist_model/video_model/videoPlaylistModel.dart';
-import 'package:learning_module/repository/playlist_repo/repository.dart';
+import '../../model/playlist_model/assignment_model/assignment_model.dart';
+import '../../model/playlist_model/video_model/comment/comment_model.dart';
+import '../../model/playlist_model/playlists.dart';
+import '../../model/playlist_model/video_model/comment/post_comment.dart';
+import '../../model/playlist_model/document_model/resource_document_model.dart';
+import '../../model/playlist_model/assignment_model/upload_assi_model.dart';
+import '../../model/playlist_model/video_model/videoPlaylistModel.dart';
+import '../../repository/playlist_repo/repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
