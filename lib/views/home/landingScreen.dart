@@ -91,7 +91,7 @@ class _landingScreenState extends State<landingScreen> {
         return logout();*/
       case MenuItems.Tests :
       default:
-        return test();
+        return livetest();//test();
     }
   }
 
