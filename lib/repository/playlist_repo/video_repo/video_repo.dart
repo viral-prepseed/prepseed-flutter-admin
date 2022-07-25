@@ -13,7 +13,7 @@ class VideoRepo {
 
     VideoPlaylistModel _model;
     var token = await sharedPref().getSharedPref('token');
-    var url = Uri.parse(StringValue.playlistUrl + id);
+    var url = Uri.parse(StringValue.videoUrl + id);
     var response = await http.get(url,headers: {
       'Content-type' : 'application/json',
       'authorization': 'Bearer $token',
@@ -26,7 +26,7 @@ class VideoRepo {
     } else {
       throw Exception('Failed to load videos');
     }
-    //print(_model);
+    print(_model);
     return _model;
   }
 

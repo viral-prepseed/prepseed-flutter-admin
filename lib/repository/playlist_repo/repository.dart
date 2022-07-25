@@ -9,7 +9,7 @@ import '../../model/playlist_model/playlists.dart';
 
 class Provider{
 
-  Future<playlist_model>getPlaylist(context) async {
+  Future<playlist_model>getPlaylist() async {
 
     playlist_model _model;
 

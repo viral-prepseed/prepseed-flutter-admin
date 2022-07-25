@@ -9,6 +9,8 @@ class StringValue {
   //playlist url
   static String playlistUrl = 'https://napi.prepseed.com/video/playlists/';
 
+  static String videoUrl = 'https://napi.prepseed.com/video/playlist/';
+
   //comment url
   static String commentUrl = "https://napi.prepseed.com/video/comments?videoId=";
 

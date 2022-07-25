@@ -36,8 +36,8 @@ class VideosProvider extends ChangeNotifier {
 
   playlist_model data = playlist_model();
 
-  getVideos(context) async {
-    data = await prov.getPlaylist(context);
+  getVideos() async {
+    data = await prov.getPlaylist();
     calTag();
     notifyListeners();
   }
@@ -172,7 +172,7 @@ class VideosProvider extends ChangeNotifier {
   VideoRepo videoRepo = VideoRepo();
   getVideoPlaylist(String id) async {
     list = await videoRepo.getVideoPlaylist(id);
-    //print(list);
+    print(list);
     notifyListeners();
   }
 

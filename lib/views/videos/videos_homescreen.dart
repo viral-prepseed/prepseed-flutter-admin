@@ -16,12 +16,6 @@ class VideosHomeScreen extends StatefulWidget {
 
 class _VideosHomeScreenState extends State<VideosHomeScreen> {
 
-  @override
-  void initState() {
-    final  provMdl = Provider.of<VideosProvider>(context,listen: false);
-    provMdl.getVideos(context);
-    super.initState();
-  }
 
   final TextEditingController controller = TextEditingController();
 
@@ -53,8 +47,8 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
             child: Container(
               height: size.height,
               padding: const EdgeInsets.all(10.0),
-              child:  ChangeNotifierProvider(
-                create: (context) => provMdl,
+              child:  ChangeNotifierProvider.value(
+                value: provMdl,
                 child: Consumer<VideosProvider>(builder: (context, dataItems, _) {
                   return provMdl.data.playlists != null ?
                   Column(

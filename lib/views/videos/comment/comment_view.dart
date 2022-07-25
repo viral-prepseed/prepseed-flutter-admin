@@ -55,7 +55,7 @@ class _CommentState extends State<Comment> {
                 onPressed: () {
                   onTap(provMdl.comment.item![index]);
                 },
-                icon: Image.asset("assets/info (1).png", height: 20.0),
+                icon: Image.asset("assets/icons/info.png", height: 20.0),
               ),
             ],
           );
