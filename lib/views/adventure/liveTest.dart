@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../helper/sharedPref.dart';
 import '../execute/test/AttemptTest.dart';
+import '../execute/test/viewAnalysis.dart';
 
 class livetest extends StatefulWidget {
   const livetest({Key? key}) : super(key: key);
@@ -152,7 +153,10 @@ class _livetestState extends State<livetest> {
                                                   Future.microtask(() async => {
                                                     Provider.of<TestProviderClass>(context, listen: false).assessments(assessmentWrapperId),
                                                   });
-                                                  showDialogBox();
+                                                  // showDialogBox();
+                                                  var route = MaterialPageRoute(builder: (BuildContext context) => (snapshot.data!.contains('Attempt'))?
+                                                  attempt_liveTest() : viewAnalysis());
+                                                  Navigator.of(context).push(route);
                                                   /*var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
                                                   Navigator.of(context).push(route);*/
                                           },

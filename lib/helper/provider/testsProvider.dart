@@ -11,8 +11,10 @@ import '../../constants/strings.dart';
 import '../../model/execute/tests/list_questions.dart';
 import '../sharedPref.dart';
 class TestProviderClass extends ChangeNotifier {
-
+  final GlobalKey<FormState> _ansKey = GlobalKey<FormState>();
+  final _textController = TextEditingController();
   bool isLoading = false;
+  List emptyList = [];
   List<AssessmentWrappers> post = [];
   list_questions? _assessment;
   List TabValues = [];
@@ -24,13 +26,18 @@ class TestProviderClass extends ChangeNotifier {
   list_questions get assessment => _assessment!;
   List<QuestionClass> get questionsList => questions;
   Map get listTopics => mapTopic;
+  GlobalKey<FormState> get ansKey => _ansKey;
+  TextEditingController get textController => _textController;
 
   get listLength => listData.length;
 
   get tabLength => TabValues.toSet().toList().length;
   get tabValues => TabValues.toSet().toList();
+  List get selectedIndex => emptyList;
 
-
+  set selectedIndexes(List list){
+    emptyList = list;
+  }
 
 /*  get tabLength => TabValues.toSet().toList().length;
   get tabValues => TabValues.toSet().toList();*/
@@ -215,6 +222,8 @@ class TestProviderClass extends ChangeNotifier {
 
             }*/
             _questions.add(QuestionClass(
+                correctMarks: elementQue.correctMark,
+                incorrectMarks: elementQue.incorrectMark,
                 type: elementQue.question!.type!,
                 text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
                 queImage: _queImage,
