@@ -15,6 +15,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import '../../helper/api/functions.dart';
 import '../../helper/provider/tests/assessmentWrappers.dart';
 import '../../helper/sharedPref.dart';
+import '../../repository/playlist_provider/videos_provider.dart';
 import '../execute/test/AttemptTest.dart';
 import '../execute/test/viewAnalysis.dart';
 
@@ -43,6 +44,7 @@ class _mainScreenState extends State<mainScreen> {
           .getAnnouncement(),
       await Provider.of<LeadershipClass>(context, listen: false)
           .apiCall(),
+      await Provider.of<VideosProvider>(context,listen: false).getVideos(),
       await Provider.of<AssessmentWrappersClass>(context, listen: false)
           .getWrappersAPI(),
       await Provider.of<ReportClass>(context, listen: false)
