@@ -9,6 +9,7 @@ class StringValue {
   //playlist url
   static String playlistUrl = 'https://napi.prepseed.com/video/playlists/';
 
+  static String videoUrl = "https://napi.prepseed.com/video/playlist/";
   //comment url
   static String commentUrl = "https://napi.prepseed.com/video/comments?videoId=";
 
@@ -20,6 +21,8 @@ class StringValue {
 
   //post the comment url
   static String commentPostUrl = 'https://napi.prepseed.com/video/comment';
+
+  static String announcementUrl = 'https://napi.prepseed.com/announcement/user/of-phase/';
 
 /*  static String token =
   sharedPref().getSharedPref('token').then((result){

@@ -8,7 +8,8 @@ import '../menu/menu_widget.dart';
 import 'videos_list.dart';
 
 class VideosHomeScreen extends StatefulWidget {
-  const VideosHomeScreen({Key? key}) : super(key: key);
+
+   VideosHomeScreen({Key? key}) : super(key: key);
 
   @override
   _VideosHomeScreenState createState() => _VideosHomeScreenState();
@@ -16,18 +17,11 @@ class VideosHomeScreen extends StatefulWidget {
 
 class _VideosHomeScreenState extends State<VideosHomeScreen> {
 
-  @override
-  void initState() {
-    final  provMdl = Provider.of<VideosProvider>(context,listen: false);
-    provMdl.getVideos(context);
-    super.initState();
-  }
-
   final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-     final provMdl = Provider.of<VideosProvider>(context,listen: true);
+     final provMdl = Provider.of<VideosProvider>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -53,9 +47,9 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
             child: Container(
               height: size.height,
               padding: const EdgeInsets.all(10.0),
-              child:  ChangeNotifierProvider(
-                create: (context) => provMdl,
-                child: Consumer<VideosProvider>(builder: (context, dataItems, _) {
+              child:  ChangeNotifierProvider.value(
+                value:  provMdl,
+                child: Consumer(builder: (context, dataItems, _) {
                   return provMdl.data.playlists != null ?
                   Column(
                     children: [

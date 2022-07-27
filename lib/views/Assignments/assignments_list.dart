@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../constants/colorPalate.dart';
+import '../../constants/theme/style.dart';
 import '../../model/playlist_model/playlists.dart';
 import '../../views/Assignments/assignment.dart';
 import '../../repository/playlist_provider/videos_provider.dart';
@@ -28,15 +31,10 @@ class _AssignmentsListState extends State<AssignmentsList> {
     final provMdl = Provider.of<VideosProvider>(context);
     //final size = MediaQuery.of(context).size;
     return  Scaffold(
-      appBar: AppBar(
-        backgroundColor: Constants.backgroundColor,
-        elevation: 0,
-        leading: MenuWidget(),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
+      body: SafeArea(
         child: Column(
           children: [
+            SizedBox(height:20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -53,9 +51,12 @@ class _AssignmentsListState extends State<AssignmentsList> {
                 )
               ],
             ),
+            Style.divider(),
+            SizedBox(height:10.0),
             Expanded(
               child: provMdl.assignmentModel.playlist != null ?
               ListView.builder(
+                padding: EdgeInsets.all(10.0),
                   itemCount: provMdl.assignmentModel.playlist!.items!.length,
                   itemBuilder: (context, index) {
                     /*String? topic;
@@ -69,7 +70,7 @@ class _AssignmentsListState extends State<AssignmentsList> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(
-                          height: 20.0,
+                          height: 10.0,
                         ),
                         Text(provMdl.assignmentModel.playlist!.items![index].resource!.title.toString()),
                         const SizedBox(
@@ -95,7 +96,7 @@ class _AssignmentsListState extends State<AssignmentsList> {
                           },
                         ),
                         const SizedBox(
-                          height: 20.0,
+                          height: 10.0,
                         ),
                       ],
                     );

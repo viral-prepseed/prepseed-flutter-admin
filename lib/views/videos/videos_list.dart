@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../constants/colorPalate.dart';
 import '../../model/playlist_model/playlists.dart';
 import '../../constants/theme/style.dart';
@@ -29,15 +31,11 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
   Widget build(BuildContext context) {
     final provMdl = Provider.of<VideosProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Constants.backgroundColor,
-        elevation: 0,
-        leading: MenuWidget(),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
+      
+      body: SafeArea(
         child: Column(
           children: [
+            SizedBox(height:20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -52,8 +50,10 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
                 )
               ],
             ),
+            Style.divider(),
             Expanded(
               child: ListView.builder(
+                padding: EdgeInsets.all(10.0),
                   itemCount: widget.list!.items!.length,
                   itemBuilder: (context, index) {
                     String? topic;

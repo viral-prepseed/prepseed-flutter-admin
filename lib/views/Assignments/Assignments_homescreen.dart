@@ -59,7 +59,7 @@ class _AssignmentHomeScreenState extends State<AssignmentHomeScreen> {
               child: ChangeNotifierProvider(
                 create: (context) => provMdl,
                 child:
-                    Consumer<VideosProvider>(builder: (context, dataItems, _) {
+                    Consumer(builder: (context, dataItems, _) {
                   if (provMdl.data.playlists != null) {
                     return ListView.builder(
                         itemCount: provMdl.strAssi.length,

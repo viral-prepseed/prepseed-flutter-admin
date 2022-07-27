@@ -1,3 +1,4 @@
+import '../../model/announcement_model/announcement_model.dart';
 import '../../model/playlist_model/assignment_model/assignment_model.dart';
 import '../../model/playlist_model/video_model/comment/comment_model.dart';
 import '../../model/playlist_model/playlists.dart';
@@ -9,6 +10,7 @@ import '../../repository/playlist_repo/repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
+import '../announcement_repo/announcement_repo.dart';
 import '../playlist_repo/assignment_repo/assignment_repo.dart';
 import '../playlist_repo/assignment_repo/upload_assi_repo.dart';
 import '../playlist_repo/document_repo/document_repo.dart';
@@ -17,28 +19,28 @@ import '../playlist_repo/video_repo/comment_repo/post_comment_repo.dart';
 import '../playlist_repo/video_repo/video_repo.dart';
 
 class VideosProvider extends ChangeNotifier {
-  bool _disposed = false;
+  bool disposed = false;
 
   @override
   void dispose() {
-    _disposed = true;
+    disposed = true;
     super.dispose();
   }
 
   @override
   void notifyListeners() {
-    if (!_disposed) {
+    if (!disposed) {
       super.notifyListeners();
     }
   }
-
   Provider prov = Provider();
 
   playlist_model data = playlist_model();
 
-  getVideos(context) async {
-    data = await prov.getPlaylist(context);
+  getVideos() async {
+    data = await prov.getPlaylist();
     calTag();
+    getAnnouncement();
     notifyListeners();
   }
 
@@ -76,36 +78,33 @@ class VideosProvider extends ChangeNotifier {
     });
 
     tagValue.forEach((elementTag) {
-      str.add(elementTag.tags![0].value);
-     /* if(elementTag.toString() == elementTag.toString()){
+      //str.add(elementTag.tags![0].value);
+      if(elementTag.runtimeType == String){
         str.add(elementTag);
       }
       else{
         str.add(elementTag.tags![0].value);
-      }*/
+      }
 
     });
     tagValueDoc.forEach((elementTag) {
-      strDoc.add(elementTag.tags![0].value);
-      /*if(elementTag.toString() == elementTag.toString()){
+      //strDoc.add(elementTag.tags![0].value);
+      if(elementTag.runtimeType == String){
         strDoc.add(elementTag);
       }
       else{
         strDoc.add(elementTag.tags![0].value);
-      }*/
-
+      }
     });
     tagValueAssi.forEach((elementTag) {
-      strAssi.add(elementTag.tags![0].value);
-      /*if(elementTag.toString() == elementTag.toString()){
+      //strAssi.add(elementTag.tags![0].value);
+      if(elementTag.runtimeType == String){
         strAssi.add(elementTag);
       }
       else{
         strAssi.add(elementTag.tags![0].value);
-      }*/
+      }
     });
-
-
     str = str.toSet().toList();
     strDoc = strDoc.toSet().toList();
     strAssi = strAssi.toSet().toList();
@@ -172,7 +171,7 @@ class VideosProvider extends ChangeNotifier {
   VideoRepo videoRepo = VideoRepo();
   getVideoPlaylist(String id) async {
     list = await videoRepo.getVideoPlaylist(id);
-    //print(list);
+    print(list);
     notifyListeners();
   }
 
@@ -213,14 +212,14 @@ class VideosProvider extends ChangeNotifier {
   bool? isSearching;
 
 
-  searchTextVideo(controller) async {
+  searchTextVideo(controller) {
     List _searchList = [];
     if (controller.text.isEmpty) {
-      isSearching =  false;
+      //isSearching =  false;
       searchingText =  "";
     }
     else {
-      isSearching = true;
+      //isSearching = true;
       searchingText = controller.text;
     }
     List tagList = [];
@@ -280,6 +279,7 @@ class VideosProvider extends ChangeNotifier {
     mapDoc = mapList;
     notifyListeners();
   }
+
   UploadAssignmentModel uploadAssignmentModel = UploadAssignmentModel();
   UploadAssignmentRepo uploadAssignmentRepo = UploadAssignmentRepo();
   uploadAssignment(var filename, String mime) async {
@@ -292,6 +292,14 @@ class VideosProvider extends ChangeNotifier {
     await request.send();
     //SimpleS3 simpleS3 = SimpleS3();
     //Future<String> result = simpleS3.uploadFile(filename, uploadAssignmentModel.data!.fields!.bucket!,"",uploadAssignmentModel.data!.fields!);
+    notifyListeners();
+  }
+
+  AnnouncementRepo announcementRepo = AnnouncementRepo();
+  AnnouncementModel announcementModel = AnnouncementModel();
+  getAnnouncement() async {
+    announcementModel = await announcementRepo.getAnnouncements();
+    print(announcementModel);
     notifyListeners();
   }
 }
