@@ -42,9 +42,10 @@ class _mainScreenState extends State<mainScreen> {
           .getVideos(),
       await Provider.of<VideosProvider>(context, listen: false)
           .getAnnouncement(),
+      await Provider.of<VideosProvider>(context, listen: false)
+          .getDoubt(),
       await Provider.of<LeadershipClass>(context, listen: false)
           .apiCall(),
-      await Provider.of<VideosProvider>(context,listen: false).getVideos(),
       await Provider.of<AssessmentWrappersClass>(context, listen: false)
           .getWrappersAPI(),
       await Provider.of<ReportClass>(context, listen: false)

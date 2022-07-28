@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prepseed/model/announcement_model/announcement_model.dart';
+import 'package:prepseed/model/interact_models/announcement_model/announcement_model.dart';
 import 'package:prepseed/views/announcements/announcement_pdf.dart';
 
 import '../../constants/colorPalate.dart';

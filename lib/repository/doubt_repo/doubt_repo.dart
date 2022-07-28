@@ -2,20 +2,20 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:prepseed/model/interact_models/announcement_model/announcement_model.dart';
 
 import '../../constants/strings.dart';
 import '../../helper/sharedPref.dart';
+import '../../model/interact_models/doubt_model/doubt_model.dart';
+import '../../model/playlist_model/playlists.dart';
 
-class AnnouncementRepo{
+class DoubtRepo{
 
-  Future<AnnouncementModel>getAnnouncements() async {
+  Future<DoubtModel>getDoubt() async {
 
-    AnnouncementModel _model;
+    DoubtModel _model;
 
     var token = await sharedPref().getSharedPref('token');
-    var phaseId = await sharedPref().getSharedPref('phaseId');
-    var url = Uri.parse(Strings.announcementUrl + phaseId + "/0/20");
+    var url = Uri.parse(Strings.doubtUrl);
     var response = await http.get(url, headers: {
       'Content-type' : 'application/json',
       'authorization': 'Bearer $token',
@@ -24,7 +24,7 @@ class AnnouncementRepo{
       /*  _model = List<playlist_model>.from(
           json.decode(response.body).map((x) => playlist_model.fromJson(x))).toList();
     */
-      _model = AnnouncementModel.fromJson(json.decode(response.body));
+      _model = DoubtModel.fromJson(json.decode(response.body));
     }
     else if(response.statusCode == 401){
       throw Exception('UnAuthorize');

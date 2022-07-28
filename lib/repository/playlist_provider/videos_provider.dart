@@ -1,4 +1,7 @@
-import '../../model/announcement_model/announcement_model.dart';
+import 'package:prepseed/model/interact_models/doubt_model/doubt_model.dart';
+import 'package:prepseed/repository/doubt_repo/doubt_repo.dart';
+
+import '../../model/interact_models/announcement_model/announcement_model.dart';
 import '../../model/playlist_model/assignment_model/assignment_model.dart';
 import '../../model/playlist_model/video_model/comment/comment_model.dart';
 import '../../model/playlist_model/playlists.dart';
@@ -299,7 +302,13 @@ class VideosProvider extends ChangeNotifier {
   AnnouncementModel announcementModel = AnnouncementModel();
   getAnnouncement() async {
     announcementModel = await announcementRepo.getAnnouncements();
-    print(announcementModel);
+    notifyListeners();
+  }
+
+  DoubtRepo doubtRepo = DoubtRepo();
+  DoubtModel doubtModel = DoubtModel();
+  getDoubt()async{
+    doubtModel = await doubtRepo.getDoubt();
     notifyListeners();
   }
 }

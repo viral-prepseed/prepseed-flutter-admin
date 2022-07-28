@@ -3,7 +3,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../../constants/strings/string.dart';
+import '../../../constants/strings.dart';
+
 import '../../../helper/sharedPref.dart';
 import '../../../model/playlist_model/assignment_model/upload_assi_model.dart';
 
@@ -13,7 +14,7 @@ class UploadAssignmentRepo {
 
     UploadAssignmentModel _model;
     var token = await sharedPref().getSharedPref('token');
-    var url = Uri.parse(StringValue.assignmentUploadUrl);
+    var url = Uri.parse(Strings.assignmentUploadUrl);
     var response = await http.post(url, headers: {
       'Content-type' : 'application/json',
       'authorization': 'Bearer $token',

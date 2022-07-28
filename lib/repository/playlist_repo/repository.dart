@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../constants/strings/string.dart';
+import '../../constants/strings.dart';
 import '../../helper/sharedPref.dart';
 import '../../model/playlist_model/playlists.dart';
 
@@ -14,7 +14,7 @@ class Provider{
     playlist_model _model;
 
     var token = await sharedPref().getSharedPref('token');
-    var url = Uri.parse(StringValue.playlistUrl);
+    var url = Uri.parse(Strings.playlistUrl);
     var response = await http.get(url, headers: {
       'Content-type' : 'application/json',
       'authorization': 'Bearer $token',

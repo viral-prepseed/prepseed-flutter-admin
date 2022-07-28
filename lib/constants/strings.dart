@@ -32,14 +32,21 @@ class Strings {
   static String otp_url = BASEURL+'get_otp.php';
 */
 
+  static String video = BASEURL + '/video';
+  static String playlistUrl = video+'/playlists/';
+  static String videoUrl = video+'/playlist/';
+  //comment url
+  static String commentUrl = video+"/comments?videoId=";
 
-/*
-  getUserId() async {
-    var customer_id;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    customer_id = prefs.getString('customer_id');
-    return customer_id;
-  }
-*/
+  static String announcementUrl = BASEURL+'/announcement/user/of-phase/';
+
+  static String doubtUrl = BASEURL + "/phase/get/628c8a6d7640243d911a6cc6";
+
+  //upload assignment url
+  static String assignmentUploadUrl = BASEURL+'/assignment/public/uploadPolicy';
+
+  //post the comment url
+  static String commentPostUrl = video+'/comment';
+
 
 }

@@ -19,6 +19,7 @@ class MenuItems{
   static const practice = MainMenuItems('Practice',Icons.document_scanner_rounded);
   static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
   static const announcement = MainMenuItems('Announcements',Icons.announcement_outlined);
+  static const doubt = MainMenuItems('Doubt', Icons.error);
   static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
   // static const logout = MenuItem('Logout',Icons.logout);
 
@@ -32,7 +33,8 @@ class MenuItems{
     practice,
     quantizedSheet,
     Tests,
-    announcement
+    announcement,
+    doubt,
     // logout
   ];
 

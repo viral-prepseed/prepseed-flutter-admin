@@ -7,6 +7,7 @@ import 'package:prepseed/views/Assignments/Assignments_homescreen.dart';
 import 'package:prepseed/views/Documents/document_homescreen.dart';
 import 'package:prepseed/views/adventure/liveTest.dart';
 import 'package:prepseed/views/announcements/announcement_homescreen.dart';
+import 'package:prepseed/views/doubt/doubt_homescreen.dart';
 import 'package:prepseed/views/execute/practice/practice.dart';
 import 'package:prepseed/views/execute/test/test_.dart';
 import 'package:prepseed/views/home/mainScreen.dart';
@@ -90,6 +91,8 @@ class _landingScreenState extends State<landingScreen> {
         return quantized_sheet();
       case MenuItems.announcement :
         return AnnouncementsHomeScreen();
+      case MenuItems.doubt :
+        return DoubtHomeScreen();
 /*      case MenuItems.logout:
         return logout();*/
       case MenuItems.Tests :
@@ -97,7 +100,5 @@ class _landingScreenState extends State<landingScreen> {
         return test();
     }
   }
-
-
 
 }

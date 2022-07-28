@@ -2,7 +2,8 @@
 
 import 'dart:convert';
 
-import '../../../constants/strings/string.dart';
+import '../../../constants/strings.dart';
+
 import '../../../helper/sharedPref.dart';
 import '../../../model/playlist_model/video_model/videoPlaylistModel.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +14,7 @@ class VideoRepo {
 
     VideoPlaylistModel _model;
     var token = await sharedPref().getSharedPref('token');
-    var url = Uri.parse(StringValue.videoUrl + id);
+    var url = Uri.parse(Strings.videoUrl + id);
     var response = await http.get(url,headers: {
       'Content-type' : 'application/json',
       'authorization': 'Bearer $token',
