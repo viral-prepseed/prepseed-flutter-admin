@@ -11,6 +11,7 @@ import '../../constants/colorPalate.dart';
 import 'package:provider/provider.dart';
 import '../../helper/provider/testsProvider.dart';
 import '../menu/menu_widget.dart';
+import 'package:catex/catex.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,9 +46,12 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   List<QuestionClass> questions = [];
   Map listTopics = {};
   late List<Map> data;
+  DateTime? clickNow;
+  DateTime? clickPrev;
 
   @override
   void initState() {
+    clickPrev = DateTime.now();
     listTopics = Provider.of<TestProviderClass>(context, listen: false).listTopics;
     // questions = Provider.of<TestProviderClass>(context, listen: false).questionsList;
     questions = listTopics.values.elementAt(0);
@@ -86,9 +90,20 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
     // print(listTopics.values.elementAt(0));
   }
 
+  timeBetweenTaps(){
+    clickNow = DateTime.now();
+    if(clickPrev != null){
+      var diff = clickPrev!.difference(clickNow!);
+      // print();
+      clickPrev = clickNow;
+      return diff.inMilliseconds;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    convertLetX(r'Let $A$ be a square matri $A$ be a squa');
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -119,7 +134,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Expanded(
+              /*Expanded(
                 child: RaisedButton(
                   elevation: 0,
                   onPressed: (){
@@ -134,13 +149,17 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                   // colorBrightness: Brightness.dark,
                   color: Constants.grey.withOpacity(1),
                 ),
-              ),
+                ),
+              ),*/
               Expanded(
                 child: RaisedButton(
                   elevation: 0,
                   onPressed: (){
                     setState(() {
                       _value = -1;
+                      Provider.of<TestProviderClass>(context,listen: false).textController.clear();
+                      // Provider.of<TestProviderClass>(context,listen: false).selectedIndex.remove(value)
+                      Provider.of<TestProviderClass>(context, listen: false).optionVal = '';
                     });
                   },
                   child: Text("Reset", style: GoogleFonts.poppins(fontSize: 17,
@@ -258,8 +277,8 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                                 {
                                   "section": _controller!.index,
                                   "question": setQID,
-                                  "response": (_value > 0) ? questions[_value].text : null,
-                                  "time": totalTimeTaken,
+                                  "response": (_value > 0) ? questions[_value].options.elementAt(_value).id : null,
+                                  "time": timeBetweenTaps(),
                                   "state": 1
                                 }
                               ]
@@ -267,6 +286,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
 
                             // functions().postFlowLogs(postmap);
                             // print(postmap);
+                            // timeBetweenTaps();
                             setState(() {
                               setQID = data[index]['id'];
                               // print(questions.length);
@@ -284,12 +304,12 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                               )),
                         ),
                       ),
-                      (index == setQID)? const Positioned(
+                      /*(index == setQID)? const Positioned(
                         child: Icon(Icons.remove_red_eye_outlined, size: 12,),
                         right: 0,
                         top: -26,
                         bottom: 0,
-                      ) : Container()
+                      ) : Container()*/
                     ],
                   ); },
 
@@ -305,8 +325,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   void resetQueTime() {
     setState(() {
       calduration1 = Duration(hours: int.parse('00'), minutes: int.parse('00'), seconds: int.parse('00'));
-    }
-    );
+    });
   }
 
   void calQueTime() {
@@ -475,6 +494,19 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
 
 /*==================================================== Questions ============================================================*/
 
+convertLetX(String text){
+  var count = text.length - text.replaceAll("\$","").length;
+  // print(count);
+  for(int i=0; i<text.length; i++) {
+    if(text.contains(r'$')){
+      text.replaceFirst('\$', r'\(');
+      print(text);
+    }
+  }
+
+}
+
+
 
 class questionWidget extends StatefulWidget {
   final dynamic queId;
@@ -486,35 +518,62 @@ class questionWidget extends StatefulWidget {
 
 class _questionWidgetState extends State<questionWidget> {
 
-  String? optionVal;
-  var selectedIndexes = [];
-  Map<String, dynamic> linkNum= {
-    'A' : 0,
-    'B' : 1,
-    'C' : 2,
-    'D' : 3,
-    "E" : 4,
-    "/" : " ",
-  };
+  String optionVal = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // optionVal = Provider.of<TestProviderClass>(context, listen: false).optionVal;
+    // selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
     // return Container();
     // return buildQuestion(widget.queId);
     QuestionClass question = widget.queId;
+/*    String txt = question.text;
+    txt = txt.replaceAll('\$', '');*/
+    // print(question.isMarked);
+    var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           linked_ques(question),
-          Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
+      TeXView(
+        child: TeXViewColumn(children: [
+          TeXViewInkWell(
+            id: "id_0",
+            child: TeXViewColumn(children: [
+              TeXViewDocument(r"""<h2>Flutter \( \rm\\TeX \)</h2>""",
+                  style: TeXViewStyle(textAlign: TeXViewTextAlign.Center)),
+//Let (A) be a square matrix of order 3 , that satisfies \(A^{3}=\mathbf{O}\), Let \(B=A^{2}+A+2 I_{3}, C=A^{2}+2 A-4 I_{3}\), then- \
+              TeXViewDocument(r"""
+              Let (A) be a square matrix of order 3 , that satisfies \(A^{3}=\mathbf{O}\), Let \(B=A^{2}+A+2 I_{3}, C=A^{2}+2 A-4 I_{3}\), then- \
+              """,
+                  style: TeXViewStyle.fromCSS(
+                      'padding: 15px; color: white; background: green'))
+            ]),
+          )
+        ]),
+        style: TeXViewStyle(
+          elevation: 10,
+          borderRadius: TeXViewBorderRadius.all(25),
+          border: TeXViewBorder.all(TeXViewBorderDecoration(
+              borderColor: Colors.blue,
+              // borderStyle: TeXViewBorderStyle.solid,
+              borderWidth: 5)),
+          backgroundColor: Colors.white,
+        ),
+      ),
+
+          // Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
           (question.queImage != '')?
           Image(image: NetworkImage(question.queImage)) :
           Container(),
-
-
           (question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT') ?
           Column(
             children: List.generate(question.options.length, (index) {
@@ -528,6 +587,7 @@ class _questionWidgetState extends State<questionWidget> {
                   } else {
                     selectedIndexes.add(question.options.elementAt(index).text);  // select
                   }
+                  // print(selectedIndexes);
                 },
                 controlAffinity: ListTileControlAffinity.leading,
               );
@@ -541,13 +601,12 @@ class _questionWidgetState extends State<questionWidget> {
               return RadioListTile(
                 title: Text(question.options.elementAt(index).text.toString()),
                   value: question.options.elementAt(index).text.toString(),
-                  groupValue: optionVal,
+                  groupValue: Provider.of<TestProviderClass>(context, listen: false).optionVal,
                   onChanged: (value){
                     setState(() {
-                    optionVal = value.toString();
+                      Provider.of<TestProviderClass>(context, listen: false).optionVal = value.toString();
                     });
                   });
-
               /*return ListTile(
                 title: Text((question.options.elementAt(index).text != 'ABC')?
                 question.options.elementAt(index).text : '${linkNum.values.where((element) => element == index)}'),
@@ -563,7 +622,8 @@ class _questionWidgetState extends State<questionWidget> {
             }),
           )
               : (question.type == 'RANGE') ?
-          const TextField(
+          TextField(
+            controller: Provider.of<TestProviderClass>(context,listen: false).textController,
             decoration: InputDecoration(labelText: "Your Answer"),
             keyboardType: TextInputType.number,
           ) : Column(

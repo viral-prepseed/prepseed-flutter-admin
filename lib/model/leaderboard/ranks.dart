@@ -1,7 +1,7 @@
 class getRanks {
   bool? success;
   int? rank;
-  double? percentile;
+  dynamic percentile;
   int? rating;
 
   getRanks({this.success, this.rank, this.percentile, this.rating});

@@ -17,8 +17,8 @@ class MenuItems{
   static const documents = MainMenuItems('Documents',Icons.wysiwyg_outlined);
   static const assignments = MainMenuItems('Assignments',Icons.book_outlined);
   static const practice = MainMenuItems('Practice',Icons.document_scanner_rounded);
-  static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
-  static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
+  // static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
+  static const Tests = MainMenuItems('Execute',Icons.assignment_outlined);
   // static const logout = MenuItem('Logout',Icons.logout);
 
   static const all = <MainMenuItems>[
@@ -29,7 +29,7 @@ class MenuItems{
     documents,
     assignments,
     practice,
-    quantizedSheet,
+    // quantizedSheet,
     Tests,
     // logout
   ];

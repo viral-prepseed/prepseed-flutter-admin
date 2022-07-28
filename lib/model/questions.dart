@@ -26,8 +26,9 @@ class QuestionClass{
 
 class Option {
   final String text;
+  final dynamic id;
 
-  Option({required this.text});
+  Option({required this.text, required this.id});
 }
 
 

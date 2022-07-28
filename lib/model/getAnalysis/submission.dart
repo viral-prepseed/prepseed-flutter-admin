@@ -56,25 +56,25 @@ class GASubmission with ChangeNotifier {
 
 class GAMeta with ChangeNotifier {
   List<GASections>? sections;
-  int? marks;
-  int? questionsAttempted;
-  int? correctQuestions;
-  int? incorrectQuestions;
+  dynamic marks;
+  dynamic questionsAttempted;
+  dynamic correctQuestions;
+  dynamic incorrectQuestions;
   dynamic correctTime;
   dynamic incorrectTime;
   dynamic unattemptedTime;
   dynamic precision;
-  int? marksAttempted;
-  int? marksGained;
-  int? marksLost;
+  dynamic marksAttempted;
+  dynamic marksGained;
+  dynamic marksLost;
   GADifficulty? difficulty;
   dynamic percent;
   dynamic percentile;
-  int? rank;
+  dynamic rank;
   dynamic firstSeenTime;
-  int? firstSeenCorrect;
-  int? firstSeenIncorrect;
-  int? firstSeenSkip;
+  dynamic firstSeenCorrect;
+  dynamic firstSeenIncorrect;
+  dynamic firstSeenSkip;
 
   GAMeta(
       {this.sections,
@@ -166,12 +166,12 @@ class GASections {
   dynamic correctTime;
   dynamic incorrectTime;
   dynamic unattemptedTime;
-  int? marks;
-  int? marksAttempted;
-  int? marksGained;
-  int? marksLost;
-  int? correct;
-  int? incorrect;
+  dynamic marks;
+  dynamic marksAttempted;
+  dynamic marksGained;
+  dynamic marksLost;
+  dynamic correct;
+  dynamic incorrect;
   dynamic precision;
 
   GASections(
@@ -237,9 +237,9 @@ class GASections {
 class GASectionsQuestions {
   String? sId;
   dynamic answer;
-  int? mark;
+  dynamic mark;
   dynamic time;
-  int? correct;
+  dynamic correct;
 
   GASectionsQuestions({this.sId, this.answer, this.mark, this.time, this.correct});
 
@@ -292,10 +292,10 @@ class GADifficulty {
 }
 
 class Easy {
-  int? correct;
-  int? incorrect;
-  int? time;
-  int? totalAttempts;
+  dynamic correct;
+  dynamic incorrect;
+  dynamic time;
+  dynamic totalAttempts;
 
   Easy({this.correct, this.incorrect, this.time, this.totalAttempts});
 
@@ -317,10 +317,10 @@ class Easy {
 }
 
 class Medium {
-  int? correct;
-  int? incorrect;
+  dynamic correct;
+  dynamic incorrect;
   dynamic time;
-  int? totalAttempts;
+  dynamic totalAttempts;
 
   Medium({this.correct, this.incorrect, this.time, this.totalAttempts});
 
@@ -369,7 +369,7 @@ class GAResponse {
 
 class ResponseSections {
   String? name;
-  int? totalQuestions;
+  dynamic totalQuestions;
   List<Questions>? questions;
 
   ResponseSections({this.name, this.totalQuestions, this.questions});
@@ -400,7 +400,7 @@ class Questions {
   String? sId;
   dynamic time;
   dynamic answer;
-  int? state;
+  dynamic state;
 
   Questions({this.sId, this.time, this.answer, this.state});
 
@@ -426,18 +426,18 @@ class Roadmap {
   String? sId;
   dynamic timeToughness;
   String? timeCategory;
-  int? result;
+  dynamic result;
   dynamic lastVisit;
-  int? questionsSeen;
-  int? questionsAttempted;
+  dynamic questionsSeen;
+  dynamic questionsAttempted;
   dynamic time;
   dynamic totalTime;
   String? accuracy;
   String? sectionName;
-  int? questionNo;
-  int? totalVisits;
-  int? difficulty;
-  int? topic;
+  dynamic questionNo;
+  dynamic totalVisits;
+  dynamic difficulty;
+  dynamic topic;
 
   Roadmap(
       {this.firstVisit,

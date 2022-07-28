@@ -85,13 +85,13 @@ class _landingScreenState extends State<landingScreen> {
         return AssignmentHomeScreen();
       case MenuItems.practice :
         return practice();
-      case MenuItems.quantizedSheet :
-        return quantized_sheet();
+/*      case MenuItems.quantizedSheet :
+        return quantized_sheet();*/
 /*      case MenuItems.logout:
         return logout();*/
       case MenuItems.Tests :
       default:
-        return test();
+        return livetest();//test();
     }
   }
 

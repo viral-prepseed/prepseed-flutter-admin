@@ -3,13 +3,13 @@ class GACoreAnalysis {
   Difficulty? difficulty;
   List<Marks>? marks;
   List<int>? hist;
-  int? maxMarks;
-  int? sumMarks;
-  double? sumAccuracy;
-  double? sumSqAccuracy;
-  int? sumPickingAbility;
-  int? sumSqPickingAbility;
-  int? totalAttempts;
+  dynamic maxMarks;
+  dynamic sumMarks;
+  dynamic sumAccuracy;
+  dynamic sumSqAccuracy;
+  dynamic sumPickingAbility;
+  dynamic sumSqPickingAbility;
+  dynamic totalAttempts;
   List<Sections>? sections;
   dynamic nintypercentile;
 
@@ -111,11 +111,11 @@ class Difficulty {
 }
 
 class Easy {
-  int? correct;
-  int? incorrect;
-  int? time;
-  int? totalAttempts;
-  int? meanTime;
+  dynamic correct;
+  dynamic incorrect;
+  dynamic time;
+  dynamic totalAttempts;
+  dynamic meanTime;
 
   Easy(
       {this.correct,
@@ -144,11 +144,11 @@ class Easy {
 }
 
 class Medium {
-  int? correct;
-  int? incorrect;
-  double? time;
-  int? totalAttempts;
-  double? meanTime;
+  dynamic correct;
+  dynamic incorrect;
+  dynamic time;
+  dynamic totalAttempts;
+  dynamic meanTime;
 
   Medium(
       {this.correct,
@@ -178,7 +178,7 @@ class Medium {
 
 class Marks {
   String? sId;
-  int? marks;
+  dynamic marks;
   String? user;
 
   Marks({this.sId, this.marks, this.user});
@@ -199,13 +199,13 @@ class Marks {
 }
 
 class Sections {
-  int? incorrect;
-  int? correct;
-  int? sumMarks;
-  int? maxMarks;
+  dynamic incorrect;
+  dynamic correct;
+  dynamic sumMarks;
+  dynamic maxMarks;
   List<int>? marks;
-  double? sumTime;
-  double? meanTime;
+  dynamic sumTime;
+  dynamic meanTime;
   List<int>? hist;
   List<Questions>? questions;
 
@@ -256,11 +256,11 @@ class Sections {
 
 class Questions {
   String? id;
-  double? sumTime;
-  double? sumSqTime;
-  int? correctAttempts;
-  int? totalAttempts;
-  double? meanTime;
+  dynamic sumTime;
+  dynamic sumSqTime;
+  dynamic correctAttempts;
+  dynamic totalAttempts;
+  dynamic meanTime;
 
   Questions(
       {this.id,

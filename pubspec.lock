@@ -23,7 +23,7 @@ packages:
     source: hosted
     version: "2.1.0"
   catex:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: catex
       url: "https://pub.dartlang.org"
