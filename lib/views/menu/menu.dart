@@ -62,12 +62,11 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   Widget buildMenuItem(MainMenuItems item) => ListTileTheme(
-    selectedTileColor: Colors.transparent,
     selectedColor: Colors.black87,
     child: ListTile(
-      // selectedTileColor: Constants.backgroundColorTrans,
+      selectedTileColor: Constants.backgroundColorTrans,
       selected: widget.currentItem == item,
-      minLeadingWidth: 50.0,
+      minLeadingWidth: 20,
       leading: Icon(item.icon),
       title: Text(item.title),
       onTap: () => widget.onSelectedItem(item),
@@ -83,13 +82,9 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
-     backgroundColor: Colors.grey,
       body: SafeArea(
         child: Container(
-          width: size.width / 1.5,
-
           decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topRight,
@@ -103,15 +98,8 @@ class _MenuScreenState extends State<MenuScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 25.0,),
-              Expanded(
-                child: ListView.builder(
-                    itemCount: MenuItems.all.length,
-                    itemBuilder: (context,index){
-                  return buildMenuItem(MenuItems.all[index]);
-                }),
-              ),
-             // ...MenuItems.all.map(buildMenuItem).toList(),
+              Spacer(),
+              ...MenuItems.all.map(buildMenuItem).toList(),
               Divider(),
               ListTile(
                 selectedTileColor: Constants.backgroundColorTrans,
@@ -123,6 +111,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   logout();
                 },
               ),
+              Spacer(),
             ],
           )
         ),
