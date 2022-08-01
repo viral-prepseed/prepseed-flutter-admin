@@ -16,6 +16,7 @@ class ResourceDocumentView extends StatefulWidget {
 }
 
 class _ResourceDocumentViewState extends State<ResourceDocumentView> {
+  PdfViewerController controller = PdfViewerController();
   @override
   Widget build(BuildContext context) {
     //final size = MediaQuery.of(context).size;
@@ -30,6 +31,7 @@ class _ResourceDocumentViewState extends State<ResourceDocumentView> {
                 IconButton(
                     alignment: Alignment.centerLeft,
                     onPressed: () {
+                      controller.clearSelection();
                       Navigator.pop(context, "");
                     },
                     icon: const Icon(Icons.arrow_back_rounded)),
@@ -47,6 +49,7 @@ class _ResourceDocumentViewState extends State<ResourceDocumentView> {
                     ? const Center(child: Text("Documents is not Available"))
                     : SfPdfViewer.network(
                     widget.item.resource!.endpoints![0].toString(),
+                    controller: controller,
                  )),
           ],
         ),
