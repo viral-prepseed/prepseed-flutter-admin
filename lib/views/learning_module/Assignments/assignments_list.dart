@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../constants/colorPalate.dart';
-import '../../constants/theme/style.dart';
-import '../../model/playlist_model/playlists.dart';
-import '../../views/Assignments/assignment.dart';
-import '../../repository/playlist_provider/videos_provider.dart';
+import '../../../constants/colorPalate.dart';
+import '../../../constants/theme/style.dart';
+import '../../../model/playlist_model/playlists.dart';
+import '../../../views/learning_module/Assignments/assignment.dart';
+import '../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../menu/menu_widget.dart';
+import '../../menu/menu_widget.dart';
 
 class AssignmentsList extends StatefulWidget {
   Playlists assi = Playlists();

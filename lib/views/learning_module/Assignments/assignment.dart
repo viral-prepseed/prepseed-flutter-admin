@@ -1,13 +1,14 @@
-import '../../constants/colorPalate.dart';
-import '../../model/playlist_model/assignment_model/assignment_model.dart';
-import '../../views/Assignments/assignment_pdf.dart';
-import '../../repository/playlist_provider/videos_provider.dart';
+import 'package:prepseed/views/learning_module/Assignments/assignment_pdf.dart';
+
+import '';
+import '/../../../constants/colorPalate.dart';
+import '/../../../model/playlist_model/assignment_model/assignment_model.dart';
+
+import '/../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
-
-import '../menu/menu_widget.dart';
 
 class Assignments extends StatefulWidget {
   AssignmentItems item;

@@ -1,12 +1,12 @@
-import '../../constants/colorPalate.dart';
-import '../../constants/theme/style.dart';
-import '../../views/Assignments/assignments_list.dart';
-import '../../repository/playlist_provider/videos_provider.dart';
+import '../../../constants/colorPalate.dart';
+import '../../../constants/theme/style.dart';
+import '../../../views/learning_module/Assignments/assignments_list.dart';
+import '../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../menu/menu_widget.dart';
+import '../../menu/menu_widget.dart';
 
 class AssignmentHomeScreen extends StatefulWidget {
 

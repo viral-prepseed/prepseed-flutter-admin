@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prepseed/views/doubt/doubt_screen.dart';
+import 'package:prepseed/views/interact_module/doubt/doubt_screen.dart';
+import 'package:prepseed/views/interact_module/doubt/upload_question.dart';
 
-import '../../constants/colorPalate.dart';
-import '../../constants/theme/style.dart';
-import '../../repository/playlist_provider/videos_provider.dart';
-import '../menu/menu_widget.dart';
+import '../../../constants/colorPalate.dart';
+import '../../../constants/theme/style.dart';
+import '../../../repository/playlist_provider/videos_provider.dart';
+import '../../menu/menu_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -28,52 +29,63 @@ class _DoubtHomeScreenState extends State<DoubtHomeScreen> {
         leading: MenuWidget(),
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "Doubts and Discussions",
-                style: Style.textStyleBold15,
-              ),
-            ),
-            Style.divider(),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "Recent Questions",
-                style: Style.textStyleBold15,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "No Questions here",
-                style: Style.textStyleRegular13Black,
-              ),
-            ),
-            Style.divider(),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "Explore by Subject",
-                style: Style.textStyleBold15,
-              ),
-            ),
-            Expanded(
-              child: Container(
-                height: size.height,
-                child: ChangeNotifierProvider(
-                  create: (context) => provMdl,
-                  child:Consumer(builder: (context, dataItems, _) {
-                    return  GridView.builder(
+        child: Container(
+          height: size.height,
+          child: ChangeNotifierProvider(
+            create: (context) => provMdl,
+            child:Consumer(builder: (context, dataItems, _) {
+              return  Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Doubts and Discussions",
+                          style: Style.textStyleBold15,
+                        ),
+                        ElevatedButton(
+                            onPressed: (){
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => UploadQuestion(sub: provMdl.doubtModel.subjects!,))
+                              );
+                            },
+                            child: Text("Ask Question"))
+                      ],
+                    ),
+                  ),
+                  Style.divider(),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "Recent Questions",
+                      style: Style.textStyleBold15,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "No Questions here",
+                      style: Style.textStyleRegular13Black,
+                    ),
+                  ),
+                  Style.divider(),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "Explore by Subject",
+                      style: Style.textStyleBold15,
+                    ),
+                  ),
+                  Expanded(
+                    child: GridView.builder(
                       shrinkWrap: true,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
@@ -134,14 +146,14 @@ class _DoubtHomeScreenState extends State<DoubtHomeScreen> {
                           },
                         );
                       },
-                    );
-                  })
+                    ),
+                  ),
+                ],
+              );
+            })
 
 
-                )
-              ),
-            ),
-          ],
+          )
         ),
       ),
     );

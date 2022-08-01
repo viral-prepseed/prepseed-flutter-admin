@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prepseed/model/interact_models/doubt_model/doubt_model.dart';
 
-import '../../constants/theme/style.dart';
+import '../../../constants/theme/style.dart';
 
 class DoubtScreen extends StatefulWidget {
   Subjects list = Subjects();

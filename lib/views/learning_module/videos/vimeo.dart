@@ -1,11 +1,11 @@
-import '../../constants/colorPalate.dart';
-import '../../model/playlist_model/video_model/videoPlaylistModel.dart';
-import '../../constants/theme/style.dart';
-import '../../views/videos/comment/comment_view.dart';
+import '../../../constants/colorPalate.dart';
+import '../../../model/playlist_model/video_model/videoPlaylistModel.dart';
+import '../../../constants/theme/style.dart';
+import '../../../views/learning_module/videos/comment/comment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:vimeo_player_flutter/vimeo_player_flutter.dart';
 
-import '../menu/menu_widget.dart';
+import '../../menu/menu_widget.dart';
 
 class Vimeo extends StatefulWidget {
   List<Items> list;

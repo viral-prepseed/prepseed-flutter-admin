@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import '../../constants/theme/style.dart';
+import '../../../constants/theme/style.dart';
+import '../../../constants/theme/style.dart';
 
 class AssignmentPdf extends StatefulWidget {
 
