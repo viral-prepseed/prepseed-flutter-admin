@@ -49,6 +49,7 @@ class _ResourceDocumentViewState extends State<ResourceDocumentView> {
                     ? const Center(child: Text("Documents is not Available"))
                     : SfPdfViewer.network(
                     widget.item.resource!.endpoints![0].toString(),
+                    controller: controller,
                  )),
           ],
         ),
