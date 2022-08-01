@@ -98,8 +98,15 @@ class _MenuScreenState extends State<MenuScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Spacer(),
-              ...MenuItems.all.map(buildMenuItem).toList(),
+              //Spacer(),
+              //...MenuItems.all.map(buildMenuItem).toList(),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: MenuItems.all.length,
+                    itemBuilder: (context, index) {
+                  return buildMenuItem(MenuItems.all[index]);
+                }),
+              ),
               Divider(),
               ListTile(
                 selectedTileColor: Constants.backgroundColorTrans,
@@ -111,7 +118,6 @@ class _MenuScreenState extends State<MenuScreen> {
                   logout();
                 },
               ),
-              Spacer(),
             ],
           )
         ),
