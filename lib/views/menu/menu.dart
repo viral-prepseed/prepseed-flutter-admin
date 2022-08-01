@@ -21,6 +21,7 @@ class MenuItems{
   static const announcement = MainMenuItems('Announcements',Icons.announcement_outlined);
   static const doubt = MainMenuItems('Doubt', Icons.error);
   static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
+  static const chats = MainMenuItems("Chats", Icons.message);
   // static const logout = MenuItem('Logout',Icons.logout);
 
   static const all = <MainMenuItems>[
@@ -35,6 +36,7 @@ class MenuItems{
     Tests,
     announcement,
     doubt,
+    chats
     // logout
   ];
 

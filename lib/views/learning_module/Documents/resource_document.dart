@@ -1,9 +1,9 @@
-import '../../constants/colorPalate.dart';
-import '../../constants/theme/style.dart';
+import '../../../constants/colorPalate.dart';
+import '../../../constants/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import '../../model/playlist_model/document_model/resource_document_model.dart';
-import '../menu/menu_widget.dart';
+import '../../../model/playlist_model/document_model/resource_document_model.dart';
+import '../../menu/menu_widget.dart';
 
 class ResourceDocumentView extends StatefulWidget {
 

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../constants/colorPalate.dart';
-import '../../constants/theme/style.dart';
+import '../../../constants/colorPalate.dart';
+import '../../../constants/theme/style.dart';
 
-import '../../repository/playlist_provider/videos_provider.dart';
-import '../menu/menu_widget.dart';
+import '../../../repository/playlist_provider/videos_provider.dart';
+import '../../menu/menu_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'announcement_screen.dart';

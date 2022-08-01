@@ -1,11 +1,11 @@
-import '../../../model/playlist_model/video_model/videoPlaylistModel.dart';
-import '../../../constants/theme/style.dart';
-import '../../../repository/playlist_provider/videos_provider.dart';
+import '../../../../model/playlist_model/video_model/videoPlaylistModel.dart';
+import '../../../../constants/theme/style.dart';
+import '../../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../model/playlist_model/video_model/comment/comment_model.dart';
+import '../../../../model/playlist_model/video_model/comment/comment_model.dart';
 
 class Comment extends StatefulWidget {
   Resource comment;
