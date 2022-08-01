@@ -103,7 +103,6 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    convertLetX(r'Let $A$ be a square matri $A$ be a squa');
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -126,7 +125,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          height: 60, width: double.infinity,
+          height: 40, width: double.infinity,
           /*color: Constants.blacklight.withOpacity(1),
                 padding: EdgeInsets.only(top: 20, bottom: 20),
                 margin: EdgeInsets.only(top:20),*/
@@ -162,7 +161,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                       Provider.of<TestProviderClass>(context, listen: false).optionVal = '';
                     });
                   },
-                  child: Text("Reset", style: GoogleFonts.poppins(fontSize: 17,
+                  child: Text("Reset", style: GoogleFonts.poppins(fontSize: 15,
                       color: Constants.backgroundColor.withOpacity(1),
                       fontWeight: FontWeight.bold,letterSpacing: 2),),
                   // colorBrightness: Brightness.dark,
@@ -186,7 +185,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                       }
                     });
                   },
-                  child: Text(nextPrev, style: GoogleFonts.poppins(fontSize: 17,
+                  child: Text(nextPrev, style: GoogleFonts.poppins(fontSize: 15,
                       color: Constants.backgroundColor.withOpacity(1),
                       fontWeight: FontWeight.bold,letterSpacing: 2),),
                   // colorBrightness: Brightness.dark,
@@ -494,16 +493,48 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
 
 /*==================================================== Questions ============================================================*/
 
+
 convertLetX(String text){
   var count = text.length - text.replaceAll("\$","").length;
   // print(count);
-  for(int i=0; i<text.length; i++) {
-    if(text.contains(r'$')){
-      text.replaceFirst('\$', r'\(');
-      print(text);
-    }
+  String _text = text.replaceAll(r'\+', r'\');
+  // replaceData(_text);
+  String _response = _text;
+  for(int i=0; i<=count/2; i++){
+    _response = replaceData(_response);
   }
 
+/*  String _response = replaceData(_text);
+  if(_response != null){
+    if(_response.contains(r'$')){
+      return replaceData(_response);
+    }else{
+      return _response;
+    }
+  }*/
+return _response;
+}
+
+replaceData(String replaceableText){
+  String? _textData;
+  String? _text_sec_Data;
+    // if(replaceableText.contains(r'$')){
+      _textData = replaceableText.replaceFirst('\$', r'\(');
+      _text_sec_Data = _textData.replaceFirst('\$', r'\)');
+      // convertLetX(_text_sec_Data);
+      // replaceData(_text_sec_Data);
+    // }else{}
+/*
+    // print(_text_sec_Data);
+    if(_text_sec_Data != null){
+      if(_text_sec_Data.contains('\$')){
+        return _text_sec_Data;
+      }else{
+        // print(_text_sec_Data);
+        return _text_sec_Data;
+      }
+    }*/
+  return _text_sec_Data;
 }
 
 
@@ -519,15 +550,7 @@ class questionWidget extends StatefulWidget {
 class _questionWidgetState extends State<questionWidget> {
 
   String optionVal = '';
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    // optionVal = Provider.of<TestProviderClass>(context, listen: false).optionVal;
-    // selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
-  }
-
-  @override
+@override
   Widget build(BuildContext context) {
     // return Container();
     // return buildQuestion(widget.queId);
@@ -535,6 +558,10 @@ class _questionWidgetState extends State<questionWidget> {
 /*    String txt = question.text;
     txt = txt.replaceAll('\$', '');*/
     // print(question.isMarked);
+
+    String s = convertLetX(question.text);
+    // print(s);
+
     var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -543,19 +570,16 @@ class _questionWidgetState extends State<questionWidget> {
           Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
           const SizedBox(height: 10,),
           linked_ques(question),
-      TeXView(
+          TeXView(
         child: TeXViewColumn(children: [
           TeXViewInkWell(
             id: "id_0",
             child: TeXViewColumn(children: [
-              TeXViewDocument(r"""<h2>Flutter \( \rm\\TeX \)</h2>""",
-                  style: TeXViewStyle(textAlign: TeXViewTextAlign.Center)),
+              /*TeXViewDocument(r"""<h2>Flutter \( \rm\\TeX \)</h2>""",
+                  style: TeXViewStyle(textAlign: TeXViewTextAlign.Center)),*/
 //Let (A) be a square matrix of order 3 , that satisfies \(A^{3}=\mathbf{O}\), Let \(B=A^{2}+A+2 I_{3}, C=A^{2}+2 A-4 I_{3}\), then- \
-              TeXViewDocument(r"""
-              Let (A) be a square matrix of order 3 , that satisfies \(A^{3}=\mathbf{O}\), Let \(B=A^{2}+A+2 I_{3}, C=A^{2}+2 A-4 I_{3}\), then- \
-              """,
-                  style: TeXViewStyle.fromCSS(
-                      'padding: 15px; color: white; background: green'))
+              TeXViewDocument(s ?? '',
+                  style: TeXViewStyle.fromCSS('padding: 15px; color: white; background: green'))
             ]),
           )
         ]),
@@ -563,7 +587,7 @@ class _questionWidgetState extends State<questionWidget> {
           elevation: 10,
           borderRadius: TeXViewBorderRadius.all(25),
           border: TeXViewBorder.all(TeXViewBorderDecoration(
-              borderColor: Colors.blue,
+              // borderColor: Colors.blue,
               // borderStyle: TeXViewBorderStyle.solid,
               borderWidth: 5)),
           backgroundColor: Colors.white,
@@ -607,21 +631,8 @@ class _questionWidgetState extends State<questionWidget> {
                       Provider.of<TestProviderClass>(context, listen: false).optionVal = value.toString();
                     });
                   });
-              /*return ListTile(
-                title: Text((question.options.elementAt(index).text != 'ABC')?
-                question.options.elementAt(index).text : '${linkNum.values.where((element) => element == index)}'),
-                leading: Radio(
-                    value: question.options.elementAt(index).text.toString(),
-                    groupValue: optionVal,
-                    onChanged: (value){
-                      setState(() {
-                        optionVal = value.toString();
-                      });
-                    }),
-              );*/
             }),
-          )
-              : (question.type == 'RANGE') ?
+          ) : (question.type == 'RANGE') ?
           TextField(
             controller: Provider.of<TestProviderClass>(context,listen: false).textController,
             decoration: InputDecoration(labelText: "Your Answer"),
@@ -652,7 +663,27 @@ linked_ques(QuestionClass question){
 
   return Column(
     children: [
-      Text(_linkText, style: GoogleFonts.poppins(fontSize: 13),),
+      TeXView(
+        child: TeXViewColumn(children: [
+          TeXViewInkWell(
+            id: "id_0",
+            child: TeXViewColumn(children: [
+              TeXViewDocument(convertLetX(_linkText) ?? '',
+                  style: TeXViewStyle.fromCSS('padding: 15px; color: white; background: green'))
+            ]),
+          )
+        ]),
+        style: TeXViewStyle(
+          elevation: 10,
+          borderRadius: TeXViewBorderRadius.all(25),
+          border: TeXViewBorder.all(TeXViewBorderDecoration(
+            // borderColor: Colors.blue,
+            // borderStyle: TeXViewBorderStyle.solid,
+              borderWidth: 5)),
+          backgroundColor: Colors.white,
+        ),
+      ),
+      // Text(convertLetX(_linkText), style: GoogleFonts.poppins(fontSize: 13),),
       SizedBox(height: 10,)
     ],
   );
