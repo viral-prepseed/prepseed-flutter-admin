@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:prepseed/helper/api/functions.dart';
 import 'package:prepseed/model/execute/tests/list_questions.dart';
 import 'package:prepseed/model/questions.dart';
 
@@ -10,10 +9,7 @@ import '../../constants/colorPalate.dart';
 
 import 'package:provider/provider.dart';
 import '../../helper/provider/testsProvider.dart';
-import '../menu/menu_widget.dart';
-import 'package:catex/catex.dart';
 import 'package:flutter_tex/flutter_tex.dart';
-import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class attempt_liveTest extends StatefulWidget {
@@ -177,7 +173,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                         nextPrev = "Next";
                         setQID = setQID + 1;
                       }else{
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text("You have reached end of the questions."),
                         ));
                         /*nextPrev = "Prev";
@@ -497,9 +493,9 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
 convertLetX(String text){
   var count = text.length - text.replaceAll("\$","").length;
   // print(count);
-  String _text = text.replaceAll(r'\+', r'\');
+  // String _text = text.replaceAll(r'\+', r'\');
   // replaceData(_text);
-  String _response = _text;
+  String _response = text;
   for(int i=0; i<=count/2; i++){
     _response = replaceData(_response);
   }
@@ -571,18 +567,11 @@ class _questionWidgetState extends State<questionWidget> {
           const SizedBox(height: 10,),
           linked_ques(question),
           TeXView(
-        child: TeXViewColumn(children: [
-          TeXViewInkWell(
-            id: "id_0",
-            child: TeXViewColumn(children: [
-              /*TeXViewDocument(r"""<h2>Flutter \( \rm\\TeX \)</h2>""",
-                  style: TeXViewStyle(textAlign: TeXViewTextAlign.Center)),*/
-//Let (A) be a square matrix of order 3 , that satisfies \(A^{3}=\mathbf{O}\), Let \(B=A^{2}+A+2 I_{3}, C=A^{2}+2 A-4 I_{3}\), then- \
-              TeXViewDocument(s ?? '',
-                  style: TeXViewStyle.fromCSS('padding: 15px; color: white; background: green'))
-            ]),
-          )
-        ]),
+          child: TeXViewColumn(children: [
+
+            _teXViewWidget( s.toString()),
+            // TeXViewDocument(s ?? '', style: TeXViewStyle.fromCSS('padding: 15px; color: white; background: green'))
+          ]),
         style: TeXViewStyle(
           elevation: 10,
           borderRadius: TeXViewBorderRadius.all(25),
@@ -602,7 +591,14 @@ class _questionWidgetState extends State<questionWidget> {
           Column(
             children: List.generate(question.options.length, (index) {
               return CheckboxListTile(
-                title: Text(question.options.elementAt(index).text),
+                title:
+                /*TeXView(
+                  child: TeXViewColumn(children: [
+                    TeXViewDocument(convertLetX(question.options.elementAt(index).text.toString()) ?? '',
+                        style: TeXViewStyle.fromCSS('padding: 15px; color: black;'))
+                  ]),
+                ),*/
+                Text(question.options.elementAt(index).text.toString()),
                 // subtitle: Text(this.noteList[position].actn_on),
                 value: selectedIndexes.contains(question.options.elementAt(index).text),
                 onChanged: (_) {
@@ -623,7 +619,14 @@ class _questionWidgetState extends State<questionWidget> {
           Column(
             children: List.generate(question.options.length, (index) {
               return RadioListTile(
-                title: Text(question.options.elementAt(index).text.toString()),
+                title:
+                /*TeXView(
+                  child: TeXViewColumn(children: [
+                    TeXViewDocument(convertLetX(question.options.elementAt(index).text.toString()) ?? '',
+                        style: TeXViewStyle.fromCSS('padding: 15px; color: black;'))
+                  ]),
+                ),*/
+                Text(question.options.elementAt(index).text.toString()),
                   value: question.options.elementAt(index).text.toString(),
                   groupValue: Provider.of<TestProviderClass>(context, listen: false).optionVal,
                   onChanged: (value){
@@ -648,45 +651,58 @@ class _questionWidgetState extends State<questionWidget> {
       ),
     );
   }
-}
 
-linked_ques(QuestionClass question){
-  LinkQuestions _linkQue;
-
-  if(question.linkedText != null && question.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
-    _linkQue = question.linkedText;
-    var rawCont = _linkQue.content!.rawContent!;
-    if(rawCont.runtimeType.toString() == "String"){
-      rawCont = json.decode(_linkQue.content!.rawContent!);
-    }
-    var _linkText = QuestionContents.fromJson(rawCont).blocks!.first.text ?? '';
-
-  return Column(
-    children: [
-      TeXView(
-        child: TeXViewColumn(children: [
-          TeXViewInkWell(
-            id: "id_0",
-            child: TeXViewColumn(children: [
-              TeXViewDocument(convertLetX(_linkText) ?? '',
-                  style: TeXViewStyle.fromCSS('padding: 15px; color: white; background: green'))
-            ]),
-          )
-        ]),
-        style: TeXViewStyle(
-          elevation: 10,
-          borderRadius: TeXViewBorderRadius.all(25),
-          border: TeXViewBorder.all(TeXViewBorderDecoration(
-            // borderColor: Colors.blue,
-            // borderStyle: TeXViewBorderStyle.solid,
-              borderWidth: 5)),
-          backgroundColor: Colors.white,
-        ),
-      ),
-      // Text(convertLetX(_linkText), style: GoogleFonts.poppins(fontSize: 13),),
-      SizedBox(height: 10,)
-    ],
-  );
+  static TeXViewWidget _teXViewWidget( String body) {
+    return TeXViewColumn(
+        style: const TeXViewStyle(
+            margin: TeXViewMargin.all(10),
+            padding: TeXViewPadding.all(10),
+            borderRadius: TeXViewBorderRadius.all(10),
+            border: TeXViewBorder.all(TeXViewBorderDecoration(
+                borderWidth: 2,
+                // borderStyle: TeXViewBorderStyle.groove,
+                borderColor: Colors.green))),
+        children: [/*
+          TeXViewDocument(title,
+              style: const TeXViewStyle(
+                  padding: TeXViewPadding.all(10),
+                  borderRadius: TeXViewBorderRadius.all(10),
+                  // textAlign: TeXViewTextAlign.center,
+                  width: 250,
+                  margin: TeXViewMargin.zeroAuto(),
+                  backgroundColor: Colors.green)),*/
+          TeXViewDocument(body,
+              style: const TeXViewStyle(margin: TeXViewMargin.only(top: 10)))
+        ]);
   }
-  return Container();
+
+
+  linked_ques(QuestionClass question){
+    LinkQuestions _linkQue;
+
+    if(question.linkedText != null && question.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
+      _linkQue = question.linkedText;
+      var rawCont = _linkQue.content!.rawContent!;
+      if(rawCont.runtimeType.toString() == "String"){
+        rawCont = json.decode(_linkQue.content!.rawContent!);
+      }
+      var _linkText = QuestionContents.fromJson(rawCont).blocks!.first.text ?? '';
+
+      return Column(
+        children: [
+          TeXView(
+            child: TeXViewColumn(children: [
+              _teXViewWidget(convertLetX(_linkText)),
+            ]),
+          ),
+          // Text(convertLetX(_linkText), style: GoogleFonts.poppins(fontSize: 13),),
+          SizedBox(height: 10,)
+        ],
+      );
+    }
+    return Container();
+  }
+
 }
+
+

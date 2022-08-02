@@ -153,9 +153,12 @@ class _livetestState extends State<livetest> {
                                                   Future.microtask(() async => {
                                                     Provider.of<TestProviderClass>(context, listen: false).assessments(assessmentWrapperId),
                                                   });
-                                                  // showDialogBox();
-                                                  var route = MaterialPageRoute(builder: (BuildContext context) => (snapshot.data!.contains('Attempt'))?
-                                                  attempt_liveTest() : InitializeProviderScreen() );
+
+                                                  var route = MaterialPageRoute(builder: (BuildContext context) =>
+                                                  // attempt_liveTest() :
+                                                      InitializeProviderScreen() );
+
+                                                  (snapshot.data!.contains('Attempt'))? showDialogBox() :
                                                   Navigator.of(context).push(route);
                                                   /*var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
                                                   Navigator.of(context).push(route);*/
