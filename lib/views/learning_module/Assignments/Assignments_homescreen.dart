@@ -5,7 +5,7 @@ import '../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../menu/menu_widget.dart';
 
 class AssignmentHomeScreen extends StatefulWidget {
@@ -107,16 +107,17 @@ class _AssignmentHomeScreenState extends State<AssignmentHomeScreen> {
                                                   children: [
                                                     provMdl.mapAssi.values.elementAt(index)[ind].thumbNailsUrls.length == 0
                                                         ? Container()
-                                                        : img.contains('svg')
-                                                            ? SvgPicture.network(
+                                                        : /*img.contains('svg')*/
+                                                    /*SvgPicture.network(
                                                       provMdl.mapAssi.values.elementAt(index)[ind].thumbNailsUrls[0],
                                                                 height: 40.0,
                                                                 width: 40.0,
-                                                              )
-                                                            : Image.network(
-                                                      provMdl.mapAssi.values.elementAt(index)[ind].thumbNailsUrls[0],
+                                                              )*/
+                                                CachedNetworkImage(imageUrl: provMdl.mapAssi.values.elementAt(index)[ind].thumbNailsUrls[0],height: 45.0),
+                                                            /*: Image(
+                                                      image: CachedNetworkImageProvider(provMdl.mapAssi.values.elementAt(index)[ind].thumbNailsUrls[0],),
                                                                 height: 45.0,
-                                                              ),
+                                                              ),*/
                                                     const SizedBox(height: 30.0),
                                                     Expanded(
                                                       child: Text(

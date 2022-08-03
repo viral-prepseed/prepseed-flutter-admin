@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prepseed/model/interact_models/announcement_model/announcement_model.dart';
 import 'package:prepseed/views/interact_module/announcements/announcement_pdf.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../constants/colorPalate.dart';
 import '../../../constants/theme/style.dart';
@@ -99,7 +100,7 @@ class _AnnouncementsState extends State<Announcements> {
                                 }, child: Text(widget.list.files![index].name.toString(),style: TextStyle(
                               color: Colors.black
                             ),))
-                        : Image.network(widget.list.files![index].url.toString(),fit: BoxFit.contain),
+                        : CachedNetworkImage(imageUrl: widget.list.files![index].url.toString(),fit: BoxFit.contain),
                        // / margin: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5.0),
                       ),
                    ],

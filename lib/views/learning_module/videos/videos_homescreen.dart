@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../menu/menu_widget.dart';
 import 'videos_list.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class VideosHomeScreen extends StatefulWidget {
 
@@ -116,17 +117,14 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
                                                       children: [
                                                         provMdl.map.values.elementAt(index)[ind].thumbNailsUrls.length == 0
                                                         ? Container()
+
                                                         : img.contains('svg')
                                                         ? SvgPicture.network(
                                                           provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],
                                                           fit: BoxFit.contain,
                                                           height: 45.0,
                                                          // placeholderBuilder: (context) => const CircularProgressIndicator(),
-                                                        )
-                                                        : Image.network(
-                                                          provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],
-                                                          height: 45.0,
-                                                        ),
+                                                        ) : CachedNetworkImage(imageUrl: provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],height: 45.0,),
                                                         const SizedBox(height: 30.0),
                                                         Text(
                                                             "${provMdl.map.values.elementAt(index)[ind].title}",

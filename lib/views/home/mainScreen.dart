@@ -52,7 +52,6 @@ class _mainScreenState extends State<mainScreen> {
           .getWrappersAPI(),
       await Provider.of<ReportClass>(context, listen: false)
           .getReportsAPI(),
-
     });
   }
   fetchPref() async{
@@ -227,7 +226,7 @@ class _mainScreenState extends State<mainScreen> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width - 32,
-                            height: 100,
+                            height: 120,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(25),
                               child: Container(
@@ -347,7 +346,7 @@ class _mainScreenState extends State<mainScreen> {
                                               children: <Widget>[
                                                 Image.asset('assets/images/logo.jpg',width: 100,),
                                                 SizedBox(
-                                                  height: 15,
+                                                  height: 7,
                                                 ),
                                                 Text('Intent',style: GoogleFonts.poppins(
                                                     fontWeight: FontWeight.bold,

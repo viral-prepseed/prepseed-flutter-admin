@@ -109,7 +109,8 @@ class _prepSeed_loginState extends State<prepSeed_login> {
 
                   Container(
                     width: double.maxFinite,
-                    child: DropdownButton<String>( //Map<dynamic,dynamic>
+                    child: DropdownButton<String>(
+                      isExpanded: true,//Map<dynamic,dynamic>
                       isDense: true,
                       hint: new Text("Select"),
                       value: selectedid,
@@ -127,8 +128,10 @@ class _prepSeed_loginState extends State<prepSeed_login> {
 
                         // print (selectedid);
                       },
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       items: _myJson.map((Map map) {
                         return DropdownMenuItem<String>(
+
                             value: map['_id'].toString(), //map
                             child: Row(
                               children: [
