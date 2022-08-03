@@ -67,7 +67,9 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 20.0,),
-                        Text(topic.toString(),style: Style.textStyleRegular15Black,),
+                        widget.list!.items![index].resource!.tags!.isNotEmpty
+                        ? Text(topic.toString(),style: Style.textStyleRegular15Black,)
+                        : Container(),
                         const SizedBox(height: 20.0,),
                         InkWell(
                           child: Row(
@@ -84,7 +86,7 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
                           onTap: () {
                             widget.list!.hasAccessToContent == true
                             ? Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Vimeo(list: provMdl.list.playlist!.items!)))
+                                builder: (context) => Vimeo(list: provMdl.list.playlist!.items![index])))
                             : Container();
                           },
                         ),

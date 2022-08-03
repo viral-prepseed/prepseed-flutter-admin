@@ -3,7 +3,7 @@ class UserSubscription {
 
   UserSubscription({this.subscriptions});
 
-  UserSubscription.fromJson(Map<String, dynamic> json) {
+  UserSubscription.fromJson(Map<dynamic, dynamic> json) {
     if (json['subscriptions'] != null) {
       subscriptions = <Subscriptions>[];
       json['subscriptions'].forEach((v) {

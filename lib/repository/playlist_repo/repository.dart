@@ -6,9 +6,10 @@ import 'package:http/http.dart' as http;
 import '../../constants/strings.dart';
 import '../../helper/sharedPref.dart';
 import '../../model/playlist_model/playlists.dart';
+import '../../model/userDetails/user_data_model.dart';
 
-class Provider{
-
+class ProviderClassRepo{
+  UserSubscription model = UserSubscription();
   Future<playlist_model>getPlaylist() async {
 
     playlist_model _model;
@@ -33,5 +34,11 @@ class Provider{
     }
     return _model;
   }
-
+  var datalist;
+  List<Subscriptions> listData = [];
+  Future<List<Subscriptions>>getUserData() async {
+     datalist = await sharedPref().getSharedPref('subscriptions');
+     listData = List<Subscriptions>.from(json.decode(datalist).map((x) => Subscriptions.fromJson(x))) ;
+   return listData;
+  }
 }

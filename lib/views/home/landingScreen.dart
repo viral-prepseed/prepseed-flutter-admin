@@ -73,6 +73,7 @@ class _landingScreenState extends State<landingScreen> {
   }
 
   Widget getScreen() {
+    MenuItems menuItems = MenuItems();
     switch (currentItem) {
       case MenuItems.home :
         return mainScreen();

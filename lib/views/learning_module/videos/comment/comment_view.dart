@@ -90,7 +90,7 @@ class _CommentState extends State<Comment> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SvgPicture.network(item.user!.dp.toString(), height: 30.0),
-                Text(item.user!.username.toString()),
+                Text(item.user!.username.toString(),style: Style.textStyleBold15,),
               ],
             ),
             const SizedBox(height: 10.0,),
@@ -119,7 +119,7 @@ class _CommentState extends State<Comment> {
             Row(
               children: [
                 Text("Update At : ", style: textStyle()),
-                Text(updateTime.toLocal().toString(), style: textStyle()),
+                Expanded(child: Text(updateTime.toLocal().toString(), style: textStyle())),
               ],
             ),
             const SizedBox(height: 10.0,),
@@ -135,6 +135,6 @@ class _CommentState extends State<Comment> {
   }
 
   textStyle() {
-    return const TextStyle(fontSize: 15.0);
+    return const TextStyle(fontSize: 13.0);
   }
 }

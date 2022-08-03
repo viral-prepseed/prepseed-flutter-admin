@@ -44,14 +44,16 @@ class _mainScreenState extends State<mainScreen> {
           .getAnnouncement(),
       await Provider.of<VideosProvider>(context, listen: false)
           .getDoubt(),
+      await Provider.of<VideosProvider>(context, listen: false)
+          .getSubscriptions(),
       await Provider.of<LeadershipClass>(context, listen: false)
           .apiCall(),
       await Provider.of<AssessmentWrappersClass>(context, listen: false)
           .getWrappersAPI(),
       await Provider.of<ReportClass>(context, listen: false)
           .getReportsAPI(),
+
     });
-    // print(listOfColumns.first.keys);se
   }
   fetchPref() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();

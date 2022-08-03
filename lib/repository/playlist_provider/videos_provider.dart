@@ -9,10 +9,12 @@ import '../../model/playlist_model/video_model/comment/post_comment.dart';
 import '../../model/playlist_model/document_model/resource_document_model.dart';
 import '../../model/playlist_model/assignment_model/upload_assi_model.dart';
 import '../../model/playlist_model/video_model/videoPlaylistModel.dart';
+import '../../model/userDetails/user_data_model.dart';
 import '../../repository/playlist_repo/repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
+import '../../views/menu/menu.dart';
 import '../announcement_repo/announcement_repo.dart';
 import '../playlist_repo/assignment_repo/assignment_repo.dart';
 import '../playlist_repo/assignment_repo/upload_assi_repo.dart';
@@ -36,7 +38,7 @@ class VideosProvider extends ChangeNotifier {
       super.notifyListeners();
     }
   }
-  Provider prov = Provider();
+  ProviderClassRepo prov = ProviderClassRepo();
 
   playlist_model data = playlist_model();
 
@@ -309,6 +311,23 @@ class VideosProvider extends ChangeNotifier {
   DoubtModel doubtModel = DoubtModel();
   getDoubt()async{
     doubtModel = await doubtRepo.getDoubt();
+    notifyListeners();
+  }
+
+  List<Subscriptions> subscriptions = [];
+  ProviderClassRepo providerClassRepo = ProviderClassRepo();
+  List items = [];
+  MenuItems menuItems = MenuItems();
+  getSubscriptions() async{
+    subscriptions = await providerClassRepo.getUserData();
+    subscriptions.forEach((element) {
+      element.subgroups!.forEach((element) {
+        element.phases!.forEach((element) {
+          element.phase!.config != null ? menuItems.all.addAll([MenuItems.announcement,MenuItems.chats,MenuItems.doubt]) : menuItems;
+          print(menuItems);
+        });
+      });
+    });
     notifyListeners();
   }
 }
