@@ -24,6 +24,9 @@ class MenuItems{
   static const doubt = MainMenuItems('Doubt', Icons.error);
   static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
   static const chats = MainMenuItems("Chats", Icons.message);
+
+  // static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
+  static const Tests = MainMenuItems('Execute',Icons.assignment_outlined);
   // static const logout = MenuItem('Logout',Icons.logout);
 
    List<MainMenuItems>  all = [
@@ -34,7 +37,7 @@ class MenuItems{
     documents,
     assignments,
     practice,
-    quantizedSheet,
+    // quantizedSheet,
     Tests,
    /* announcement,
     doubt,

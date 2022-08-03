@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prepseed/helper/api/functions.dart';
+import 'package:prepseed/init/InitializeProviderScreen.dart';
 import 'package:prepseed/views/adventure/attempt_liveTest.dart';
 import 'package:prepseed/views/menu/menu_widget.dart';
 
@@ -14,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../helper/sharedPref.dart';
 import '../execute/test/AttemptTest.dart';
+import '../execute/test/viewAnalysis.dart';
 
 class livetest extends StatefulWidget {
   const livetest({Key? key}) : super(key: key);
@@ -60,15 +62,17 @@ class _livetestState extends State<livetest> {
                   body: Column(
                     children: [
                       TabBar(
+                        isScrollable: true,
                         indicatorColor: Constants.blue,
                         labelColor: Constants.white.withOpacity(0.8),
                         unselectedLabelColor: Constants.white.withOpacity(0.5),
                         labelStyle: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
-                            fontSize: 17
+                            fontSize: 17,
                         ),
                         tabs: List.generate(myModel.tabLength, (index) {
-                          return Tab(text: '${context.watch<TestProviderClass>().tabValues.elementAt(index)}',);
+                          return Tab(
+                            text: '${context.watch<TestProviderClass>().tabValues.elementAt(index)}',);
                         }
 
                         /*[
@@ -141,10 +145,7 @@ class _livetestState extends State<livetest> {
 
                                           FutureBuilder<String>(
                                             future: functions().getWrapperApiCall('${asw.elementAt(idx).sId}'),
-                                            builder: (
-                                                BuildContext context,
-                                                AsyncSnapshot<String> snapshot,
-                                                ) {
+                                            builder: (BuildContext context, AsyncSnapshot<String> snapshot,) {
                                               if (snapshot.hasData) {
                                                 return ElevatedButton(onPressed: (){
                                                   var assessmentWrapperId = asw.elementAt(idx).sId;
@@ -152,7 +153,13 @@ class _livetestState extends State<livetest> {
                                                   Future.microtask(() async => {
                                                     Provider.of<TestProviderClass>(context, listen: false).assessments(assessmentWrapperId),
                                                   });
-                                                  showDialogBox();
+
+                                                  var route = MaterialPageRoute(builder: (BuildContext context) =>
+                                                  // attempt_liveTest() :
+                                                      InitializeProviderScreen() );
+
+                                                  (snapshot.data!.contains('Attempt'))? showDialogBox() :
+                                                  Navigator.of(context).push(route);
                                                   /*var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
                                                   Navigator.of(context).push(route);*/
                                           },

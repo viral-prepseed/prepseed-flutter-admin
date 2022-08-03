@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:prepseed/helper/api/functions.dart';
 import 'package:prepseed/model/execute/tests/list_questions.dart';
 import 'package:prepseed/model/questions.dart';
 
@@ -10,9 +9,7 @@ import '../../constants/colorPalate.dart';
 
 import 'package:provider/provider.dart';
 import '../../helper/provider/testsProvider.dart';
-import '../menu/menu_widget.dart';
 import 'package:flutter_tex/flutter_tex.dart';
-import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class attempt_liveTest extends StatefulWidget {
@@ -24,11 +21,19 @@ class attempt_liveTest extends StatefulWidget {
 
 class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerProviderStateMixin {
 
-
+  List _store = [];
   Duration duration1 = Duration();
   Timer? timer1;
   TabController? _controller;
   static var countdownDuration1 = Duration(minutes: 10);
+
+  Duration calduration1 = Duration();
+  Timer? caltimer1;
+  var totalTimeTaken = 0;
+  dynamic _value = 1;
+
+  bool isMarked = false;
+  var nextPrev = "Next";
 
   late List list_que_tab = [];
   var setQID = 0;
@@ -36,9 +41,13 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   List topicQue = [];
   List<QuestionClass> questions = [];
   Map listTopics = {};
+  late List<Map> data;
+  DateTime? clickNow;
+  DateTime? clickPrev;
 
   @override
   void initState() {
+    clickPrev = DateTime.now();
     listTopics = Provider.of<TestProviderClass>(context, listen: false).listTopics;
     // questions = Provider.of<TestProviderClass>(context, listen: false).questionsList;
     questions = listTopics.values.elementAt(0);
@@ -49,6 +58,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
     });
     startTimer1();
     _controller = TabController(length: tabValues.length, vsync: this,animationDuration: Duration.zero);
+    calduration1 = Duration(hours: int.parse('00'), minutes: int.parse('00'), seconds: int.parse('00'));
     var hours1;
     var mints1;
     var secs1;
@@ -57,13 +67,14 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
     secs1 = int.parse("00");
     setQID = _controller!.index;
     countdownDuration1 = Duration(hours: hours1, minutes: mints1, seconds: secs1);
+    // startTimer1();
     reset1();
     _controller!.addListener(() {
       questions = listTopics.values.elementAt(_controller!.index);
       setState(() {
         questions;
         setQID = 0;
-        print(questions.elementAt(_controller!.index).text);
+        // print(questions.elementAt(_controller!.index).text);
       });
     });
 /*    questions.forEach((element) {
@@ -75,6 +86,16 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
     // print(listTopics.values.elementAt(0));
   }
 
+  timeBetweenTaps(){
+    clickNow = DateTime.now();
+    if(clickPrev != null){
+      var diff = clickPrev!.difference(clickNow!);
+      // print();
+      clickPrev = clickNow;
+      return diff.inMilliseconds;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +105,93 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
           children: [
             actionWidgets(),
             buildTopicTabs(),
+            bottomActionWidget()
             // selectQueList(),
           ],
         ),
       ),
+    );
+  }
+
+  /*==================================================== bottomActionWidget  ============================================================*/
+  bottomActionWidget(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          height: 40, width: double.infinity,
+          /*color: Constants.blacklight.withOpacity(1),
+                padding: EdgeInsets.only(top: 20, bottom: 20),
+                margin: EdgeInsets.only(top:20),*/
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              /*Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      isMarked = !false;
+                      // _stackkey.currentState.
+                    });
+                  },
+                  child: Text("Mark", style: GoogleFonts.poppins(fontSize: 17,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+                ),
+              ),*/
+              Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      _value = -1;
+                      Provider.of<TestProviderClass>(context,listen: false).textController.clear();
+                      // Provider.of<TestProviderClass>(context,listen: false).selectedIndex.remove(value)
+                      Provider.of<TestProviderClass>(context, listen: false).optionVal = '';
+                    });
+                  },
+                  child: Text("Reset", style: GoogleFonts.poppins(fontSize: 15,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+              ),
+              Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      if(setQID+1 < data.length){
+                        nextPrev = "Next";
+                        setQID = setQID + 1;
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("You have reached end of the questions."),
+                        ));
+                        /*nextPrev = "Prev";
+                        setQID = setQID - 1;*/
+                      }
+                    });
+                  },
+                  child: Text(nextPrev, style: GoogleFonts.poppins(fontSize: 15,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -123,7 +227,8 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
 
   /*==================================================== List Questions ============================================================*/
   Widget selectQueList(){
-    final List<Map> data = List.generate(topicQue.elementAt(_controller!.index),
+    calQueTime();
+    data = List.generate(topicQue.elementAt(_controller!.index),
             (index) => {'id': index, 'name': 'Item $index', 'isSelected': false});
     return SingleChildScrollView(
       child: Column(
@@ -151,7 +256,6 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                     // key: _stackkey,
                     children: [
                       Card(
-
                         key: ValueKey(data[index]['name']),
                         color: (setQID == index)
                             ? Colors.green
@@ -163,23 +267,27 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                           onTap: () {
 
                             // print(data[index]['id'] + 1);
-                            /*Map postmap = {
+                            Map postmap = {
                               "flow":[
                                 {
                                   "section": _controller!.index,
-                                  "question": tappedIndex,
-                                  "response": (_value > 0) ? quedata?.question?.options![_value].sId : null,
-                                  "time": totalTimeTaken,
+                                  "question": setQID,
+                                  "response": (_value > 0) ? questions[_value].options.elementAt(_value).id : null,
+                                  "time": timeBetweenTaps(),
                                   "state": 1
                                 }
                               ]
-                            };*/
+                            };
+
                             // functions().postFlowLogs(postmap);
                             // print(postmap);
+                            // timeBetweenTaps();
                             setState(() {
                               setQID = data[index]['id'];
                               // print(questions.length);
                             });
+                            _store.add(setQID);
+                            print(_store);
                           },
                           title: Align(
                               alignment: Alignment.topCenter,
@@ -191,13 +299,12 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                               )),
                         ),
                       ),
-                      /*(index == tappedIndex)? const Positioned(
+                      /*(index == setQID)? const Positioned(
                         child: Icon(Icons.remove_red_eye_outlined, size: 12,),
                         right: 0,
                         top: -26,
                         bottom: 0,
-                      ) :*/
-
+                      ) : Container()*/
                     ],
                   ); },
 
@@ -209,6 +316,39 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
       ),
     );
   }
+
+  void resetQueTime() {
+    setState(() {
+      calduration1 = Duration(hours: int.parse('00'), minutes: int.parse('00'), seconds: int.parse('00'));
+    });
+  }
+
+  void calQueTime() {
+    // print(totalTimeTaken);
+    resetQueTime();
+    caltimer1 = Timer.periodic(Duration(seconds: 1), (_) => addCalQueTime());
+  }
+
+  void addCalQueTime() {
+
+    final addSeconds = 1;
+    if (mounted) {
+      setState(() {
+        // totalTimeTaken = 0;
+        final seconds = calduration1.inMinutes + addSeconds;
+        if (seconds < 0) {
+          caltimer1?.cancel();
+        } else {
+          calduration1 = Duration(seconds: seconds);
+          seconds;
+          totalTimeTaken = calduration1.inMinutes;
+          /*print(seconds);
+          print(calduration1.inMilliseconds);*/
+        }
+      });
+    }
+  }
+
   calLength(dataIndex){
     num addLength = 0;
     int i = _controller!.index;
@@ -350,6 +490,51 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
 /*==================================================== Questions ============================================================*/
 
 
+convertLetX(String text){
+  var count = text.length - text.replaceAll("\$","").length;
+  // print(count);
+  // String _text = text.replaceAll(r'\+', r'\');
+  // replaceData(_text);
+  String _response = text;
+  for(int i=0; i<=count/2; i++){
+    _response = replaceData(_response);
+  }
+
+/*  String _response = replaceData(_text);
+  if(_response != null){
+    if(_response.contains(r'$')){
+      return replaceData(_response);
+    }else{
+      return _response;
+    }
+  }*/
+return _response;
+}
+
+replaceData(String replaceableText){
+  String? _textData;
+  String? _text_sec_Data;
+    // if(replaceableText.contains(r'$')){
+      _textData = replaceableText.replaceFirst('\$', r'\(');
+      _text_sec_Data = _textData.replaceFirst('\$', r'\)');
+      // convertLetX(_text_sec_Data);
+      // replaceData(_text_sec_Data);
+    // }else{}
+/*
+    // print(_text_sec_Data);
+    if(_text_sec_Data != null){
+      if(_text_sec_Data.contains('\$')){
+        return _text_sec_Data;
+      }else{
+        // print(_text_sec_Data);
+        return _text_sec_Data;
+      }
+    }*/
+  return _text_sec_Data;
+}
+
+
+
 class questionWidget extends StatefulWidget {
   final dynamic queId;
   const questionWidget({Key? key, required this.queId}) : super(key: key);
@@ -359,40 +544,61 @@ class questionWidget extends StatefulWidget {
 }
 
 class _questionWidgetState extends State<questionWidget> {
-  String? optionVal;
-  var selectedIndexes = [];
-  Map<String, dynamic> linkNum= {
-    'A' : 0,
-    'B' : 1,
-    'C' : 2,
-    'D' : 3,
-    "E" : 4,
-    "/" : " ",
-  };
 
-  @override
+  String optionVal = '';
+@override
   Widget build(BuildContext context) {
     // return Container();
     // return buildQuestion(widget.queId);
     QuestionClass question = widget.queId;
+/*    String txt = question.text;
+    txt = txt.replaceAll('\$', '');*/
+    // print(question.isMarked);
+
+    String s = convertLetX(question.text);
+    // print(s);
+
+    var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           linked_ques(question),
-          Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
+          TeXView(
+          child: TeXViewColumn(children: [
+
+            _teXViewWidget( s.toString()),
+            // TeXViewDocument(s ?? '', style: TeXViewStyle.fromCSS('padding: 15px; color: white; background: green'))
+          ]),
+        style: TeXViewStyle(
+          elevation: 10,
+          borderRadius: TeXViewBorderRadius.all(25),
+          border: TeXViewBorder.all(TeXViewBorderDecoration(
+              // borderColor: Colors.blue,
+              // borderStyle: TeXViewBorderStyle.solid,
+              borderWidth: 5)),
+          backgroundColor: Colors.white,
+        ),
+      ),
+
+          // Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
           (question.queImage != '')?
           Image(image: NetworkImage(question.queImage)) :
           Container(),
-
-
           (question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT') ?
           Column(
             children: List.generate(question.options.length, (index) {
               return CheckboxListTile(
-                title: Text(question.options.elementAt(index).text),
+                title:
+                /*TeXView(
+                  child: TeXViewColumn(children: [
+                    TeXViewDocument(convertLetX(question.options.elementAt(index).text.toString()) ?? '',
+                        style: TeXViewStyle.fromCSS('padding: 15px; color: black;'))
+                  ]),
+                ),*/
+                Text(question.options.elementAt(index).text.toString()),
                 // subtitle: Text(this.noteList[position].actn_on),
                 value: selectedIndexes.contains(question.options.elementAt(index).text),
                 onChanged: (_) {
@@ -401,6 +607,7 @@ class _questionWidgetState extends State<questionWidget> {
                   } else {
                     selectedIndexes.add(question.options.elementAt(index).text);  // select
                   }
+                  // print(selectedIndexes);
                 },
                 controlAffinity: ListTileControlAffinity.leading,
               );
@@ -412,31 +619,25 @@ class _questionWidgetState extends State<questionWidget> {
           Column(
             children: List.generate(question.options.length, (index) {
               return RadioListTile(
-                title: Text(question.options.elementAt(index).text.toString()),
+                title:
+                /*TeXView(
+                  child: TeXViewColumn(children: [
+                    TeXViewDocument(convertLetX(question.options.elementAt(index).text.toString()) ?? '',
+                        style: TeXViewStyle.fromCSS('padding: 15px; color: black;'))
+                  ]),
+                ),*/
+                Text(question.options.elementAt(index).text.toString()),
                   value: question.options.elementAt(index).text.toString(),
-                  groupValue: optionVal,
+                  groupValue: Provider.of<TestProviderClass>(context, listen: false).optionVal,
                   onChanged: (value){
                     setState(() {
-                    optionVal = value.toString();
+                      Provider.of<TestProviderClass>(context, listen: false).optionVal = value.toString();
                     });
                   });
-
-              /*return ListTile(
-                title: Text((question.options.elementAt(index).text != 'ABC')?
-                question.options.elementAt(index).text : '${linkNum.values.where((element) => element == index)}'),
-                leading: Radio(
-                    value: question.options.elementAt(index).text.toString(),
-                    groupValue: optionVal,
-                    onChanged: (value){
-                      setState(() {
-                        optionVal = value.toString();
-                      });
-                    }),
-              );*/
             }),
-          )
-              : (question.type == 'RANGE') ?
-          const TextField(
+          ) : (question.type == 'RANGE') ?
+          TextField(
+            controller: Provider.of<TestProviderClass>(context,listen: false).textController,
             decoration: InputDecoration(labelText: "Your Answer"),
             keyboardType: TextInputType.number,
           ) : Column(
@@ -450,102 +651,58 @@ class _questionWidgetState extends State<questionWidget> {
       ),
     );
   }
-}
 
-linked_ques(QuestionClass question){
-  LinkQuestions _linkQue;
-
-  if(question.linkedText != null && question.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
-    _linkQue = question.linkedText;
-    var rawCont = _linkQue.content!.rawContent!;
-    if(rawCont.runtimeType.toString() == "String"){
-      rawCont = json.decode(_linkQue.content!.rawContent!);
-    }
-    var _linkText = QuestionContents.fromJson(rawCont).blocks!.first.text ?? '';
-
-  return Column(
-    children: [
-      Text(_linkText, style: GoogleFonts.poppins(fontSize: 13),),
-      SizedBox(height: 10,)
-    ],
-  );
+  static TeXViewWidget _teXViewWidget( String body) {
+    return TeXViewColumn(
+        style: const TeXViewStyle(
+            margin: TeXViewMargin.all(10),
+            padding: TeXViewPadding.all(10),
+            borderRadius: TeXViewBorderRadius.all(10),
+            border: TeXViewBorder.all(TeXViewBorderDecoration(
+                borderWidth: 2,
+                // borderStyle: TeXViewBorderStyle.groove,
+                borderColor: Colors.green))),
+        children: [/*
+          TeXViewDocument(title,
+              style: const TeXViewStyle(
+                  padding: TeXViewPadding.all(10),
+                  borderRadius: TeXViewBorderRadius.all(10),
+                  // textAlign: TeXViewTextAlign.center,
+                  width: 250,
+                  margin: TeXViewMargin.zeroAuto(),
+                  backgroundColor: Colors.green)),*/
+          TeXViewDocument(body,
+              style: const TeXViewStyle(margin: TeXViewMargin.only(top: 10)))
+        ]);
   }
-  return Container();
+
+
+  linked_ques(QuestionClass question){
+    LinkQuestions _linkQue;
+
+    if(question.linkedText != null && question.type == "LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT"){
+      _linkQue = question.linkedText;
+      var rawCont = _linkQue.content!.rawContent!;
+      if(rawCont.runtimeType.toString() == "String"){
+        rawCont = json.decode(_linkQue.content!.rawContent!);
+      }
+      var _linkText = QuestionContents.fromJson(rawCont).blocks!.first.text ?? '';
+
+      return Column(
+        children: [
+          TeXView(
+            child: TeXViewColumn(children: [
+              _teXViewWidget(convertLetX(_linkText)),
+            ]),
+          ),
+          // Text(convertLetX(_linkText), style: GoogleFonts.poppins(fontSize: 13),),
+          SizedBox(height: 10,)
+        ],
+      );
+    }
+    return Container();
+  }
+
 }
 
- /*Widget buildQuestion(QuestionClass question){
-  // var quesText = question.text.replaceAll('\$', '');
-  // print(question.type);
-  Map<String, dynamic> linkNum= {
-    'A' : 0,
-    'B' : 1,
-    'C' : 2,
-    'D' : 3,
-    "E" : 4,
-    "/" : " ",
-  };
-  String? optionVal;
 
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: [
-        Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
-        SizedBox(height: 10,),
-        linked_ques(question),
-        Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
-        (question.queImage != '')?
-            Image(image: NetworkImage(question.queImage)) :
-        Container(),
-
-
-        (question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT') ?
-        Column(
-          children: List.generate(question.options.length, (index) {
-            return ListTile(
-              leading: Radio(
-                  value: "123",
-                  groupValue: optionVal,
-                  onChanged: (value){
-                    setState(() {
-                      gender = value.toString();
-                    });
-                  }),
-              title: Text(question.options.elementAt(index).text),
-            );
-          }),
-        ):
-        (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
-            question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'
-        ) ?
-        Column(
-          children: List.generate(question.options.length, (index) {
-            return ListTile(
-              title: Text((question.options.elementAt(index).text != 'ABC')?
-              question.options.elementAt(index).text : '${linkNum.values.where((element) => element == index)}'),
-              leading: Radio(
-                  value: "123",
-                  groupValue: optionVal,
-                  onChanged: (value){
-                    *//*setState(() {
-                      gender = value.toString();
-                    });*//*
-                  }),
-            );
-          }),
-        )
-        : (question.type == 'RANGE') ?
-        const TextField(
-          decoration: InputDecoration(labelText: "Your Answer"),
-          keyboardType: TextInputType.number,
-        ) : Column(
-          children: List.generate(question.options.length, (index) {
-            return ListTile(
-              title: Text(question.options.elementAt(index).text),
-            );
-          }),
-        )
-      ],
-    ),
-  );
-}*/

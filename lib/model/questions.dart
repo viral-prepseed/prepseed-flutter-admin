@@ -1,6 +1,8 @@
 class QuestionClass{
   final String type;
   final String text;
+  final dynamic correctMarks;
+  final dynamic incorrectMarks;
   dynamic queImage;
   dynamic optImage;
   dynamic linkedText;
@@ -11,6 +13,8 @@ class QuestionClass{
   QuestionClass({
     required this.type,
     required this.text,
+    required this.correctMarks,
+    required this.incorrectMarks,
     this.queImage,
     this.optImage,
     this.linkedText,
@@ -22,8 +26,9 @@ class QuestionClass{
 
 class Option {
   final String text;
+  final dynamic id;
 
-  Option({required this.text});
+  Option({required this.text, required this.id});
 }
 
 
