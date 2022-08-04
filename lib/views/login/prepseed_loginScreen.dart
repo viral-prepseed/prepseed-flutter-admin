@@ -7,7 +7,7 @@ import 'package:prepseed/model/clientNames.dart';
 import 'package:prepseed/views/login/company_signIn_signUp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../constants/strings.dart';
 
 class prepSeed_login extends StatefulWidget {
@@ -87,8 +87,6 @@ class _prepSeed_loginState extends State<prepSeed_login> {
 
   @override
   Widget build(BuildContext context) {
-
-    print(_myJson.runtimeType);
     return SafeArea(
       child: Scaffold(
         // backgroundColor: Constants.backgroundColor,
@@ -111,7 +109,7 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                     width: double.maxFinite,
                     child: DropdownButton<String>( //Map<dynamic,dynamic>
                       isDense: true,
-                      hint: new Text("Select"),
+                      hint: Text("Select"),
                       value: selectedid,
                       onChanged: ( newValue) async {
                         setState(() {
@@ -132,7 +130,19 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                             value: map['_id'].toString(), //map
                             child: Row(
                               children: [
-                                Image(image: NetworkImage(map['logo']),width: 45,),
+                                // Image(image: NetworkImage(map['logo']),width: 45,),
+                                CachedNetworkImage(
+                                  imageUrl: map['logo'],
+                                  placeholder: (context, url) => const CircleAvatar(
+                                    backgroundColor: Colors.amber,
+                                    // radius: 150,
+                                  ),
+                                  imageBuilder: (context, image) => CircleAvatar(
+                                    backgroundImage: image,
+                                    backgroundColor: Colors.transparent,
+                                    // radius: 150,
+                                  ),
+                                ),
                                 SizedBox(width: 10,),
                                 Text(
                                   map["name"],

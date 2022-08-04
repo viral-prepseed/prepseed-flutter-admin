@@ -34,6 +34,20 @@ String _printDuration(Duration duration) {
 
 class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderStateMixin {
   TabController? _tabController;
+
+  double correctTime = 0.0;
+  double incorrectTime = 0.0;
+  double unattemptedTime = 0.0;
+
+  dynamic maxMarks;
+  dynamic marks;
+  dynamic rank;
+  dynamic percentile;
+  dynamic questionsAttempted;
+  dynamic correctQuestions;
+  dynamic incorrectQuestions;
+  dynamic hist;
+
   List<ChartSampleData>? chartData;
   List<ChartData>? timeUsagechartData;
   List<ChartData>? academicChartData;
@@ -122,10 +136,26 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
     var userId = await sharedPref().getSharedPref('userId');
     // print(userId);
 
+
     Future.microtask(() async => {
        await Provider.of<AnalysisClass>(context, listen: false)
           .apiCall(userId,id),
-    });
+
+    correctTime = (Provider.of<AnalysisClass>(context, listen: false).submissionObj!.meta!.correctTime/60) ?? 0.0,
+    incorrectTime = (Provider.of<AnalysisClass>(context, listen: false).submissionObj!.meta!.incorrectTime/60) ?? 0.0,
+    unattemptedTime = (Provider.of<AnalysisClass>(context, listen: false).submissionObj!.meta!.unattemptedTime/60) ?? 0.0,
+
+    maxMarks = Provider.of<AnalysisClass>(context, listen: false).maxMarks,
+    marks = Provider.of<AnalysisClass>(context, listen: false).alldatas!.marks,
+    rank = Provider.of<AnalysisClass>(context, listen: false).alldatas!.rank,
+    percentile = Provider.of<AnalysisClass>(context, listen: false).alldatas!.percentile,
+    questionsAttempted = Provider.of<AnalysisClass>(context, listen: false).alldatas!.questionsAttempted,
+    correctQuestions = Provider.of<AnalysisClass>(context, listen: false).alldatas!.correctQuestions,
+    incorrectQuestions = Provider.of<AnalysisClass>(context, listen: false).alldatas!.incorrectQuestions,
+    hist = Provider.of<AnalysisClass>(context, listen: false).core!.hist!,
+  });
+
+
     // _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -134,9 +164,7 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
     return Scaffold(
       body: Consumer<AnalysisClass>(builder: (context, myModel, child){
         List<GASections> sectionList = myModel.sectionList;
-        double correctTime = (myModel.submissionObj!.meta!.correctTime/60) ?? 0.0;
-        double incorrectTime = (myModel.submissionObj!.meta!.incorrectTime/60) ?? 0.0;
-        double unattemptedTime = (myModel.submissionObj!.meta!.unattemptedTime/60) ?? 0.0;
+
         // print(myModel.core!.hist);
         return SafeArea(
           child: SingleChildScrollView(
@@ -196,21 +224,21 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
                               padding: const EdgeInsets.all(8.0),
                               child: Text('Marks Obtained'),
                             ),
-                            Column(children: [Text('${myModel.alldatas!.marks}/${myModel.maxMarks}'),],)
+                            Column(children: [Text('${marks}/${maxMarks}'),],)
                           ]),
                           TableRow(children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text('Overall Rank'),
                             ),
-                            Column(children: [Text('${myModel.alldatas!.rank}'),],)
+                            Column(children: [Text('${rank}'),],)
                           ]),
                           TableRow(children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text('Percentile'),
                             ),
-                            Column(children: [Text('${myModel.alldatas!.percentile}'),],)
+                            Column(children: [Text('${percentile}'),],)
                           ]),
                           /*TableRow(children: [
                             Padding(
@@ -224,21 +252,21 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
                               padding: const EdgeInsets.all(8.0),
                               child: Text('Questions Attempted'),
                             ),
-                            Column(children: [Text('${myModel.alldatas!.questionsAttempted}'),],)
+                            Column(children: [Text('${questionsAttempted}'),],)
                           ]),
                           TableRow(children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text('Correct Questions'),
                             ),
-                            Column(children: [Text('${myModel.alldatas!.correctQuestions}'),],)
+                            Column(children: [Text('${correctQuestions}'),],)
                           ]),
                           TableRow(children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text('Incorrect Questions'),
                             ),
-                            Column(children: [Text('${myModel.alldatas!.incorrectQuestions}'),],)
+                            Column(children: [Text('${incorrectQuestions}'),],)
                           ]),
                         ],
                       ),
@@ -369,8 +397,8 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
                           splineType: SplineType.cardinal,
                             dataSource:
 
-                            List.generate(myModel.core!.hist!.length, (index) =>
-                                Percentage(index, myModel.core!.hist!.elementAt(index) ),
+                            List.generate(hist.length, (index) =>
+                                Percentage(index, hist.elementAt(index) ),
                             )
                               /*[
                               *//*Percentage(100, 4),

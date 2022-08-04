@@ -146,6 +146,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                 ),
                 ),
               ),*/
+              (Provider.of<TestProviderClass>(context,listen: false).isReset == true) ?
               Expanded(
                 child: RaisedButton(
                   elevation: 0,
@@ -163,7 +164,8 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                   // colorBrightness: Brightness.dark,
                   color: Constants.grey.withOpacity(1),
                 ),
-              ),
+              )
+                  : Container(),
               Expanded(
                 child: RaisedButton(
                   elevation: 0,
@@ -211,7 +213,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
               indicatorColor: Constants.blue,
               labelColor: Constants.white.withOpacity(0.8),
               unselectedLabelColor: Constants.white.withOpacity(0.5),
-              labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 17),
+              labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15),
               tabs: List.generate(tabValues.length, (index) => Text(tabValues[index])),
             ),
             Expanded(child: TabBarView(
@@ -490,48 +492,6 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
 /*==================================================== Questions ============================================================*/
 
 
-convertLetX(String text){
-  var count = text.length - text.replaceAll("\$","").length;
-  // print(count);
-  // String _text = text.replaceAll(r'\+', r'\');
-  // replaceData(_text);
-  String _response = text;
-  for(int i=0; i<=count/2; i++){
-    _response = replaceData(_response);
-  }
-
-/*  String _response = replaceData(_text);
-  if(_response != null){
-    if(_response.contains(r'$')){
-      return replaceData(_response);
-    }else{
-      return _response;
-    }
-  }*/
-return _response;
-}
-
-replaceData(String replaceableText){
-  String? _textData;
-  String? _text_sec_Data;
-    // if(replaceableText.contains(r'$')){
-      _textData = replaceableText.replaceFirst('\$', r'\(');
-      _text_sec_Data = _textData.replaceFirst('\$', r'\)');
-      // convertLetX(_text_sec_Data);
-      // replaceData(_text_sec_Data);
-    // }else{}
-/*
-    // print(_text_sec_Data);
-    if(_text_sec_Data != null){
-      if(_text_sec_Data.contains('\$')){
-        return _text_sec_Data;
-      }else{
-        // print(_text_sec_Data);
-        return _text_sec_Data;
-      }
-    }*/
-  return _text_sec_Data;
-}
 
 
 
@@ -546,19 +506,22 @@ class questionWidget extends StatefulWidget {
 class _questionWidgetState extends State<questionWidget> {
 
   String optionVal = '';
+  
+  
 @override
   Widget build(BuildContext context) {
-    // return Container();
-    // return buildQuestion(widget.queId);
-    QuestionClass question = widget.queId;
-/*    String txt = question.text;
-    txt = txt.replaceAll('\$', '');*/
-    // print(question.isMarked);
 
-    String s = convertLetX(question.text);
+  QuestionClass question = widget.queId;
+  String s = (question.text);
     // print(s);
 
-    var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
+  var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
+/*  if(question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
+      question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'){
+    Provider.of<TestProviderClass>(context,listen: false).isReset = true;
+  }else{
+    Provider.of<TestProviderClass>(context,listen: false).isReset = false;
+  }*/
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -568,11 +531,10 @@ class _questionWidgetState extends State<questionWidget> {
           linked_ques(question),
           TeXView(
           child: TeXViewColumn(children: [
-
-            _teXViewWidget( s.toString()),
+            _teXViewWidget((s.toString())),
             // TeXViewDocument(s ?? '', style: TeXViewStyle.fromCSS('padding: 15px; color: white; background: green'))
           ]),
-        style: TeXViewStyle(
+        style: const TeXViewStyle(
           elevation: 10,
           borderRadius: TeXViewBorderRadius.all(25),
           border: TeXViewBorder.all(TeXViewBorderDecoration(
@@ -592,13 +554,12 @@ class _questionWidgetState extends State<questionWidget> {
             children: List.generate(question.options.length, (index) {
               return CheckboxListTile(
                 title:
-                /*TeXView(
+                TeXView(
                   child: TeXViewColumn(children: [
-                    TeXViewDocument(convertLetX(question.options.elementAt(index).text.toString()) ?? '',
-                        style: TeXViewStyle.fromCSS('padding: 15px; color: black;'))
+                    _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
                   ]),
-                ),*/
-                Text(question.options.elementAt(index).text.toString()),
+                ),
+                // Text(question.options.elementAt(index).text.toString()),
                 // subtitle: Text(this.noteList[position].actn_on),
                 value: selectedIndexes.contains(question.options.elementAt(index).text),
                 onChanged: (_) {
@@ -614,19 +575,16 @@ class _questionWidgetState extends State<questionWidget> {
             }),
           ):
           (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
-              question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'
-          ) ?
+              question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT') ?
           Column(
             children: List.generate(question.options.length, (index) {
               return RadioListTile(
-                title:
-                /*TeXView(
+                title: TeXView(
                   child: TeXViewColumn(children: [
-                    TeXViewDocument(convertLetX(question.options.elementAt(index).text.toString()) ?? '',
-                        style: TeXViewStyle.fromCSS('padding: 15px; color: black;'))
-                  ]),
-                ),*/
-                Text(question.options.elementAt(index).text.toString()),
+                    _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
+                    ]),
+                ),
+                // Text(question.options.elementAt(index).text.toString()),
                   value: question.options.elementAt(index).text.toString(),
                   groupValue: Provider.of<TestProviderClass>(context, listen: false).optionVal,
                   onChanged: (value){
@@ -692,11 +650,11 @@ class _questionWidgetState extends State<questionWidget> {
         children: [
           TeXView(
             child: TeXViewColumn(children: [
-              _teXViewWidget(convertLetX(_linkText)),
+              _teXViewWidget((_linkText)),
             ]),
           ),
           // Text(convertLetX(_linkText), style: GoogleFonts.poppins(fontSize: 13),),
-          SizedBox(height: 10,)
+          const SizedBox(height: 10,)
         ],
       );
     }

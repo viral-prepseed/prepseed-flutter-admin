@@ -82,8 +82,8 @@ class _testLevelState extends State<testLevel> {
                                           children: [
                                             Text(asw.name!),
                                             const SizedBox(height: 5,),
-                                            Text('Click to see analysis'),
-                                            SizedBox(
+                                            const Text('Click to see analysis'),
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                           ],

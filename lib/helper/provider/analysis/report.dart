@@ -156,17 +156,14 @@ class ReportClass extends ChangeNotifier {
 
       listOfColumns = _listOfColumns;
 
-
-
       print(allMarksSelf);
-      print(allPercentage);
-      print(allMarksAvg);
       print(allMarksHigh);
+      print(allMarksAvg);
+      print(allPercentage);
       print(allMarksTopper);
       print(allPercentile);
       print(allCP);
       print(_repAllList);
-
 
 
       /*mapUser.forEach((key, value) {
