@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:prepseed/helper/provider/analysis/report.dart';
 import 'package:prepseed/helper/provider/leadershipProvider.dart';
 import 'package:prepseed/model/assesments/getwrapper.dart';
+import 'package:prepseed/repository/playlist_provider/videos_provider.dart';
 import 'package:prepseed/views/menu/menu_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import '../../helper/api/functions.dart';
 import '../../helper/provider/tests/assessmentWrappers.dart';
 import '../../helper/sharedPref.dart';
+import '../../repository/playlist_provider/videos_provider.dart';
 import '../execute/test/AttemptTest.dart';
 import '../execute/test/viewAnalysis.dart';
 
@@ -36,6 +38,14 @@ class _mainScreenState extends State<mainScreen> {
 
   initProvider(){
     Future.microtask(() async => {
+      await Provider.of<VideosProvider>(context, listen: false)
+          .getVideos(),
+      await Provider.of<VideosProvider>(context, listen: false)
+          .getAnnouncement(),
+      await Provider.of<VideosProvider>(context, listen: false)
+          .getDoubt(),
+      await Provider.of<VideosProvider>(context, listen: false)
+          .getSubscriptions(),
       await Provider.of<LeadershipClass>(context, listen: false)
           .apiCall(),
       await Provider.of<AssessmentWrappersClass>(context, listen: false)
@@ -43,13 +53,11 @@ class _mainScreenState extends State<mainScreen> {
       await Provider.of<ReportClass>(context, listen: false)
           .getReportsAPI(),
     });
-    // print(listOfColumns.first.keys);
   }
   fetchPref() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     username = prefs.getString('username')!;
   }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -70,14 +78,12 @@ class _mainScreenState extends State<mainScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-
                     Row(
                       children: [
                         MenuWidget(),
                         // Text(username,style: GoogleFonts.poppins(color: Constants.black),),
                       ],
                     ),
-
                     Column(
                       children: [
                         Text(
@@ -200,7 +206,6 @@ class _mainScreenState extends State<mainScreen> {
                         }),
                       ],
                     ),
-
                     SizedBox(
                       height: 15,
                     ),
@@ -221,7 +226,7 @@ class _mainScreenState extends State<mainScreen> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width - 32,
-                            height: 100,
+                            height: 120,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(25),
                               child: Container(
@@ -341,7 +346,7 @@ class _mainScreenState extends State<mainScreen> {
                                               children: <Widget>[
                                                 Image.asset('assets/images/logo.jpg',width: 100,),
                                                 SizedBox(
-                                                  height: 15,
+                                                  height: 7,
                                                 ),
                                                 Text('Intent',style: GoogleFonts.poppins(
                                                     fontWeight: FontWeight.bold,

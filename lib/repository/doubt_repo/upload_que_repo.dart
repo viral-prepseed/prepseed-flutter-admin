@@ -8,9 +8,9 @@ import '../../../constants/strings.dart';
 import '../../../helper/sharedPref.dart';
 import '../../../model/playlist_model/assignment_model/upload_assi_model.dart';
 
-class UploadAssignmentRepo {
+class UploadQueRepo {
 
-  Future<UploadAssignmentModel> assignmentUpload(String filename, String mime) async {
+  Future<UploadAssignmentModel> queUpload(String filename, String mime) async {
 
     UploadAssignmentModel _model;
     var token = await sharedPref().getSharedPref('token');

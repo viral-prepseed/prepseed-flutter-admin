@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:prepseed/main.dart';
 import 'package:prepseed/model/menuItem.dart';
-import 'package:prepseed/views/Assignments/Assignments_homescreen.dart';
-import 'package:prepseed/views/Documents/document_homescreen.dart';
+import 'package:prepseed/views/interact_module/chat/chat_homescreen.dart';
+import 'package:prepseed/views/learning_module/Assignments/Assignments_homescreen.dart';
+import 'package:prepseed/views/learning_module/Documents/document_homescreen.dart';
 import 'package:prepseed/views/adventure/liveTest.dart';
+import 'package:prepseed/views/interact_module/announcements/announcement_homescreen.dart';
+import 'package:prepseed/views/interact_module/doubt/doubt_homescreen.dart';
 import 'package:prepseed/views/execute/practice/practice.dart';
 import 'package:prepseed/views/execute/test/test_.dart';
 import 'package:prepseed/views/home/mainScreen.dart';
@@ -19,7 +22,7 @@ import 'package:prepseed/views/execute/test/tests.dart';
 import 'package:prepseed/views/home/mainScreen.dart';
 import 'package:prepseed/views/login/prepseed_loginScreen.dart';
 import 'package:prepseed/views/stats_analysis/analysis/analysis.dart';
-import 'package:prepseed/views/videos/videos_homescreen.dart';
+import 'package:prepseed/views/learning_module/videos/videos_homescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:prepseed/views/stats_analysis/reports/reports.dart';
 
@@ -70,6 +73,7 @@ class _landingScreenState extends State<landingScreen> {
   }
 
   Widget getScreen() {
+    MenuItems menuItems = MenuItems();
     switch (currentItem) {
       case MenuItems.home :
         return mainScreen();
@@ -85,6 +89,14 @@ class _landingScreenState extends State<landingScreen> {
         return AssignmentHomeScreen();
       case MenuItems.practice :
         return practice();
+      case MenuItems.quantizedSheet :
+        return quantized_sheet();
+      case MenuItems.announcement :
+        return AnnouncementsHomeScreen();
+      case MenuItems.doubt :
+        return DoubtHomeScreen();
+      case MenuItems.chats :
+        return ChatsHomeScreen();
 /*      case MenuItems.quantizedSheet :
         return quantized_sheet();*/
 /*      case MenuItems.logout:
@@ -94,7 +106,5 @@ class _landingScreenState extends State<landingScreen> {
         return livetest();//test();
     }
   }
-
-
 
 }

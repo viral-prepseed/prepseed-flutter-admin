@@ -1,12 +1,14 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:prepseed/repository/playlist_repo/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../../model/menuItem.dart';
+import '../../repository/playlist_provider/videos_provider.dart';
 import '../login/prepseed_loginScreen.dart';
 
 class MenuItems{
@@ -17,11 +19,17 @@ class MenuItems{
   static const documents = MainMenuItems('Documents',Icons.wysiwyg_outlined);
   static const assignments = MainMenuItems('Assignments',Icons.book_outlined);
   static const practice = MainMenuItems('Practice',Icons.document_scanner_rounded);
+  static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
+  static const announcement = MainMenuItems('Announcements',Icons.announcement_outlined);
+  static const doubt = MainMenuItems('Doubt', Icons.error);
+  static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
+  static const chats = MainMenuItems("Chats", Icons.message);
+
   // static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
   static const Tests = MainMenuItems('Execute',Icons.assignment_outlined);
   // static const logout = MenuItem('Logout',Icons.logout);
 
-  static const all = <MainMenuItems>[
+   List<MainMenuItems>  all = [
     home,
     analysis,
     reports,
@@ -31,9 +39,11 @@ class MenuItems{
     practice,
     // quantizedSheet,
     Tests,
+   /* announcement,
+    doubt,
+    chats*/
     // logout
   ];
-
 }
 
 
@@ -58,7 +68,7 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget buildMenuItem(MainMenuItems item) => ListTileTheme(
     selectedColor: Colors.black87,
     child: ListTile(
-      selectedTileColor: Constants.backgroundColorTrans,
+     // selectedTileColor: Constants.backgroundColorTrans,
       selected: widget.currentItem == item,
       minLeadingWidth: 20,
       leading: Icon(item.icon),
@@ -74,11 +84,16 @@ class _MenuScreenState extends State<MenuScreen> {
     email = prefs.getString('email');
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final provMdl = Provider.of<VideosProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.grey,
       body: SafeArea(
         child: Container(
+          width: size.width / 1.5,
           decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topRight,
@@ -92,8 +107,24 @@ class _MenuScreenState extends State<MenuScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Spacer(),
-              ...MenuItems.all.map(buildMenuItem).toList(),
+             // Spacer(),
+            //  ...MenuItems.all.map(buildMenuItem).toList(),
+              SizedBox(height: 25.0,),
+              Expanded(
+                child: ChangeNotifierProvider.value(
+                  value:  provMdl,
+                  child: Consumer(builder: (context, dataItems, _)
+                    {
+                      return ListView.builder(
+                        itemCount: provMdl.menuItems.all.length,
+                        itemBuilder: (context,index){
+                          return buildMenuItem(provMdl.menuItems.all[index]);
+                        }
+                      );
+                    }
+                  ),
+                ),
+              ),
               Divider(),
               ListTile(
                 selectedTileColor: Constants.backgroundColorTrans,
@@ -105,7 +136,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   logout();
                 },
               ),
-              Spacer(),
+             // Spacer(),
             ],
           )
         ),

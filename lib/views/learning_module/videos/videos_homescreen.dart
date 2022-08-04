@@ -1,14 +1,16 @@
-import '../../constants/colorPalate.dart';
-import '../../constants/theme/style.dart';
-import '../../repository/playlist_provider/videos_provider.dart';
+import '../../../constants/colorPalate.dart';
+import '../../../constants/theme/style.dart';
+import '../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import '../menu/menu_widget.dart';
+import '../../menu/menu_widget.dart';
 import 'videos_list.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class VideosHomeScreen extends StatefulWidget {
-  const VideosHomeScreen({Key? key}) : super(key: key);
+
+   VideosHomeScreen({Key? key}) : super(key: key);
 
   @override
   _VideosHomeScreenState createState() => _VideosHomeScreenState();
@@ -16,18 +18,11 @@ class VideosHomeScreen extends StatefulWidget {
 
 class _VideosHomeScreenState extends State<VideosHomeScreen> {
 
-  @override
-  void initState() {
-    final  provMdl = Provider.of<VideosProvider>(context,listen: false);
-    provMdl.getVideos(context);
-    super.initState();
-  }
-
   final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-     final provMdl = Provider.of<VideosProvider>(context,listen: true);
+     final provMdl = Provider.of<VideosProvider>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -53,9 +48,9 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
             child: Container(
               height: size.height,
               padding: const EdgeInsets.all(10.0),
-              child:  ChangeNotifierProvider(
-                create: (context) => provMdl,
-                child: Consumer<VideosProvider>(builder: (context, dataItems, _) {
+              child:  ChangeNotifierProvider.value(
+                value:  provMdl,
+                child: Consumer(builder: (context, dataItems, _) {
                   return provMdl.data.playlists != null ?
                   Column(
                     children: [
@@ -122,17 +117,14 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
                                                       children: [
                                                         provMdl.map.values.elementAt(index)[ind].thumbNailsUrls.length == 0
                                                         ? Container()
+
                                                         : img.contains('svg')
                                                         ? SvgPicture.network(
                                                           provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],
                                                           fit: BoxFit.contain,
                                                           height: 45.0,
                                                          // placeholderBuilder: (context) => const CircularProgressIndicator(),
-                                                        )
-                                                        : Image.network(
-                                                          provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],
-                                                          height: 45.0,
-                                                        ),
+                                                        ) : CachedNetworkImage(imageUrl: provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],height: 45.0,),
                                                         const SizedBox(height: 30.0),
                                                         Text(
                                                             "${provMdl.map.values.elementAt(index)[ind].title}",

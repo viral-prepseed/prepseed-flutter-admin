@@ -76,19 +76,20 @@ class _testLevelState extends State<testLevel> {
                                         const SizedBox(width: 15,),
                                         VerticalDivider(color: Constants.black),
                                         const SizedBox(width: 15,),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text(asw.name!),
-                                            const SizedBox(height: 5,),
-                                            const Text('Click to see analysis'),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                          ],
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text(asw.name!),
+                                              const SizedBox(height: 5,),
+                                              Text('Click to see analysis'),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ],
+                                          ),
                                         ),
-
                                       ],
                                     )),
                               ),

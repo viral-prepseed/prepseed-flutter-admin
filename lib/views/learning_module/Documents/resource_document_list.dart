@@ -1,12 +1,14 @@
-import '../../constants/colorPalate.dart';
-import '../../model/playlist_model/playlists.dart';
-import '../../constants/theme/style.dart';
-import '../../views/Documents/resource_document.dart';
-import '../../repository/playlist_provider/videos_provider.dart';
+import 'package:flutter/cupertino.dart';
+
+import '../../../constants/colorPalate.dart';
+import '../../../model/playlist_model/playlists.dart';
+import '../../../constants/theme/style.dart';
+import '../../../views/learning_module/Documents/resource_document.dart';
+import '../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../menu/menu_widget.dart';
+import '../../menu/menu_widget.dart';
 
 class ResourceDocumentList extends StatefulWidget {
   Playlists docs = Playlists();
@@ -31,15 +33,10 @@ class _ResourceDocumentListState extends State<ResourceDocumentList> {
   Widget build(BuildContext context) {
     final provMdl = Provider.of<VideosProvider>(context);
     return  Scaffold(
-      appBar: AppBar(
-        backgroundColor: Constants.backgroundColor,
-        elevation: 0,
-        leading: MenuWidget(),
-      ),
-      body:Padding(
-        padding: const EdgeInsets.all(10.0),
+      body:SafeArea(
         child: Column(
           children: [
+            SizedBox(height:20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -54,10 +51,12 @@ class _ResourceDocumentListState extends State<ResourceDocumentList> {
                 )
               ],
             ),
+            Style.divider(),
             widget.docs.items!.isEmpty ?
               const Center(child: CircularProgressIndicator()):
             Expanded(
               child: ListView.builder(
+                padding: EdgeInsets.all(10.0),
                   itemCount: widget.docs.items!.length,
                   itemBuilder: (context,index){
                     String? topic;

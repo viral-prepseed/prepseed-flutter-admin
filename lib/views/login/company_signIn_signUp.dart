@@ -11,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/strings.dart';
 import '../../constants/colorPalate.dart';
 import '../../helper/api/functions.dart';
+import '../../helper/provider/DataClassProvider.dart';
+import '../../repository/playlist_repo/repository.dart';
 import 'prepseed_loginScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:prepseed/model/usertopics.dart';
@@ -46,12 +48,10 @@ class _signIn_signUp extends State<signIn_signUp>{
 
   var _username = TextEditingController();
   var _password = TextEditingController();
-
+  ProviderClassRepo provider = ProviderClassRepo();
   final FocusNode _usernameFocusNode = FocusNode();
-  final FocusNode _passwordFocusNode = FocusNode();
-
-
   startLogin() async {
+
     String apiurl = Strings.signIn;
     email = _username.text.trim();
     password = _password.text.trim();
@@ -88,6 +88,8 @@ class _signIn_signUp extends State<signIn_signUp>{
       var jsondata = json.decode(response.body);
       sharedPref().setSharedPref('topics', json.encode(jsondata['topics']));
       sharedPref().setSharedPref('stats', json.encode(jsondata['user']['stats']));
+      sharedPref().setSharedPref('subscriptions', json.encode(jsondata['user']['subscriptions']));
+     // provider.getUserData();
       // print(jsondata);
 
       setState(() {
@@ -103,6 +105,7 @@ class _signIn_signUp extends State<signIn_signUp>{
       prefs.setString('email',jsondata["user"]["email"]);
       prefs.setString('email',jsondata["user"]["email"]);
       prefs.setString('token',jsondata["token"]);
+    /*  prefs.setString('subscriptions', jsondata["user"]["subscriptions"]);*/
       prefs.setString('phaseId',jsondata["user"]["subscriptions"][0]["subgroups"][0]["phases"][0]["phase"]["_id"]);
 
       Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -121,6 +124,9 @@ class _signIn_signUp extends State<signIn_signUp>{
 
 
   dynamic tokenid;
+
+
+  final FocusNode _passwordFocusNode = FocusNode();
 
   @override
   void initState() {

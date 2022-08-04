@@ -1,12 +1,14 @@
-import '../../constants/colorPalate.dart';
-import '../../model/playlist_model/playlists.dart';
-import '../../constants/theme/style.dart';
-import '../../repository/playlist_provider/videos_provider.dart';
-import '../../views/videos/vimeo.dart';
+import 'package:flutter/cupertino.dart';
+
+import '../../../constants/colorPalate.dart';
+import '../../../model/playlist_model/playlists.dart';
+import '../../../constants/theme/style.dart';
+import '../../../repository/playlist_provider/videos_provider.dart';
+import '../../../views/learning_module/videos/vimeo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../menu/menu_widget.dart';
+import '../../menu/menu_widget.dart';
 
 class PlaylistVideos extends StatefulWidget {
   Playlists? list;
@@ -29,15 +31,11 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
   Widget build(BuildContext context) {
     final provMdl = Provider.of<VideosProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Constants.backgroundColor,
-        elevation: 0,
-        leading: MenuWidget(),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
+      
+      body: SafeArea(
         child: Column(
           children: [
+            SizedBox(height:20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -52,8 +50,10 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
                 )
               ],
             ),
+            Style.divider(),
             Expanded(
               child: ListView.builder(
+                padding: EdgeInsets.all(10.0),
                   itemCount: widget.list!.items!.length,
                   itemBuilder: (context, index) {
                     String? topic;
@@ -67,7 +67,9 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 20.0,),
-                        Text(topic.toString(),style: Style.textStyleRegular15Black,),
+                        widget.list!.items![index].resource!.tags!.isNotEmpty
+                        ? Text(topic.toString(),style: Style.textStyleRegular15Black,)
+                        : Container(),
                         const SizedBox(height: 20.0,),
                         InkWell(
                           child: Row(
@@ -84,7 +86,7 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
                           onTap: () {
                             widget.list!.hasAccessToContent == true
                             ? Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Vimeo(list: provMdl.list.playlist!.items!)))
+                                builder: (context) => Vimeo(list: provMdl.list.playlist!.items![index])))
                             : Container();
                           },
                         ),

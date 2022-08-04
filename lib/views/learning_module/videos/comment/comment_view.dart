@@ -1,11 +1,11 @@
-import '../../../model/playlist_model/video_model/videoPlaylistModel.dart';
-import '../../../constants/theme/style.dart';
-import '../../../repository/playlist_provider/videos_provider.dart';
+import '../../../../model/playlist_model/video_model/videoPlaylistModel.dart';
+import '../../../../constants/theme/style.dart';
+import '../../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../model/playlist_model/video_model/comment/comment_model.dart';
+import '../../../../model/playlist_model/video_model/comment/comment_model.dart';
 
 class Comment extends StatefulWidget {
   Resource comment;
@@ -55,7 +55,7 @@ class _CommentState extends State<Comment> {
                 onPressed: () {
                   onTap(provMdl.comment.item![index]);
                 },
-                icon: Image.asset("assets/info (1).png", height: 20.0),
+                icon: Image.asset("assets/icons/info.png", height: 20.0),
               ),
             ],
           );
@@ -90,7 +90,7 @@ class _CommentState extends State<Comment> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SvgPicture.network(item.user!.dp.toString(), height: 30.0),
-                Text(item.user!.username.toString()),
+                Text(item.user!.username.toString(),style: Style.textStyleBold15,),
               ],
             ),
             const SizedBox(height: 10.0,),
@@ -119,7 +119,7 @@ class _CommentState extends State<Comment> {
             Row(
               children: [
                 Text("Update At : ", style: textStyle()),
-                Text(updateTime.toLocal().toString(), style: textStyle()),
+                Expanded(child: Text(updateTime.toLocal().toString(), style: textStyle())),
               ],
             ),
             const SizedBox(height: 10.0,),
@@ -135,6 +135,6 @@ class _CommentState extends State<Comment> {
   }
 
   textStyle() {
-    return const TextStyle(fontSize: 15.0);
+    return const TextStyle(fontSize: 13.0);
   }
 }

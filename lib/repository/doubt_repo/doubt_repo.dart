@@ -5,26 +5,26 @@ import 'package:http/http.dart' as http;
 
 import '../../constants/strings.dart';
 import '../../helper/sharedPref.dart';
+import '../../model/interact_models/doubt_model/doubt_model.dart';
 import '../../model/playlist_model/playlists.dart';
-import '../../model/userDetails/user_data_model.dart';
 
-class ProviderClassRepo{
-  UserSubscription model = UserSubscription();
-  Future<playlist_model>getPlaylist() async {
+class DoubtRepo{
 
-    playlist_model _model;
+  Future<DoubtModel>getDoubt() async {
+
+    DoubtModel _model;
 
     var token = await sharedPref().getSharedPref('token');
-    var url = Uri.parse(Strings.playlistUrl);
+    var url = Uri.parse(Strings.doubtUrl);
     var response = await http.get(url, headers: {
       'Content-type' : 'application/json',
       'authorization': 'Bearer $token',
     });
     if (response.statusCode == 200) {
-    /*  _model = List<playlist_model>.from(
+      /*  _model = List<playlist_model>.from(
           json.decode(response.body).map((x) => playlist_model.fromJson(x))).toList();
     */
-      _model = playlist_model.fromJson(json.decode(response.body));
+      _model = DoubtModel.fromJson(json.decode(response.body));
     }
     else if(response.statusCode == 401){
       throw Exception('UnAuthorize');
@@ -32,13 +32,8 @@ class ProviderClassRepo{
     else {
       throw Exception('Failed to get Playlist');
     }
+    print(_model);
     return _model;
   }
-  var datalist;
-  List<Subscriptions> listData = [];
-  Future<List<Subscriptions>>getUserData() async {
-     datalist = await sharedPref().getSharedPref('subscriptions');
-     listData = List<Subscriptions>.from(json.decode(datalist).map((x) => Subscriptions.fromJson(x))) ;
-   return listData;
-  }
+
 }

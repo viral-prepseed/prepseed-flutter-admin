@@ -3,7 +3,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../../constants/strings/string.dart';
+import '../../../constants/strings.dart';
+
 import '../../../helper/sharedPref.dart';
 import '../../../model/playlist_model/document_model/resource_document_model.dart';
 
@@ -13,7 +14,7 @@ class DocumentRepo {
 
     ResourceDocumentsModel _model;
     var token = await sharedPref().getSharedPref('token');
-    var url = Uri.parse(StringValue.playlistUrl + id);
+    var url = Uri.parse(Strings.videoUrl + id);
     var response = await http.get(url,
       headers: {
         'Content-type' : 'application/json',
