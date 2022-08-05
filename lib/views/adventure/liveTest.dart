@@ -86,6 +86,7 @@ class _livetestState extends State<livetest> {
                         ],*/
                       ),
                       ),
+                      SizedBox(height: 15.0,),
                       Expanded(child:
                       TabBarView(
                         children:
@@ -188,9 +189,6 @@ class _livetestState extends State<livetest> {
                         })
                       )
                       ),
-
-
-
                     ],
                   ),
                 ),

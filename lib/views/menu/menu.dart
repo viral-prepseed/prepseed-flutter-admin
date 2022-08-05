@@ -26,7 +26,7 @@ class MenuItems{
   static const chats = MainMenuItems("Chats", Icons.message);
 
   // static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
-  static const Tests = MainMenuItems('Execute',Icons.assignment_outlined);
+  //static const Tests = MainMenuItems('Execute',Icons.assignment_outlined);
   // static const logout = MenuItem('Logout',Icons.logout);
 
    List<MainMenuItems>  all = [
