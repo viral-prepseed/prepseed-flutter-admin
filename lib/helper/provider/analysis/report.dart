@@ -9,11 +9,11 @@ class ReportClass extends ChangeNotifier {
 
   bool isLoading = false;
   List<Map> allList = [];
-  List<Items>? itemsList;
+  List<Items> itemsList = [];
   List testNames = [];
 
   List<Map> get listOfColumns => allList;
-  List<Items> get items => itemsList!;
+  List<Items> get items => itemsList;
 
   set listOfColumns(List<Map> value) {
     allList = value;
@@ -28,7 +28,8 @@ class ReportClass extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
-
+  Report reportModel = Report();
+  /*Map mapStatsMax = {};*/
   getReportsAPI() async {
     var token = await sharedPref().getSharedPref('token');
     var phaseId = await sharedPref().getSharedPref('phaseId');
@@ -43,10 +44,10 @@ class ReportClass extends ChangeNotifier {
           'authorization': 'Bearer $token',
         });
 
-    var responseJson = json.decode(response.body);
-    // print(response.statusCode);
-    if (200 == response.statusCode) {
 
+    // print(response.statusCode);
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
       Report _reports = Report.fromJson(responseJson);
       List<Items>? _items = _reports.items;
 
@@ -61,7 +62,8 @@ class ReportClass extends ChangeNotifier {
       Map mapUserSelf = {};
       Map mapTopperHigh = {};
       Map mapStatsAvg = {};
-      Map mapStatsMax = {};
+      Map mapMax = {};
+
       // Map mapStatsPercentile = {};
       Map allPercentage = {};
       Map allMarksSelf = {};
@@ -70,22 +72,22 @@ class ReportClass extends ChangeNotifier {
       Map allMarksAvg = {};
       Map allPercentile = {};
       Map allCP = {};
-
+      Map mapStatsMax = {};
+      List listData = [];
       for(var rep in _reports.items!){
-        List listData = rep.user!.toJson().keys.toList();
-        rep.details!.forEach((element) {
-          _repAllList.add(element.toJson());
-          finalMapData['Name'] = element.name;
-          finalMapData['Date'] = element.availableFrom;
+          rep.details!.forEach((element) {
+            _repAllList.add(element.toJson());
+            finalMapData['Name'] = element.name;
+            finalMapData['Date'] = element.availableFrom;
+          }
+          );
+          if(rep.user != null){
+            listData = rep.user!.toJson().keys.toList();
+          mapUserSelf = rep.user!.toJson();
         }
-        );
-
-
-        mapUserSelf = rep.user!.toJson();
         mapTopperHigh = rep.topper!.toJson();
         mapStatsAvg = rep.statsBySection!.toJson();
         mapStatsMax = rep.maxMarks!.toJson();
-        // print(mapStatsMax);
 
         for(var elements in mapUserSelf.keys){
           var calval = (Overall.fromJson(mapUserSelf[elements]).marks! / mapStatsMax[elements]) * 100;
@@ -97,6 +99,9 @@ class ReportClass extends ChangeNotifier {
           allMarksSelf[elements] = Overall.fromJson(mapUserSelf[elements]).marks;
         }
 
+     /*   for(var elements in mapStatsMax.keys){
+          mapMax[elements] = MaxMarks.fromJson(mapStatsMax[elements]).overall;
+        }*/
         for(var elements in mapTopperHigh.keys){
           // allMarksSelf = {elements : mapUserSelf[elements]};
           allMarksTopper[elements] = Overall.fromJson(mapTopperHigh[elements]).marks;
@@ -133,9 +138,19 @@ class ReportClass extends ChangeNotifier {
           allMarksHigh.forEach((key, value) {
             if(key == element){
               finalListData.add(value);
-              // finalMapData[key] = value;
             }
           });
+          mapStatsMax.forEach((key, value) {
+            if(key == element){
+              finalListData.add(value);
+            }
+          });
+         /* allMarksHigh.forEach((key, value) {
+            if(key == element){
+              finalListData.add(value);
+              // finalMapData[key] = value;
+            }
+          });*/
           /*finalMapData[element] = finalListData;
           finalListData = [];*/
           allMarksAvg.forEach((key, value) {
@@ -153,11 +168,7 @@ class ReportClass extends ChangeNotifier {
         finalMapData = {};
         // print(finalMapData);
       }
-
       listOfColumns = _listOfColumns;
-
-
-
       print(allMarksSelf);
       print(allPercentage);
       print(allMarksAvg);
@@ -166,17 +177,11 @@ class ReportClass extends ChangeNotifier {
       print(allPercentile);
       print(allCP);
       print(_repAllList);
-
-
-
       /*mapUser.forEach((key, value) {
         allMarks = {keys : value['marks']};
         print(allMarks);
       });*/
-
       // allReportsList = _repAllList;
-
-
     } else {
       return [];
     }

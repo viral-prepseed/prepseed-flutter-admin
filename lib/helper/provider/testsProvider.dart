@@ -11,8 +11,10 @@ import '../../constants/strings.dart';
 import '../../model/execute/tests/list_questions.dart';
 import '../sharedPref.dart';
 class TestProviderClass extends ChangeNotifier {
-
+  final _textController = TextEditingController();
   bool isLoading = false;
+  List emptyList = [];
+  String _optionVal = '';
   List<AssessmentWrappers> post = [];
   list_questions? _assessment;
   List TabValues = [];
@@ -24,13 +26,23 @@ class TestProviderClass extends ChangeNotifier {
   list_questions get assessment => _assessment!;
   List<QuestionClass> get questionsList => questions;
   Map get listTopics => mapTopic;
+  String get optionVal => _optionVal;
+  TextEditingController get textController => _textController;
 
   get listLength => listData.length;
 
   get tabLength => TabValues.toSet().toList().length;
   get tabValues => TabValues.toSet().toList();
+  List get selectedIndex => emptyList;
 
+/*  set selectedIndex(List list){
+    emptyList = list;
+  }*/
 
+  set optionVal(String _opval){
+    _optionVal = _opval;
+    notifyListeners();
+  }
 
 /*  get tabLength => TabValues.toSet().toList().length;
   get tabValues => TabValues.toSet().toList();*/
@@ -166,7 +178,7 @@ class TestProviderClass extends ChangeNotifier {
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(multiOp.content['rawContent']);
                   }
-                  _options.add(Option(text: opCont['blocks'][0]['text']));
+                  _options.add(Option(text: opCont['blocks'][0]['text'],id: multiOp.id));
                 });
               }
 
@@ -177,7 +189,7 @@ class TestProviderClass extends ChangeNotifier {
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(opCont);
                   }
-                  _options.add(Option(text: opCont['blocks'][0]['text']));
+                  _options.add(Option(text: opCont['blocks'][0]['text'],id: multiOp.sId));
                 }
               }
 
@@ -187,13 +199,13 @@ class TestProviderClass extends ChangeNotifier {
                   for (var multiOp in elementQue.question!.options!) {
                     var _isimageopt = multiOp.content;
                     if(_isimageopt == null){
-                      _options.add(Option(text: 'ABC'));
+                      _options.add(Option(text: 'ABC',id: 1));
                     }else{
                       var opCont = multiOp.content!.rawContent;
                       if(opCont.runtimeType.toString() == 'String'){
                         opCont = json.decode(opCont);
                       }
-                      _options.add(Option(text: opCont['blocks'][0]['text']));
+                      _options.add(Option(text: opCont['blocks'][0]['text'],id: multiOp.sId));
                     }
                   }
 
@@ -215,6 +227,8 @@ class TestProviderClass extends ChangeNotifier {
 
             }*/
             _questions.add(QuestionClass(
+                correctMarks: elementQue.correctMark,
+                incorrectMarks: elementQue.incorrectMark,
                 type: elementQue.question!.type!,
                 text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
                 queImage: _queImage,

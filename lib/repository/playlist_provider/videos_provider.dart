@@ -317,14 +317,19 @@ class VideosProvider extends ChangeNotifier {
   List<Subscriptions> subscriptions = [];
   ProviderClassRepo providerClassRepo = ProviderClassRepo();
   List items = [];
+  bool config = false;
   MenuItems menuItems = MenuItems();
   getSubscriptions() async{
     subscriptions = await providerClassRepo.getUserData();
     subscriptions.forEach((element) {
       element.subgroups!.forEach((element) {
         element.phases!.forEach((element) {
-          element.phase!.config != null ? menuItems.all.addAll([MenuItems.announcement,MenuItems.chats,MenuItems.doubt]) : menuItems;
+          if( element.phase!.config != null){
+            menuItems.all.addAll([MenuItems.announcement,MenuItems.chats,MenuItems.doubt]);
+            config = true;
+          }
           print(menuItems);
+          print(config);
         });
       });
     });

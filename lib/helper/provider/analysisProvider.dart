@@ -32,7 +32,7 @@ class AnalysisClass extends ChangeNotifier {
   List<GASections> get sectionList => postList;
   List<Roadmap> get rmapList => roadmapList;
   List<ChartSampleData> get chartSampleList => chartList;
-  GACoreAnalysis? get core => coreAna!;
+  GACoreAnalysis? get core => coreAna;
   GASubmission? get submission => submissionObj!;
 
   var maxMarks = 0;
@@ -135,10 +135,8 @@ class AnalysisClass extends ChangeNotifier {
             'authorization': 'Bearer $token',
           },
           body: json.encode(bodydata));
-      if (200 == response.statusCode) {
+      if (response.statusCode == 200) {
         // print(response.body);
-
-
         List<GASections>? gafilesList = [];
         List<Roadmap>? _roadmaplist = [];
         var responseJson = json.decode(response.body);

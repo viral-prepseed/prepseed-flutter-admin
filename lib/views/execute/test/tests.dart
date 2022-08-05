@@ -397,7 +397,7 @@ class _testState extends State<test> {
                                                                 var assessmentWrapperId = asw.sId;
                                                                 sharedPref().setSharedPref('assessmentWrapperId', assessmentWrapperId);
                                                                 var route = MaterialPageRoute(builder: (BuildContext context) => (snapshot.data!.contains('Attempt'))?
-                                                            AttemptTest() : viewAnalysis() );
+                                                            AttemptTest() : viewAnalysis());
                                                                 Navigator.of(context).push(route);
                                                               },
                                                                   child: Text(snapshot.data!)
