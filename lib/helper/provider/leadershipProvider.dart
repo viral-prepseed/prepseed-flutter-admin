@@ -92,7 +92,7 @@ class LeadershipClass extends ChangeNotifier {
     });
 
 
-    if (200 == response.statusCode) {
+    if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
       PhaseLeaderboard phaseLeaderboard = PhaseLeaderboard.fromJson(responseJson);
       // print(responseJson);

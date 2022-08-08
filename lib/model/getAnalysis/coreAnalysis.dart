@@ -2,7 +2,7 @@ class GACoreAnalysis {
   String? sId;
   Difficulty? difficulty;
   List<Marks>? marks;
-  List<int>? hist;
+  List<dynamic>? hist;
   dynamic maxMarks;
   dynamic sumMarks;
   dynamic sumAccuracy;
@@ -39,7 +39,7 @@ class GACoreAnalysis {
         marks!.add(new Marks.fromJson(v));
       });
     }
-    hist = json['hist'].cast<int>();
+    hist = json['hist'];
     maxMarks = json['maxMarks'];
     sumMarks = json['sumMarks'];
     sumAccuracy = json['sumAccuracy'];

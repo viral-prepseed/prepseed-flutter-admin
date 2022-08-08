@@ -101,7 +101,7 @@ class TestProviderClass extends ChangeNotifier {
         'Accept': 'application/json',
         'authorization': 'Bearer $token',
       });
-      if (200 == response.statusCode) {
+      if (response.statusCode == 200) {
         // print(response.body);
         List<AssessmentWrappers>? filesList = [];
         var responseJson = json.decode(response.body);

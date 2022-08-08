@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:prepseed/constants/colorPalate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../helper/provider/leadershipProvider.dart';
 
 class LeaderBoard extends StatefulWidget {
@@ -44,12 +45,14 @@ class _LeaderBoardState extends State<LeaderBoard> {
 
           Consumer<LeadershipClass>(builder: (context, leaderModel, child){
             // print(leaderModel.leaderBoardData!.elementAt(0).rating);
-            return ListView.builder(
+            return leaderModel.leaderBoardData != null
+              ? ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, position) {
-
+              itemCount: leaderModel.leaderBoardData!.length,
+              itemBuilder: (context, index) {
+                String subSvg = leaderModel.leaderBoardData![index].user!.dp.toString();
+                String img = subSvg.split('.').last;
                 return Card(
                   child: Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -58,19 +61,27 @@ class _LeaderBoardState extends State<LeaderBoard> {
                         children: [
                           Row(
                             children: [
-
+                              img.contains('svg') ?
                               CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 radius: 25,
-                                child: getPicture(leaderModel.leaderBoardData!.elementAt(position).user!.dp!),
+                                child: SvgPicture.network(leaderModel.leaderBoardData![index].user!.dp.toString()),
+                              ) :
+                              CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                radius: 25,
+                                child: CachedNetworkImage(imageUrl: leaderModel.leaderBoardData![index].user!.dp.toString(),
+                                  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  placeholder: (context,url) => CircularProgressIndicator(),
+                                ),
                               ),
                               SizedBox(width: 10,),
                               // CircleAvatar(child: Image(image: NetworkImage('${leaderModel.leaderBoardData!.elementAt(position).user!.dp}'))),
-                              Text('${leaderModel.leaderBoardData!.elementAt(position).user!.username}',style:
+                              Text('${leaderModel.leaderBoardData![index].user!.username}',style:
                                 GoogleFonts.poppins(color: Constants.black,fontWeight: FontWeight.w600,fontSize: 13),),
                             ],
                           ),
-                          Text('${leaderModel.leaderBoardData!.elementAt(position).rating!.round()}',
+                          Text('${leaderModel.leaderBoardData![index].rating!.round()}',
                           style: GoogleFonts.poppins(color: Constants.darkGreen,fontWeight: FontWeight.w600,fontSize: 13),
                           ),
                         ],
@@ -78,7 +89,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
                   ),
                 );
               },
-            );
+            ) : Center(child: CircularProgressIndicator(),);
           })
 
         ],

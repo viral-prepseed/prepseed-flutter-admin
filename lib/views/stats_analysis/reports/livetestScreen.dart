@@ -67,9 +67,7 @@ class _liveScreenState extends State<liveScreen> {
                   ]
               ),
               SizedBox(height: 10,),
-
-
-              ListView.separated(
+              /*ListView.separated(
                 separatorBuilder: (context, index) => SizedBox(height: 20,),
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -118,13 +116,96 @@ class _liveScreenState extends State<liveScreen> {
                         )
                       ],
                     );
-              })
-
+              })*/
+              testDetails()
             ],
           ),
         )
       ),
     );
+  }
+  Widget testDetails(){
+    final provMdl = Provider.of<ReportClass>(context);
+    listOfColumns = Provider.of<ReportClass>(context).listOfColumns;
+    listOfItems = Provider.of<ReportClass>(context).items;
+
+    /*listOfColumns =  [{'Name': 'APT01 Paper 1', 'Date': '2022-05-15T03:30:48.289Z', 'overall': [71, 112, 66], 'physics': [48, 56, 31], 'chemistry': [6, 37, 16], 'mathematics': [17, 38, 18]},
+    {'Name': 'APT01 Paper 1', 'Date': '2022-05-15T03:30:48.289Z', 'overall': [71, 112, 66], 'physics': [48, 56, 31], 'chemistry': [6, 37, 16], 'mathematics': [17, 38, 18]}];
+    */
+    /*listOfColumns = Provider.of<ReportClass>(context, listen: false).listOfColumns;
+    print(listOfColumns);*/
+
+    // final List<Map> listOfColumns = Provider.of<ReportClass>(context, listen: false).listOfColumns;
+    /* print(provMdl.mapStatsMax);*/
+    return Consumer(builder: (context, reportsModel, child){
+      // print(listOfColumns);
+      // print(reportsModel.allReportsList.first.user!.overall!.marks);
+
+      /* for(int i = 0; i <= listOfItems.length; i++){
+        *//*if(listOfItems[i].user != null){*//*
+         per = listOfItems[i].user!.overall!.marks! * listOfItems[i].statsBySection!.overall!.highestMarks! / 100 ;
+        //}
+      }*/
+      //print(per);
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+              border:  TableBorder.all(width:1, color:Colors.black45),
+              columns: [
+                DataColumn(label:  Text("Name")),
+                DataColumn(label:  Text("Date")),
+                DataColumn(label:  Text("Self")),
+                DataColumn(label:  Text("High")),
+                DataColumn(label:  Text("Avg")),
+                DataColumn(label:  Text("Self")),
+                DataColumn(label:  Text("High")),
+                DataColumn(label:  Text("Avg")),
+                DataColumn(label:  Text("Self")),
+                DataColumn(label:  Text("High")),
+                DataColumn(label:  Text("Avg")),
+                DataColumn(label:  Text("Self")),
+                DataColumn(label:  Text("High")),
+                DataColumn(label:  Text("Avg")),
+                DataColumn(label:  Text("Max")),
+                DataColumn(label: Text("%age")),
+                DataColumn(label:  Text("Physics")),
+                DataColumn(label:  Text("Mathematics")),
+                DataColumn(label:  Text("Chemistry")),
+                DataColumn(label:  Text("overall")),
+              ],
+              rows: listOfItems.map((element) =>
+                  DataRow(
+                      cells: [
+                        DataCell(Text(element.details![0].name.toString())),
+                        DataCell(Text(element.details![0].availableFrom.toString())),
+                        element.user != null ? element.user!.physics/*!.marks*/ != null ? DataCell(Text(element.user!.physics!.marks.toString()/*element['physics'].elementAt(0).toString()*/)) : DataCell(Text("0")): DataCell(Text("0")),
+                        element.topper!.physics != null ? DataCell(Text(element.topper!.physics!.marks.toString())) : DataCell(Text("0")),
+                        element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.averageMarks.toString())) : DataCell(Text("0")),
+                        element.user != null ? element.user!.mathematics != null ? DataCell(Text(element.user!.mathematics!.marks.toString()/*element['mathematics'].elementAt(0).toString()*/)) : DataCell(Text("0")) : DataCell(Text("0")),
+                        element.topper!.mathematics != null ? DataCell(Text(element.topper!.mathematics!.marks.toString())) : DataCell(Text("0")),
+                        element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.averageMarks.toString())): DataCell(Text("0")),
+                        element.user != null ? element.user!.chemistry != null ? DataCell(Text(element.user!.chemistry!.marks.toString()/*(element['chemistry'].elementAt(0).toString()*/)) : DataCell(Text("0")) : DataCell(Text("0")),
+                        element.topper!.chemistry != null ? DataCell(Text(element.topper!.chemistry!.marks.toString())) : DataCell(Text("0")),
+                        element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.averageMarks.toString())) : DataCell(Text("0")),
+                        element.user != null ? DataCell(Text(element.user!.overall!.marks.toString()/*element['overall'].elementAt(0).toString()*/)) : DataCell(Text("0")),
+                        element.topper!.overall!.marks != null ? DataCell(Text(element.topper!.overall!.marks.toString())) : DataCell(Text("0")),
+                        DataCell(Text(element.statsBySection!.overall!.averageMarks.toString())),
+                        DataCell(Text(element.maxMarks!.overall.toString())),
+                        element.user != null ? DataCell(Text(
+                            (element.user!.overall!.marks! / element.maxMarks!.overall!*100).toString().substring(0,3)))
+                            : DataCell(Text("0")),
+                        element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.percentile.toString())) : DataCell(Text("0")),
+                        element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.percentile.toString())) : DataCell(Text("0")),
+                        element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.percentile.toString())) : DataCell(Text("0")),
+                        DataCell(Text(element.statsBySection!.overall!.percentile.toString())),
+                      ]
+                  )).toList()
+          ),
+        ),
+      );
+    });
   }
 }
 

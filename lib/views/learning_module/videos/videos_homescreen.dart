@@ -117,7 +117,6 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
                                                       children: [
                                                         provMdl.map.values.elementAt(index)[ind].thumbNailsUrls.length == 0
                                                         ? Container()
-
                                                         : img.contains('svg')
                                                         ? SvgPicture.network(
                                                           provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],

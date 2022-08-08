@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:prepseed/model/playlist_model/assignment_model/upload_assi_model.dart';
+import 'package:prepseed/views/adventure/liveTest.dart';
+import 'package:prepseed/views/learning_module/videos/videos_homescreen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:prepseed/helper/provider/analysis/report.dart';
 import 'package:prepseed/helper/provider/leadershipProvider.dart';
@@ -21,6 +24,7 @@ import '../../init/InitializeProviderScreen.dart';
 import '../../model/assesments/reports.dart';
 import '../../repository/playlist_provider/videos_provider.dart';
 import '../adventure/attempt_liveTest.dart';
+import '../execute/practice/practice.dart';
 import '../execute/test/AttemptTest.dart';
 import '../execute/test/viewAnalysis.dart';
 
@@ -39,7 +43,6 @@ class _mainScreenState extends State<mainScreen> {
    //TooltipBehavior _tooltipBehavior = TooltipBehavior();
   @override
   void initState() {
-    fetchPref();
    /* Future.microtask(() async => {
       await Provider.of<VideosProvider>(context, listen: false)
           .getSubscriptions(),
@@ -48,9 +51,11 @@ class _mainScreenState extends State<mainScreen> {
       await Provider.of<TestProviderClass>(context, listen: false)
           .apiCall(),
     });*/
+    fetchPref();
     initProvider();
-    getAssesmentId();
+    //getAssesmentId();
   }
+
   getAssesmentId() async {
     var id = await sharedPref().getSharedPref('assessmentWrapperId');
     var userId = await sharedPref().getSharedPref('userId');
@@ -67,6 +72,8 @@ class _mainScreenState extends State<mainScreen> {
     Future.microtask(() async => {
       await Provider.of<ReportClass>(context, listen: false)
           .getReportsAPI(),
+      await Provider.of<TestProviderClass>(context, listen: false)
+          .apiCall(),
       await Provider.of<VideosProvider>(context, listen: false)
           .getVideos(),
       await Provider.of<VideosProvider>(context, listen: false)
@@ -128,155 +135,176 @@ class _mainScreenState extends State<mainScreen> {
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: [
-                              ChangeNotifierProvider.value(
-                                value: vdoProv,
-                                child: Consumer(builder: (context, vdo, child){
-                                   return vdoProv.config ? Container(
-                                     margin: const EdgeInsets.all(10.0),
-                                     padding: const EdgeInsets.all(10.0),
-                                     width: MediaQuery.of(context).size.width - 70,
-                                     height: 100,
-                                     decoration: BoxDecoration(
-                                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                       color: Constants.blacklight,
-                                     ),
-                                     child: Row(
-                                       crossAxisAlignment:
-                                       CrossAxisAlignment.center,
-                                       mainAxisAlignment:
-                                       MainAxisAlignment.spaceBetween,
-                                       children: <Widget>[
-                                         CircularPercentIndicator(
-                                           radius: 70.0,
-                                           animation: true,
-                                           animationDuration: 2200,
-                                           lineWidth: 07.0,
-                                           percent: 0.0,
-                                           center: Text(
-                                             "0%",
-                                             style: const TextStyle(
-                                                 fontWeight: FontWeight.bold,
-                                                 fontSize: 12.0),
+                              InkWell(
+                                child: ChangeNotifierProvider.value(
+                                  value: vdoProv,
+                                  child: Consumer(builder: (context, vdo, child){
+                                     return vdoProv.config ? Container(
+                                       margin: const EdgeInsets.all(10.0),
+                                       padding: const EdgeInsets.all(10.0),
+                                       width: MediaQuery.of(context).size.width - 70,
+                                       height: 100,
+                                       decoration: BoxDecoration(
+                                         borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                         color: Constants.blacklight,
+                                       ),
+                                       child: Row(
+                                         crossAxisAlignment:
+                                         CrossAxisAlignment.center,
+                                         mainAxisAlignment:
+                                         MainAxisAlignment.spaceBetween,
+                                         children: <Widget>[
+                                           CircularPercentIndicator(
+                                             radius: 70.0,
+                                             animation: true,
+                                             animationDuration: 2200,
+                                             lineWidth: 07.0,
+                                             percent: 0.0,
+                                             center: Text(
+                                               "0%",
+                                               style: const TextStyle(
+                                                   fontWeight: FontWeight.bold,
+                                                   fontSize: 12.0),
+                                             ),
+                                             circularStrokeCap:
+                                             CircularStrokeCap.butt,
+                                             backgroundColor: Colors.white,
+                                             progressColor: Colors.blue,
                                            ),
-                                           circularStrokeCap:
-                                           CircularStrokeCap.butt,
-                                           backgroundColor: Colors.white,
-                                           progressColor: Colors.blue,
-                                         ),
-                                         Text(
-                                           'Question Practiced',
-                                           style: GoogleFonts.poppins(
-                                               fontWeight: FontWeight.w500,
-                                               color: Constants.black,
-                                               fontSize: 15),
-                                           maxLines: 1,
-                                           overflow: TextOverflow.ellipsis,
-                                         ),
-                                         const SizedBox(height: 10.0,)
-                                         // Image.asset('assets/mastercard.png', width: 48.0)
-                                       ],
-                                     ),
-                                   )
-                                       :  Container();
-                                }),
-                              ),
-                               Consumer<AssessmentWrappersClass>(builder: (context, aswModel, child){
-                                  return Container(
-                                    margin: const EdgeInsets.all(10.0),
-                                    padding: const EdgeInsets.all(10.0),
-                                    width: MediaQuery.of(context).size.width - 70,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                      color: Constants.blacklight,
-                                    ),
-                                    child: Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            CircularPercentIndicator(
-                                              radius: 70.0,
-                                              animation: true,
-                                              animationDuration: 2200,
-                                              lineWidth: 07.0,
-                                              percent: 0.4,
-                                              center: Text(
-                                                "${aswModel.listData.length}/${aswModel.allAswList.length}",
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12.0),
-                                              ),
-                                              circularStrokeCap:
-                                              CircularStrokeCap.butt,
-                                              backgroundColor: Colors.white,
-                                              progressColor: Colors.blue,
-                                            ),
-                                            Text(
-                                              'Tests Taken',
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Constants.black,
-                                                  fontSize: 15),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            const SizedBox(height: 10.0,)
-                                            // Image.asset('assets/mastercard.png', width: 48.0)
-                                          ],
-                                        ),
+                                           Text(
+                                             'Question Practiced',
+                                             style: GoogleFonts.poppins(
+                                                 fontWeight: FontWeight.w500,
+                                                 color: Constants.black,
+                                                 fontSize: 15),
+                                             maxLines: 1,
+                                             overflow: TextOverflow.ellipsis,
+                                           ),
+                                           const SizedBox(height: 10.0,)
+                                           // Image.asset('assets/mastercard.png', width: 48.0)
+                                         ],
+                                       ),
+                                     )
+                                         :  Container();
+                                  }),
+                                ),
+                                onTap: (){
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => practice())
                                   );
-                                }),
-                               Consumer(builder: (context, vdo, child){
-                                  return vdoProv.config ? Container(
-                                    margin: const EdgeInsets.all(10.0),
-                                    padding: const EdgeInsets.all(10.0),
-                                    width: MediaQuery.of(context).size.width - 70,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                      color: Constants.blacklight,
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        CircularPercentIndicator(
-                                          radius: 70.0,
-                                          animation: true,
-                                          animationDuration: 2200,
-                                          lineWidth: 07.0,
-                                          percent: 0.0,
-                                          center: Text(
-                                            "0/3",
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12.0),
+                                },
+                              ),
+                               InkWell(
+                                 child: Consumer<AssessmentWrappersClass>(builder: (context, aswModel, child){
+                                    return Container(
+                                      margin: const EdgeInsets.all(10.0),
+                                      padding: const EdgeInsets.all(10.0),
+                                      width: MediaQuery.of(context).size.width - 70,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                        color: Constants.blacklight,
+                                      ),
+                                      child: Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              CircularPercentIndicator(
+                                                radius: 70.0,
+                                                animation: true,
+                                                animationDuration: 2200,
+                                                lineWidth: 07.0,
+                                                percent: 0.4,
+                                                center: Text(
+                                                  "${aswModel.listData.length}/${aswModel.allAswList.length}",
+                                                  style: const TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 12.0),
+                                                ),
+                                                circularStrokeCap:
+                                                CircularStrokeCap.butt,
+                                                backgroundColor: Colors.white,
+                                                progressColor: Colors.blue,
+                                              ),
+                                              Text(
+                                                'Tests Taken',
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Constants.black,
+                                                    fontSize: 15),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 10.0,)
+                                              // Image.asset('assets/mastercard.png', width: 48.0)
+                                            ],
                                           ),
-                                          circularStrokeCap:
-                                          CircularStrokeCap.butt,
-                                          backgroundColor: Colors.white,
-                                          progressColor: Colors.blue,
-                                        ),
-                                        Text(
-                                          'Videos Watched',
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w500,
-                                              color: Constants.black,
-                                              fontSize: 15),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 10.0,)
-                                        // Image.asset('assets/mastercard.png', width: 48.0)
-                                      ],
-                                    ),
-                                  )
-                                  : Container();
-                               })
+                                    );
+                                  }),
+                                 onTap: (){
+                                   Navigator.of(context).push(MaterialPageRoute(
+                                       builder: (context) => livetest())
+                                   );
+                                 },
+                               ),
+                               InkWell(
+                                 child: Consumer(builder: (context, vdo, child){
+                                    return vdoProv.config ? Container(
+                                      margin: const EdgeInsets.all(10.0),
+                                      padding: const EdgeInsets.all(10.0),
+                                      width: MediaQuery.of(context).size.width - 70,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                        color: Constants.blacklight,
+                                      ),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          CircularPercentIndicator(
+                                            radius: 70.0,
+                                            animation: true,
+                                            animationDuration: 2200,
+                                            lineWidth: 07.0,
+                                            percent: 0.0,
+                                            center: Text(
+                                              "0/3",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12.0),
+                                            ),
+                                            circularStrokeCap:
+                                            CircularStrokeCap.butt,
+                                            backgroundColor: Colors.white,
+                                            progressColor: Colors.blue,
+                                          ),
+                                          Text(
+                                            'Videos Watched',
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w500,
+                                                color: Constants.black,
+                                                fontSize: 15),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 10.0,)
+                                          // Image.asset('assets/mastercard.png', width: 48.0)
+                                        ],
+                                      ),
+                                    )
+                                    : Container();
+                                 }),
+                                 onTap: (){
+                                   Navigator.of(context).push(MaterialPageRoute(
+                                       builder: (context) => VideosHomeScreen())
+                                   );
+                                 },
+                               )
                               ],
                             ),
                           ),
@@ -389,7 +417,7 @@ class _mainScreenState extends State<mainScreen> {
                           ),
                          // Style.divider(),
                           Container(
-                            height: 220.0,
+                            height: 200.0,
                             // width: 200.0,
                             child: ChangeNotifierProvider.value(
                               value: provMdl,
@@ -398,7 +426,7 @@ class _mainScreenState extends State<mainScreen> {
                                   itemCount: provMdl.tabLength,
                                   itemBuilder: (context,index){
                                     return  Container(
-                                      height: 220.0,
+                                      height: 200.0,
                                       child: ListView.builder(
                                         padding: const EdgeInsets.all(10.0),
                                         scrollDirection: Axis.horizontal,
@@ -409,7 +437,7 @@ class _mainScreenState extends State<mainScreen> {
                                           return Container(
                                             height: 200.0,
                                             width: 150.0,
-                                            padding: const EdgeInsets.all(10.0),
+                                          //  padding: const EdgeInsets.all(10.0),
                                             margin: const EdgeInsets.only(right: 15.0),
                                             // width: double.maxFinite,
                                             decoration: BoxDecoration(
@@ -423,44 +451,45 @@ class _mainScreenState extends State<mainScreen> {
                                               physics: const NeverScrollableScrollPhysics(),
                                               children: [
                                                 const SizedBox(height: 10,),
-                                                Text('${asw.elementAt(idx).name}',
-                                                  overflow: TextOverflow.fade,
-                                                  maxLines: 1,
-                                                  softWrap: false,),
-                                                const SizedBox(height: 10,),
-                                                Style.divider(),
-
-                                                const SizedBox(height: 20,),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: const [
-                                                     Text('Questions'),
-                                                     SizedBox(width: 10.0,),
-                                                     Text('54'),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 20,),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    const Text('Duration'),
-                                                    const SizedBox(width: 10.0,),
-                                                    Text(provMdl.printDuration(Duration(seconds: asw.elementAt(idx).core!.duration!))),
-                                                  ],
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('${asw.elementAt(idx).name}',
+                                                    overflow: TextOverflow.fade,
+                                                    maxLines: 1,
+                                                    softWrap: false,),
                                                 ),
                                                 const SizedBox(height: 10,),
                                                 Style.divider(),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: const [
+                                                       Text('Questions'),
+                                                       SizedBox(width: 10.0,),
+                                                       Text('54'),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      const Text('Duration'),
+                                                      const SizedBox(width: 10.0,),
+                                                      Text(provMdl.printDuration(Duration(seconds: asw.elementAt(idx).core!.duration!))),
+                                                    ],
+                                                  ),
+                                                ),
                                                 const SizedBox(height: 10,),
+                                                Style.divider(),
+                                               // const SizedBox(height: 10,),
                                                 FutureBuilder<String>(
                                                   future: functions().getWrapperApiCall('${asw.elementAt(idx).sId}'),
                                                   builder: (BuildContext context, AsyncSnapshot<String> snapshot,) {
                                                     if (snapshot.hasData) {
-                                                      return ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(10),//to set border radius to button
-                                                            ),
-                                                          ),
+                                                      return TextButton(
                                                           onPressed: (){
                                                             var assessmentWrapperId = asw.elementAt(idx).sId;
                                                             sharedPref().setSharedPref('assessmentWrapperId', assessmentWrapperId);
@@ -481,7 +510,8 @@ class _mainScreenState extends State<mainScreen> {
                                                             snapshot.data!,
                                                             textAlign: TextAlign.center,
                                                             style: const TextStyle(
-                                                              fontSize: 11.0,
+                                                              fontSize: 13.0,
+                                                              color: Colors.blueGrey
                                                             ),)
                                                       );
                                                     } else {
@@ -530,7 +560,7 @@ class _mainScreenState extends State<mainScreen> {
                             child: ChangeNotifierProvider.value(
                               value: myModel,
                               child: Consumer(builder: (context, dataItems, _) {
-                                return myModel.core != null
+                                return myModel.core != null ? myModel.core!.hist != null
                                     ? SfCartesianChart(
                                     primaryXAxis: NumericAxis(
                                         isVisible: false
@@ -588,7 +618,7 @@ class _mainScreenState extends State<mainScreen> {
                                       )
                                     ]
                                 )
-                                : Center(child: CircularProgressIndicator());}
+                                : Center(child: CircularProgressIndicator()) : Container();}
                               ),
                             ),
                           ),
@@ -689,7 +719,13 @@ class _mainScreenState extends State<mainScreen> {
     return Consumer(builder: (context, reportsModel, child){
       // print(listOfColumns);
       // print(reportsModel.allReportsList.first.user!.overall!.marks);
-      print(listOfItems);
+
+     /* for(int i = 0; i <= listOfItems.length; i++){
+        *//*if(listOfItems[i].user != null){*//*
+         per = listOfItems[i].user!.overall!.marks! * listOfItems[i].statsBySection!.overall!.highestMarks! / 100 ;
+        //}
+      }*/
+      //print(per);
       return SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
@@ -712,25 +748,37 @@ class _mainScreenState extends State<mainScreen> {
                   DataColumn(label:  Text("High")),
                   DataColumn(label:  Text("Avg")),
                   DataColumn(label:  Text("Max")),
+              DataColumn(label: Text("%age")),
+              DataColumn(label:  Text("Physics")),
+              DataColumn(label:  Text("Mathematics")),
+              DataColumn(label:  Text("Chemistry")),
+              DataColumn(label:  Text("overall")),
             ],
             rows: listOfItems.map((element) =>
                 DataRow(
                 cells: [
                   DataCell(Text(element.details![0].name.toString())),
                   DataCell(Text(element.details![0].availableFrom.toString())),
-                  element.user != null ? DataCell(Text(element.user!.physics!.marks.toString()/*element['physics'].elementAt(0).toString()*/)) : DataCell(Text("0")),
+                  element.user != null ? element.user!.physics/*!.marks*/ != null ? DataCell(Text(element.user!.physics!.marks.toString()/*element['physics'].elementAt(0).toString()*/)) : DataCell(Text("0")): DataCell(Text("0")),
                   element.topper!.physics != null ? DataCell(Text(element.topper!.physics!.marks.toString())) : DataCell(Text("0")),
-                  DataCell(Text(element.statsBySection!.physics!.averageMarks.toString())),
-                  element.user != null ? DataCell(Text(element.user!.mathematics!.marks.toString()/*element['mathematics'].elementAt(0).toString()*/)) : DataCell(Text("0")),
-                  element.topper!.mathematics != null ?DataCell(Text(element.topper!.mathematics!.marks.toString())) : DataCell(Text("0")),
-                  DataCell(Text(element.statsBySection!.mathematics!.averageMarks.toString())),
-                  element.user != null ? DataCell(Text(element.user!.chemistry!.marks.toString()/*(element['chemistry'].elementAt(0).toString()*/)) : DataCell(Text("0")),
+                  element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.averageMarks.toString())) : DataCell(Text("0")),
+                  element.user != null ? element.user!.mathematics != null ? DataCell(Text(element.user!.mathematics!.marks.toString()/*element['mathematics'].elementAt(0).toString()*/)) : DataCell(Text("0")) : DataCell(Text("0")),
+                  element.topper!.mathematics != null ? DataCell(Text(element.topper!.mathematics!.marks.toString())) : DataCell(Text("0")),
+                  element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.averageMarks.toString())): DataCell(Text("0")),
+                  element.user != null ? element.user!.chemistry != null ? DataCell(Text(element.user!.chemistry!.marks.toString()/*(element['chemistry'].elementAt(0).toString()*/)) : DataCell(Text("0")) : DataCell(Text("0")),
                   element.topper!.chemistry != null ? DataCell(Text(element.topper!.chemistry!.marks.toString())) : DataCell(Text("0")),
-                  DataCell(Text(element.statsBySection!.chemistry!.averageMarks.toString())),
+                  element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.averageMarks.toString())) : DataCell(Text("0")),
                   element.user != null ? DataCell(Text(element.user!.overall!.marks.toString()/*element['overall'].elementAt(0).toString()*/)) : DataCell(Text("0")),
                   element.topper!.overall!.marks != null ? DataCell(Text(element.topper!.overall!.marks.toString())) : DataCell(Text("0")),
                   DataCell(Text(element.statsBySection!.overall!.averageMarks.toString())),
                   DataCell(Text(element.maxMarks!.overall.toString())),
+                  element.user != null ? DataCell(Text(
+                      (element.user!.overall!.marks! / element.maxMarks!.overall!*100).toString().substring(0,3)))
+                  : DataCell(Text("0")),
+                  element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.percentile.toString())) : DataCell(Text("0")),
+                  element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.percentile.toString())) : DataCell(Text("0")),
+                  element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.percentile.toString())) : DataCell(Text("0")),
+                  DataCell(Text(element.statsBySection!.overall!.percentile.toString())),
                 ]
             )).toList()
           ),

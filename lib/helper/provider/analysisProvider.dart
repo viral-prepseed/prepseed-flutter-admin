@@ -118,7 +118,8 @@ class AnalysisClass extends ChangeNotifier {
   }
 
   Future<List<metaSections>> apiCall(userId,wrapperId) async {
-
+print(userId);
+print(wrapperId);
     await SubmissionDetails(userId,wrapperId);
     var token = await sharedPref().getSharedPref('token');
     var phaseId = await sharedPref().getSharedPref('phaseId');
@@ -151,11 +152,13 @@ class AnalysisClass extends ChangeNotifier {
         sectionList = gafilesList;
 
         List<ChartSampleData> _chartlist = [];
-        for (var element in ga_submission.roadmap!) {
-          _roadmaplist.add(element);
-          if(element.timeCategory == 'perfect' ){ //&& element.result == 0
-            _chartlist.add(ChartSampleData(x: (element.lastVisit/60000), y: element.totalTime, yValue: -0.03, secondSeriesYValue: 0.10,
-                text: '${(element.questionNo!)}'),);
+        if(ga_submission.roadmap != null){
+          for (var element in ga_submission.roadmap!) {
+            _roadmaplist.add(element);
+            if(element.timeCategory == 'perfect' ){ //&& element.result == 0
+              _chartlist.add(ChartSampleData(x: (element.lastVisit/60000), y: element.totalTime, yValue: -0.03, secondSeriesYValue: 0.10,
+                  text: '${(element.questionNo!)}'),);
+            }
           }
         }
         roadmaplist = _roadmaplist;

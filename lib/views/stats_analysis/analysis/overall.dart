@@ -35,7 +35,6 @@ class _overallState extends State<overall> with SingleTickerProviderStateMixin {
       await Provider.of<UserClass>(context, listen: false)
           .apiCall(),
     });
-
   }
 
   @override

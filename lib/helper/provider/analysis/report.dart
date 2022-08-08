@@ -90,8 +90,9 @@ class ReportClass extends ChangeNotifier {
         mapStatsMax = rep.maxMarks!.toJson();
 
         for(var elements in mapUserSelf.keys){
+          if(mapStatsMax[elements] != null){
           var calval = (Overall.fromJson(mapUserSelf[elements]).marks! / mapStatsMax[elements]) * 100;
-          allPercentage[elements] = double.parse(calval.toString()).toStringAsFixed(2);
+          allPercentage[elements] = double.parse(calval.toString()).toStringAsFixed(2);}
         }
 
         for(var elements in mapUserSelf.keys){

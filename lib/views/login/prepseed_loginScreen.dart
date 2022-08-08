@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:prepseed/constants/colorPalate.dart';
@@ -94,74 +95,37 @@ class _prepSeed_loginState extends State<prepSeed_login> {
         // backgroundColor: Constants.backgroundColor,
         body: Column(
           children: [
-
-
-
             Image.asset('assets/images/logo.jpg'),
             SizedBox(height: 45,),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                key: _prepSeed_login,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child:
-
-                  Container(
-                    width: double.maxFinite,
-                    child: DropdownButton<String>(
-                      isExpanded: true,//Map<dynamic,dynamic>
-                      isDense: true,
-                      hint: new Text("Select"),
-                      value: selectedid,
-                      onChanged: ( newValue) async {
-                        setState(() {
-                          selectedid = newValue!;
-
-                          /*institutename = newValue!['name']!;
-                          institutelogo = newValue['logo']!;*/
-
-                        });
-                        /*final pref = await SharedPreferences.getInstance();
-                        pref.setString('InstituteName', institutename!);
-                        pref.setString('InstituteLogo', institutelogo!);*/
-
-                        // print (selectedid);
-                      },
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      items: _myJson.map((Map map) {
-                        return DropdownMenuItem<String>(
-
-                            value: map['_id'].toString(), //map
-                            child: Row(
-                              children: [
-                                Image(image: NetworkImage(map['logo']),width: 45,),
-                                SizedBox(width: 10,),
-                                Text(
-                                  map["name"],
-                                ),
-
-                              ],
-                            )
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  /*DropdownButton<Map<dynamic,dynamic>>(
-                    isDense: true,
-                    hint: new Text("Select"),
-                    // value: institutename,
-                    onChanged: ( newValue) {
-
-                      setState(() {
-                        institutename = newValue!['name'];
-                      });
-
-                      print (_mySelection);
-                    },
-                    items: _myJson.map((Map map) {
-                      return DropdownMenuItem<Map<dynamic,dynamic>>(
-                          value: map,
+            Form(
+              key: _prepSeed_login,
+              child: Container(
+               // margin: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
+                width: double.maxFinite,
+                child: DropdownButton<String>(
+                  isExpanded: true,//Map<dynamic,dynamic>
+                  isDense: true,
+                  hint: new Text("Select"),
+                  value: selectedid,
+                  onChanged: ( newValue) async {
+                    setState(() {
+                      selectedid = newValue!;
+                      /*institutename = newValue!['name']!;
+                      institutelogo = newValue['logo']!;*/
+                    });
+                    /*final pref = await SharedPreferences.getInstance();
+                    pref.setString('InstituteName', institutename!);
+                    pref.setString('InstituteLogo', institutelogo!);*/
+                    // print (selectedid);
+                  },
+                  //itemHeight: 70.0,
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  items: _myJson.map((Map map) {
+                    return DropdownMenuItem<String>(
+                        value: map['_id'].toString(), //map
+                        child: Container(
+                          padding: EdgeInsets.all(10.0),
                           child: Row(
                             children: [
                               Image(image: NetworkImage(map['logo']),width: 45,),
@@ -171,63 +135,10 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                               ),
 
                             ],
-                          )
-                      );
-                    }).toList(),
-                  ),*/
-
-                  /*DropdownSearch<String>(
-                    showSearchBox: true,
-                    *//*popupProps: PopupProps.menu(
-                      showSelectedItems: true,
-                      disabledItemFn: (String s) => s.startsWith('I'),
-                    ),*//*
-                    // items: _myJson,
-                    popupItemBuilder: (context, item, isSelected) => Container(
-                      height: 200,
-                      child: ListView.builder
-                        (
-                          itemCount: _myJson?.length,
-                          itemBuilder: (BuildContext ctxt, int index) {
-                            _myJson!.map((Map map) {
-                              return  DropdownMenuItem<String>(
-                                  value: map["id"].toString(),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        map["name"],
-                                      ),
-                                      Image(image: NetworkImage(map['logo']),width: 45,)
-                                    ],
-                                  )
-                              );
-                            }).toList();
-                            return Container();
-                          }
-                      ),
-                    ),
-                    dropdownSearchDecoration: const InputDecoration(
-                      labelText: "Select your Institute",
-                      // hintText: "country in menu mode",
-                    ),
-                    onChanged: (String? item) async {
-                      final pref = await SharedPreferences.getInstance();
-                      pref.setString('data', item!);
-                      // print(clientlogo[item]);
-                    },
-                    validator: (String? item) {
-                      if (item == null){
-                        return "Please select any one before proceeding further.";
-                      }
-                      else{
-                        setState(() {
-                          institutename = item;
-                        });
-                        return null;
-                      }
-                    },
-                    // selectedItem: "Brazil",
-                  ),*/
+                          ),
+                        )
+                    );
+                  }).toList(),
                 ),
               ),
             ),
