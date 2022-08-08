@@ -260,8 +260,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                       Card(
                         key: ValueKey(data[index]['name']),
                         color: (setQID == index)
-                            ? Colors.green
-                            : Colors.white,
+                            ? Colors.green : Colors.white,
                         elevation: 5,
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(
@@ -282,7 +281,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                             };
 
                             // functions().postFlowLogs(postmap);
-                            // print(postmap);
+                            print(postmap);
                             // timeBetweenTaps();
                             setState(() {
                               setQID = data[index]['id'];

@@ -344,7 +344,7 @@ class _mainScreenState extends State<mainScreen> {
                                             Column(
 
                                               children: <Widget>[
-                                                Image.asset('assets/images/logo.jpg',width: 100,),
+                                                Image.asset('assets/images/logo.png',width: 100,),
                                                 SizedBox(
                                                   height: 7,
                                                 ),

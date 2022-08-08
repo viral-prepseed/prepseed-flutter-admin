@@ -138,10 +138,10 @@ class TestProviderClass extends ChangeNotifier {
         return [];*/
       }
     } catch (e) {
-      ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
+      /*ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
         content: Text("Something went wrong."),
       ));
-      print(e);
+      print(e);*/
       return [];
     }
   }
@@ -179,7 +179,7 @@ class TestProviderClass extends ChangeNotifier {
             // print(elementQue.question!.type);
             listType.add(elementQue.question!.type);
             var rawCont = elementQue.question!.content!.rawContent!;
-            /* Convert to Json Object */
+            /*If String then Convert to Json Object */
             if(rawCont.runtimeType.toString() == "String"){
               rawCont = json.decode(elementQue.question!.content!.rawContent!);
             }

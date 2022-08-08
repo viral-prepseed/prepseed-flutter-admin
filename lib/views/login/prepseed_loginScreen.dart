@@ -95,7 +95,7 @@ class _prepSeed_loginState extends State<prepSeed_login> {
 
 
 
-            Image.asset('assets/images/logo.jpg'),
+            Image.asset('assets/images/logo.png'),
             SizedBox(height: 45,),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -191,7 +191,8 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                     *//*popupProps: PopupProps.menu(
                       showSelectedItems: true,
                       disabledItemFn: (String s) => s.startsWith('I'),
-                    ),*//*
+                    ),*/
+                  /*
                     // items: _myJson,
                     popupItemBuilder: (context, item, isSelected) => Container(
                       height: 200,
