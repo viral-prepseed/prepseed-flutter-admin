@@ -401,13 +401,14 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
                                 Percentage(index, hist.elementAt(index) ),
                             )
                               /*[
-                              *//*Percentage(100, 4),
+                              */
+                              /*Percentage(100, 4),
                               Percentage(10, 3),
                               Percentage(50, 11),
                               Percentage(50, 10),
                               Percentage(70, 2),
-                              Percentage(90, 2),*//*
-
+                              Percentage(90, 2),*/
+                              /*
                               Percentage(' ', 4),
                               Percentage('Feb', 3),
                               Percentage('March', 11),

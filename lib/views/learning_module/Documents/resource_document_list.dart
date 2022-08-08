@@ -7,6 +7,7 @@ import '../../../views/learning_module/Documents/resource_document.dart';
 import '../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../menu/menu_widget.dart';
 
@@ -74,10 +75,24 @@ class _ResourceDocumentListState extends State<ResourceDocumentList> {
                         InkWell(
                           child: Row(
                             children: [
-                              Image.network(widget.docs.items![index].resource!.thumbNailsUrls![0].toString(),
+
+                              CachedNetworkImage(
+                                  imageUrl: widget.docs.items![index].resource!.thumbNailsUrls![0].toString(),
+                                  placeholder: (context, url) => Image(
+                                    image: AssetImage("assets/images/logo.png"),
+                                    width: MediaQuery.of(context).size.width / 4,
+                                    height: MediaQuery.of(context).size.height / 9,
+                                    fit: BoxFit.contain,),
+                                  imageBuilder: (context, image) => Image(
+                                    image: image,
+                                    width: MediaQuery.of(context).size.width / 4,
+                                    height: MediaQuery.of(context).size.height / 9,
+                                    fit: BoxFit.contain,)
+                              ),
+                              /*Image.network(widget.docs.items![index].resource!.thumbNailsUrls![0].toString(),
                                 width: 100.0,
                                 height: 50.0,
-                              ),
+                              ),*/
                               Expanded(child: Text(widget.docs.items![index].resource!.title.toString(),textAlign: TextAlign.center,)),
                             ],),
                           onTap: (){

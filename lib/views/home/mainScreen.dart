@@ -50,8 +50,8 @@ class _mainScreenState extends State<mainScreen> {
           .apiCall(),
       await Provider.of<AssessmentWrappersClass>(context, listen: false)
           .getWrappersAPI(),
-      await Provider.of<ReportClass>(context, listen: false)
-          .getReportsAPI(),
+/*      await Provider.of<ReportClass>(context, listen: false)
+          .getReportsAPI(),*/
     });
   }
   fetchPref() async{
@@ -379,7 +379,7 @@ class _mainScreenState extends State<mainScreen> {
                           SizedBox(
                             height: 15,
                           ),
-                          testDetails(),
+                          // testDetails(),
 
                         ]),
                   ],

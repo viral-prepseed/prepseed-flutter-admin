@@ -70,18 +70,20 @@ class ReportClass extends ChangeNotifier {
       Map allMarksAvg = {};
       Map allPercentile = {};
       Map allCP = {};
+      List listData = [];
 
       for(var rep in _reports.items!){
-        List listData = rep.user!.toJson().keys.toList();
-        rep.details!.forEach((element) {
-          _repAllList.add(element.toJson());
-          finalMapData['Name'] = element.name;
-          finalMapData['Date'] = element.availableFrom;
+        if(rep.user != null){
+          listData = rep.user!.toJson().keys.toList();
+          rep.details!.forEach((element) {
+            _repAllList.add(element.toJson());
+            finalMapData['Name'] = element.name;
+            finalMapData['Date'] = element.availableFrom;
+          });
+
+
+          mapUserSelf = rep.user!.toJson();
         }
-        );
-
-
-        mapUserSelf = rep.user!.toJson();
         mapTopperHigh = rep.topper!.toJson();
         mapStatsAvg = rep.statsBySection!.toJson();
         mapStatsMax = rep.maxMarks!.toJson();

@@ -2,14 +2,17 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:prepseed/main.dart';
 import 'package:prepseed/model/assesments/getwrapper.dart';
 import 'package:prepseed/model/questions.dart';
 import 'package:prepseed/views/learn/assignments.dart';
 
 import '../../constants/strings.dart';
 import '../../model/execute/tests/list_questions.dart';
+import '../../views/login/prepseed_loginScreen.dart';
 import '../sharedPref.dart';
 class TestProviderClass extends ChangeNotifier {
   final _textController = TextEditingController();
@@ -125,9 +128,19 @@ class TestProviderClass extends ChangeNotifier {
         // print(listData);
         return listData;
       } else {
-        return [];
+        ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
+          content: Text("Session Time Out."),
+        ));
+        var newRoute = MaterialPageRoute(builder: (BuildContext context) => prepSeed_login());
+        Navigator.of(navigatorKey.currentState!.context).pushReplacement(newRoute);
+        throw Exception("UNAUTHORIZED");
+        /*print(response.statusCode);
+        return [];*/
       }
     } catch (e) {
+      ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
+        content: Text("Something went wrong."),
+      ));
       print(e);
       return [];
     }
