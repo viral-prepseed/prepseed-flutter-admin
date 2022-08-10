@@ -271,9 +271,6 @@ class _signIn_signUp extends State<signIn_signUp>{
                                         ),
                                       ),
                                     ),
-
-
-
                                     Container(
                                       //show error message here
                                       margin: EdgeInsets.only(top:30),

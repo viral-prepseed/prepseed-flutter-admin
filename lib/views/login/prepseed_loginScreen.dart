@@ -100,8 +100,8 @@ class _prepSeed_loginState extends State<prepSeed_login> {
             Form(
               key: _prepSeed_login,
               child: Container(
-               // margin: EdgeInsets.all(10.0),
-                padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.all(10.0),
+                //padding: EdgeInsets.all(10.0),
                 width: double.maxFinite,
                 child: DropdownButton<String>(
                   isExpanded: true,//Map<dynamic,dynamic>
@@ -125,7 +125,7 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                     return DropdownMenuItem<String>(
                         value: map['_id'].toString(), //map
                         child: Container(
-                          padding: EdgeInsets.all(10.0),
+                          //padding: EdgeInsets.all(10.0),
                           child: Row(
                             children: [
                               Image(image: NetworkImage(map['logo']),width: 45,),
