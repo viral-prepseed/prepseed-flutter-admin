@@ -1,53 +1,57 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:prepseed/constants/strings.dart';
+import 'package:prepseed/model/stats_analysis_model/reports/videos_attendance.dart';
 
-import '../../../model/dataclass.dart';
+import '../../sharedPref.dart';
+
 
 class VideoAttendanceProviderClass extends ChangeNotifier {
 
   bool isLoading = false; //loading parameter
-  List<DataClass> post = []; // DataClass empty parameter
+  List<Items> post = []; // videos_attendance empty parameter
   int _count = 1; // dummy parameter to check working!!
   int get count => _count; //to set value for _count
-  List<DataClass> get listData => post; //to set value for post
+  List<Items> get listData => post; //to set value for post
 
-  set count(int n) {
-    //function to change _count and notify change to ChangeNotifier
-    _count = n;
-    notifyListeners();
-  }
 
-  set listData(List<DataClass> value) {
+  set listData(List<Items> value) {
     //function to update list data and notify
     post = value;
     isLoading = false;
     notifyListeners();
   }
 
-  ProviderClass() {
-    post = [];
-  }
-
-  Future<List<DataClass>> apiCall() async {
+  Future<List<Items>> apiCall() async {
     //function to call API using Http package
-    String url = 'https://jsonplaceholder.typicode.com/photos';
-    try {
+    var phaseId = await sharedPref().getSharedPref('phaseId');
+    String url = Strings.videoAttendance+'/628c8a6d7640243d911a6cc6';//+phaseId;
+    // try {
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       });
+      // var resp = json.decode(response.body)['items'];
       if (200 == response.statusCode) {
-        print(response.body);
-        final List<DataClass> filesList = dataClassFromJson(response.body);
-        listData = filesList;
-        return filesList;
+        final List<Items> lst = [];
+        // print(response.body);
+        final videos_attendance filesList = videos_attendance.fromJson(json.decode(response.body));
+/*        if(filesList.items != null){
+          if(filesList.items!.first.resourceModel == "Video"){
+            listData.addAll(filesList.items!);
+          }
+        }*/
+        print(filesList.items);
+        return lst;
       } else {
         return [];
       }
-    } catch (e) {
+/*    } catch (e) {
       print(e);
       return [];
-    }
+    }*/
   }
 }

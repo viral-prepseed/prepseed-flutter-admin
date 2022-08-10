@@ -31,7 +31,6 @@ class _mainScreenState extends State<mainScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     fetchPref();
     initProvider();
   }

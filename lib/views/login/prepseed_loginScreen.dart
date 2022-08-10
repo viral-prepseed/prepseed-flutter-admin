@@ -9,6 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../constants/strings.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../main.dart';
 
 class prepSeed_login extends StatefulWidget {
   const prepSeed_login({Key? key}) : super(key: key);
@@ -91,10 +94,9 @@ class _prepSeed_loginState extends State<prepSeed_login> {
       child: Scaffold(
         // backgroundColor: Constants.backgroundColor,
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
-
-
             Image.asset('assets/images/logo.png'),
             SizedBox(height: 45,),
             Padding(
@@ -105,56 +107,62 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                   padding: const EdgeInsets.all(8.0),
                   child:
 
-                  Container(
-                    width: double.maxFinite,
-                    child: DropdownButton<String>(
-                      isExpanded: true,//Map<dynamic,dynamic>
-                      isDense: true,
-                      hint: Text("Select"),
-                      value: selectedid,
-                      onChanged: ( newValue) async {
-                        setState(() {
-                          selectedid = newValue!;
+                  Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Constants.black),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
 
-                          /*institutename = newValue!['name']!;
-                          institutelogo = newValue['logo']!;*/
+                          hint: const Text("Select"),
+                          value: selectedid,
+                          onChanged: ( newValue) async {
+                            setState(() {
+                              selectedid = newValue!;
+  
+                              /*institutename = newValue!['name']!;
+                              institutelogo = newValue['logo']!;*/
 
-                        });
-                        /*final pref = await SharedPreferences.getInstance();
-                        pref.setString('InstituteName', institutename!);
-                        pref.setString('InstituteLogo', institutelogo!);*/
+                            });
+                            /*final pref = await SharedPreferences.getInstance();
+                            pref.setString('InstituteName', institutename!);
+                            pref.setString('InstituteLogo', institutelogo!);*/
 
-                        // print (selectedid);
-                      },
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      items: _myJson.map((Map map) {
-                        return DropdownMenuItem<String>(
+                            // print (selectedid);
+                          },
+                          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                          items: _myJson.map((Map map) {
+                            return DropdownMenuItem<String>(
+                                value: map['_id'].toString(), //map
+                                child: Row(
+                                  children: [
+                                    // Image(image: NetworkImage(map['logo']),width: 45,),
+                                    CachedNetworkImage(
+                                      imageUrl: map['logo'],
+                                      placeholder: (context, url) => const CircleAvatar(
+                                        backgroundColor: Colors.amber,
+                                        // radius: 150,
+                                      ),
+                                      imageBuilder: (context, image) => CircleAvatar(
+                                        backgroundImage: image,
+                                        backgroundColor: Colors.transparent,
+                                        // radius: 150,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Text(
+                                      map["name"],
+                                    ),
 
-                            value: map['_id'].toString(), //map
-                            child: Row(
-                              children: [
-                                // Image(image: NetworkImage(map['logo']),width: 45,),
-                                CachedNetworkImage(
-                                  imageUrl: map['logo'],
-                                  placeholder: (context, url) => const CircleAvatar(
-                                    backgroundColor: Colors.amber,
-                                    // radius: 150,
-                                  ),
-                                  imageBuilder: (context, image) => CircleAvatar(
-                                    backgroundImage: image,
-                                    backgroundColor: Colors.transparent,
-                                    // radius: 150,
-                                  ),
-                                ),
-                                SizedBox(width: 10,),
-                                Text(
-                                  map["name"],
-                                ),
-
-                              ],
-                            )
-                        );
-                      }).toList(),
+                                  ],
+                                )
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ),
                   ),
                   /*DropdownButton<Map<dynamic,dynamic>>(
@@ -185,7 +193,6 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                       );
                     }).toList(),
                   ),*/
-
                   /*DropdownSearch<String>(
                     showSearchBox: true,
                     *//*popupProps: PopupProps.menu(
@@ -243,9 +250,15 @@ class _prepSeed_loginState extends State<prepSeed_login> {
               ),
             ),
             SizedBox(height: 70,),
-            ElevatedButton(onPressed: (){
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: Constants.black,
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    textStyle: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold)),
+                onPressed: (){
                 if (_prepSeed_login.currentState!.validate()) {
-
                   _myJson.forEach((element) async {
                     if(element['_id'] == selectedid){
                       print('matched id:'+ element['_id'].toString());
@@ -260,15 +273,17 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                       // print('nm');
                     }
                   });
-
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => signIn_signUp(clientname: institutename!,clientlogo: institutelogo!,)));
+                  (institutename != null)?
+                  Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => signIn_signUp(clientname: institutename!,clientlogo: institutelogo!,)))
+                  : ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
+                    content: Text("Select your Institute / Collage name"),
+                  ));
                 }else{
                   print('oops..');
                   return null;
                 }
-            },
-                child: Text('Next'))
+            }, child: Text('Next', style: GoogleFonts.poppins(fontSize: 16,color: Constants.backgroundColorlight),))
           ],
         ),
       ),

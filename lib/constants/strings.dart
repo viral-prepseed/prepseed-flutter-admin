@@ -33,6 +33,7 @@ class Strings {
 */
 
   static String video = BASEURL + '/video';
+  static String videoAttendance = video + '/course-plan/of-phase';
   static String playlistUrl = video+'/playlists/';
   static String videoUrl = video+'/playlist/';
   //comment url

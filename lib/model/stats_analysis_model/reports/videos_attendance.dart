@@ -1,4 +1,13 @@
-class videos_attendance {
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+
+List<Items> videoListFromJson(String str) =>
+    List<Items>.from(json.decode(str).map((x) => Items.fromJson(x)));
+String videoListToJson(List<Items> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class videos_attendance with ChangeNotifier {
   List<Items>? items;
   String? now;
 
