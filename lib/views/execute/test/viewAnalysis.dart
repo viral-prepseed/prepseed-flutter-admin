@@ -26,7 +26,7 @@ String _printDuration(Duration duration) {
   return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
 }
 
- timeFormatter (double time) {
+timeFormatter (double time) {
   Duration duration = Duration(milliseconds: time.round());
 
   return time/60000;
@@ -91,7 +91,7 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
 
     chartData = <ChartSampleData>[
       ChartSampleData(
-          x: DateTime(2006), y: 0.01, yValue: -0.03, secondSeriesYValue: 0.10,),
+        x: DateTime(2006), y: 0.01, yValue: -0.03, secondSeriesYValue: 0.10,),
       ChartSampleData(
           x: DateTime(2007), y: 0.03, yValue: -0.02, secondSeriesYValue: 0.08),
       ChartSampleData(
@@ -123,7 +123,7 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
     // print(userId);
 
     Future.microtask(() async => {
-       await Provider.of<AnalysisClass>(context, listen: false)
+      await Provider.of<AnalysisClass>(context, listen: false)
           .apiCall(userId,id),
     });
     // _tabController = TabController(length: 3, vsync: this);
@@ -134,7 +134,7 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
     final myModel = Provider.of<AnalysisClass>(context);
     return Scaffold(
       body: myModel.submissionObj != null
-        ? ChangeNotifierProvider.value(
+          ? ChangeNotifierProvider.value(
         value: myModel,
         child: Consumer(builder: (context,my, child){
           List<GASections> sectionList = myModel.sectionList;
@@ -704,7 +704,7 @@ You have finished the assessment too early.''',style: GoogleFonts.poppins(color:
               ),
             ),
           );
-    }),
+        }),
       ) : Center(child: CircularProgressIndicator()),
     );
   }

@@ -329,6 +329,51 @@ class _signIn_signUp extends State<signIn_signUp>{
                                         ),
                                       ),
                                     ),
+
+
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      // mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          // color: Constants.blacklight.withOpacity(1),
+                                          padding: EdgeInsets.only(top: 20, bottom: 50),
+                                          margin: EdgeInsets.only(top:20),
+                                          child: Center(
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Constants.black,
+                                                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                                                  textStyle: TextStyle(
+                                                      fontSize: 30,
+                                                      fontWeight: FontWeight.bold)),
+                                              onPressed: (){
+                                                setState(() {
+                                                  if (_signIn_signUpFormKey.currentState!.validate()) {
+                                                    showprogress = true;
+                                                    startLogin();
+                                                  }
+                                                });
+                                              },
+                                              child: (showprogress == true)?
+                                              SizedBox(
+                                                height:30, width:30,
+                                                child: CircularProgressIndicator(
+                                                  backgroundColor: Colors.orange[100],
+                                                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
+                                                ),
+                                              ):Text("Login", style: GoogleFonts.poppins(fontSize: 17,
+                                                  color: Constants.backgroundColorlight.withOpacity(1),
+                                                  fontWeight: FontWeight.bold,letterSpacing: 2),),
+                                              /*    shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(30)
+                                //button corner radius
+                              ),*/
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -338,47 +383,6 @@ class _signIn_signUp extends State<signIn_signUp>{
                         ),
                       ]),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    color: Constants.blacklight.withOpacity(1),
-                    padding: EdgeInsets.only(top: 20, bottom: 20),
-                    margin: EdgeInsets.only(top:20),
-                    child: SizedBox(
-                      height: 60, width: double.infinity,
-                      child:RaisedButton(
-                        elevation: 0,
-                        onPressed: (){
-                          setState(() {
-                            if (_signIn_signUpFormKey.currentState!.validate()) {
-                              showprogress = true;
-                              startLogin();
-                            }
-                          });
-                        },
-                        child: (showprogress == true)?
-                        SizedBox(
-                          height:30, width:30,
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.orange[100],
-                            valueColor: const AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
-                          ),
-                        ):Text("Sign In", style: GoogleFonts.poppins(fontSize: 17,
-                            color: Constants.backgroundColor.withOpacity(1),
-                            fontWeight: FontWeight.bold,letterSpacing: 2),),
-                        colorBrightness: Brightness.dark,
-                        color: Constants.blacklight.withOpacity(1),
-                        /*    shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(30)
-                                //button corner radius
-                              ),*/
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

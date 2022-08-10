@@ -43,6 +43,7 @@ class _mainScreenState extends State<mainScreen> {
    //TooltipBehavior _tooltipBehavior = TooltipBehavior();
   @override
   void initState() {
+
    /* Future.microtask(() async => {
       await Provider.of<VideosProvider>(context, listen: false)
           .getSubscriptions(),
@@ -51,6 +52,7 @@ class _mainScreenState extends State<mainScreen> {
       await Provider.of<TestProviderClass>(context, listen: false)
           .apiCall(),
     });*/
+
     fetchPref();
     initProvider();
     //getAssesmentId();
@@ -86,6 +88,9 @@ class _mainScreenState extends State<mainScreen> {
           .apiCall(),
       await Provider.of<AssessmentWrappersClass>(context, listen: false)
           .getWrappersAPI(),
+/*      await Provider.of<ReportClass>(context, listen: false)
+          .getReportsAPI(),*/
+
     });
   }
   fetchPref() async{
@@ -518,8 +523,7 @@ class _mainScreenState extends State<mainScreen> {
                                                       return const Text('Loading data');
                                                     }
                                                   },
-                                                )
-                                              ],
+                                                )]
                                             ),
                                           );
                                         },
@@ -531,10 +535,10 @@ class _mainScreenState extends State<mainScreen> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-
+                          SizedBox(
+                            height: 15,
+                          ),
+                          // testDetails(),
                     const SizedBox(
                       height: 15,
                     ),
@@ -694,8 +698,8 @@ class _mainScreenState extends State<mainScreen> {
                     testDetails(),
                   ],
                 ),
-              ),
-            );
+              ),]
+            )));
           }
       ),
     ),

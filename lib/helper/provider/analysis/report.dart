@@ -75,14 +75,14 @@ class ReportClass extends ChangeNotifier {
       Map mapStatsMax = {};
       List listData = [];
       for(var rep in _reports.items!){
-          rep.details!.forEach((element) {
-            _repAllList.add(element.toJson());
-            finalMapData['Name'] = element.name;
-            finalMapData['Date'] = element.availableFrom;
-          }
-          );
-          if(rep.user != null){
-            listData = rep.user!.toJson().keys.toList();
+        rep.details!.forEach((element) {
+          _repAllList.add(element.toJson());
+          finalMapData['Name'] = element.name;
+          finalMapData['Date'] = element.availableFrom;
+        }
+        );
+        if(rep.user != null){
+          listData = rep.user!.toJson().keys.toList();
           mapUserSelf = rep.user!.toJson();
         }
         mapTopperHigh = rep.topper!.toJson();
@@ -91,8 +91,8 @@ class ReportClass extends ChangeNotifier {
 
         for(var elements in mapUserSelf.keys){
           if(mapStatsMax[elements] != null){
-          var calval = (Overall.fromJson(mapUserSelf[elements]).marks! / mapStatsMax[elements]) * 100;
-          allPercentage[elements] = double.parse(calval.toString()).toStringAsFixed(2);}
+            var calval = (Overall.fromJson(mapUserSelf[elements]).marks! / mapStatsMax[elements]) * 100;
+            allPercentage[elements] = double.parse(calval.toString()).toStringAsFixed(2);}
         }
 
         for(var elements in mapUserSelf.keys){
@@ -100,7 +100,7 @@ class ReportClass extends ChangeNotifier {
           allMarksSelf[elements] = Overall.fromJson(mapUserSelf[elements]).marks;
         }
 
-     /*   for(var elements in mapStatsMax.keys){
+        /*   for(var elements in mapStatsMax.keys){
           mapMax[elements] = MaxMarks.fromJson(mapStatsMax[elements]).overall;
         }*/
         for(var elements in mapTopperHigh.keys){
@@ -146,7 +146,7 @@ class ReportClass extends ChangeNotifier {
               finalListData.add(value);
             }
           });
-         /* allMarksHigh.forEach((key, value) {
+          /* allMarksHigh.forEach((key, value) {
             if(key == element){
               finalListData.add(value);
               // finalMapData[key] = value;

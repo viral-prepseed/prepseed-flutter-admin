@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColorTrans,
+      backgroundColor: Constants.backgroundColor,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,12 +64,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FadeTransition(
-                  opacity: animation!,
+              ScaleTransition(
+                  scale: animation!,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:[
-                        Image.asset('assets/images/logo.jpg')
+                        Image.asset('assets/images/logo.png')
                       ]
                   )
               )

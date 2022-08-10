@@ -7,6 +7,7 @@ import '../../../views/learning_module/Assignments/assignment.dart';
 import '../../../repository/playlist_provider/videos_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../menu/menu_widget.dart';
 
@@ -79,10 +80,26 @@ class _AssignmentsListState extends State<AssignmentsList> {
                         InkWell(
                           child: Row(
                             children: [
-                              Image.network(
+                              CachedNetworkImage(
+                                imageUrl: provMdl.assignmentModel.playlist!.items![index].resource!.thumbNailsUrls![0].toString(),
+                                placeholder: (context, url) => Image(
+                                image: AssetImage("assets/images/logo.png"),
+                                width: MediaQuery.of(context).size.width / 4,
+                                  height: MediaQuery.of(context).size.height / 9,
+                                fit: BoxFit.contain,),
+                                imageBuilder: (context, image) => Image(
+                                  image: image,
+                                width: MediaQuery.of(context).size.width / 4,
+                                height: MediaQuery.of(context).size.height / 9,
+                                fit: BoxFit.contain,)
+                              ),
+                              /*Image.network(
                                 provMdl.assignmentModel.playlist!.items![index].resource!.thumbNailsUrls![0].toString(),
                                 width: 100.0,
                                 height: 50.0,
+                              ),*/
+                              const SizedBox(
+                                width: 20.0,
                               ),
                               Expanded(
                                   child: Text(provMdl.assignmentModel.playlist!.items![index].resource!.title.toString())),

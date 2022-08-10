@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prepseed/helper/provider/DataClassProvider.dart';
 import 'package:prepseed/helper/provider/analysis/report.dart';
 import 'package:prepseed/helper/provider/leadershipProvider.dart';
+import 'package:prepseed/helper/provider/reports/videoAttendanceProvider.dart';
 import 'package:prepseed/helper/provider/sectionProvider.dart';
 import 'package:prepseed/helper/provider/userDerailsProvider.dart';
 import 'package:prepseed/repository/playlist_provider/videos_provider.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LeadershipClass>(create: (_) => LeadershipClass(),),
         ChangeNotifierProvider<AssessmentWrappersClass>(create: (_) => AssessmentWrappersClass(),),
         ChangeNotifierProvider<ReportClass>(create: (_) => ReportClass(),),
+        ChangeNotifierProvider<VideoAttendanceProviderClass>(create: (_) => VideoAttendanceProviderClass(),),
       ],
       child: MaterialApp(
         // title: 'Flutter Demo',

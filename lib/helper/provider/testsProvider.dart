@@ -1,20 +1,25 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:prepseed/main.dart';
 import 'package:prepseed/model/assesments/getwrapper.dart';
 import 'package:prepseed/model/questions.dart';
 import 'package:prepseed/views/learn/assignments.dart';
 
 import '../../constants/strings.dart';
 import '../../model/execute/tests/list_questions.dart';
+import '../../views/login/prepseed_loginScreen.dart';
 import '../sharedPref.dart';
 class TestProviderClass extends ChangeNotifier {
   final _textController = TextEditingController();
   bool isLoading = false;
   List emptyList = [];
   String _optionVal = '';
+  bool _isReset = false;
   List<AssessmentWrappers> post = [];
   list_questions? _assessment;
   List TabValues = [];
@@ -27,6 +32,7 @@ class TestProviderClass extends ChangeNotifier {
   List<QuestionClass> get questionsList => questions;
   Map get listTopics => mapTopic;
   String get optionVal => _optionVal;
+  bool get isReset => _isReset;
   TextEditingController get textController => _textController;
 
   get listLength => listData.length;
@@ -41,6 +47,11 @@ class TestProviderClass extends ChangeNotifier {
 
   set optionVal(String _opval){
     _optionVal = _opval;
+    notifyListeners();
+  }
+
+  set isReset(bool _val){
+    _isReset = _val;
     notifyListeners();
   }
 
@@ -117,10 +128,20 @@ class TestProviderClass extends ChangeNotifier {
         // print(listData);
         return listData;
       } else {
-        return [];
+        ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
+          content: Text("Session Time Out."),
+        ));
+        var newRoute = MaterialPageRoute(builder: (BuildContext context) => prepSeed_login());
+        Navigator.of(navigatorKey.currentState!.context).pushReplacement(newRoute);
+        throw Exception("UNAUTHORIZED");
+        /*print(response.statusCode);
+        return [];*/
       }
     } catch (e) {
-      print(e);
+      /*ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
+        content: Text("Something went wrong."),
+      ));
+      print(e);*/
       return [];
     }
   }
@@ -158,7 +179,7 @@ class TestProviderClass extends ChangeNotifier {
             // print(elementQue.question!.type);
             listType.add(elementQue.question!.type);
             var rawCont = elementQue.question!.content!.rawContent!;
-            /* Convert to Json Object */
+            /*If String then Convert to Json Object */
             if(rawCont.runtimeType.toString() == "String"){
               rawCont = json.decode(elementQue.question!.content!.rawContent!);
             }
@@ -178,7 +199,7 @@ class TestProviderClass extends ChangeNotifier {
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(multiOp.content['rawContent']);
                   }
-                  _options.add(Option(text: opCont['blocks'][0]['text'],id: multiOp.id));
+                  _options.add(Option(text: convertLetX(opCont['blocks'][0]['text']),id: multiOp.id));
                 });
               }
 
@@ -189,7 +210,7 @@ class TestProviderClass extends ChangeNotifier {
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(opCont);
                   }
-                  _options.add(Option(text: opCont['blocks'][0]['text'],id: multiOp.sId));
+                  _options.add(Option(text: convertLetX(opCont['blocks'][0]['text']),id: multiOp.sId));
                 }
               }
 
@@ -205,7 +226,7 @@ class TestProviderClass extends ChangeNotifier {
                       if(opCont.runtimeType.toString() == 'String'){
                         opCont = json.decode(opCont);
                       }
-                      _options.add(Option(text: opCont['blocks'][0]['text'],id: multiOp.sId));
+                      _options.add(Option(text: convertLetX(opCont['blocks'][0]['text']),id: multiOp.sId));
                     }
                   }
 
@@ -230,7 +251,7 @@ class TestProviderClass extends ChangeNotifier {
                 correctMarks: elementQue.correctMark,
                 incorrectMarks: elementQue.incorrectMark,
                 type: elementQue.question!.type!,
-                text: QuestionContents.fromJson(rawCont).blocks!.first.text!,
+                text: convertLetX(QuestionContents.fromJson(rawCont).blocks!.first.text!),
                 queImage: _queImage,
                 optImage: _optImage,
                 linkedText: _linkTextMain,
@@ -253,6 +274,49 @@ class TestProviderClass extends ChangeNotifier {
       print(e);
       // return [];
     }*/
+  }
+
+  convertLetX(String text){
+    var count = text.length - text.replaceAll("\$","").length;
+    // print(count);
+    // String _text = text.replaceAll(r'\+', r'\');
+    // replaceData(_text);
+    String _response = text;
+    for(int i=0; i<=count/2; i++){
+      _response = replaceData(_response);
+    }
+
+/*  String _response = replaceData(_text);
+  if(_response != null){
+    if(_response.contains(r'$')){
+      return replaceData(_response);
+    }else{
+      return _response;
+    }
+  }*/
+    return _response;
+  }
+
+  replaceData(String replaceableText){
+    String? _textData;
+    String? _text_sec_Data;
+    // if(replaceableText.contains(r'$')){
+    _textData = replaceableText.replaceFirst('\$', r'\(');
+    _text_sec_Data = _textData.replaceFirst('\$', r'\)');
+    // convertLetX(_text_sec_Data);
+    // replaceData(_text_sec_Data);
+    // }else{}
+/*
+    // print(_text_sec_Data);
+    if(_text_sec_Data != null){
+      if(_text_sec_Data.contains('\$')){
+        return _text_sec_Data;
+      }else{
+        // print(_text_sec_Data);
+        return _text_sec_Data;
+      }
+    }*/
+    return _text_sec_Data;
   }
 
 

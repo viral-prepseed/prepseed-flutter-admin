@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:prepseed/model/getAnalysis/submission.dart';
 import 'package:prepseed/model/assesments/getwrapper.dart';
-import 'package:prepseed/model/leaderboard/phase_user.dart';
-import 'package:prepseed/model/leaderboard/ranks.dart';
+import 'package:prepseed/model/stats_analysis_model/leaderboard/phase_user.dart';
+import 'package:prepseed/model/stats_analysis_model/leaderboard/ranks.dart';
 import 'package:prepseed/views/learn/assignments.dart';
 import 'package:prepseed/views/stats_analysis/analysis/leaderboard.dart';
 

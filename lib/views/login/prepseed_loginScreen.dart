@@ -8,8 +8,11 @@ import 'package:prepseed/model/clientNames.dart';
 import 'package:prepseed/views/login/company_signIn_signUp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../constants/strings.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../main.dart';
 
 class prepSeed_login extends StatefulWidget {
   const prepSeed_login({Key? key}) : super(key: key);
@@ -88,44 +91,97 @@ class _prepSeed_loginState extends State<prepSeed_login> {
 
   @override
   Widget build(BuildContext context) {
-
-    print(_myJson.runtimeType);
     return SafeArea(
       child: Scaffold(
         // backgroundColor: Constants.backgroundColor,
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/images/logo.jpg'),
+            Image.asset('assets/images/logo.png'),
             SizedBox(height: 45,),
-            Form(
-              key: _prepSeed_login,
-              child: Container(
-                margin: EdgeInsets.all(10.0),
-                //padding: EdgeInsets.all(10.0),
-                width: double.maxFinite,
-                child: DropdownButton<String>(
-                  isExpanded: true,//Map<dynamic,dynamic>
-                  isDense: true,
-                  hint: new Text("Select"),
-                  value: selectedid,
-                  onChanged: ( newValue) async {
-                    setState(() {
-                      selectedid = newValue!;
-                      /*institutename = newValue!['name']!;
-                      institutelogo = newValue['logo']!;*/
-                    });
-                    /*final pref = await SharedPreferences.getInstance();
-                    pref.setString('InstituteName', institutename!);
-                    pref.setString('InstituteLogo', institutelogo!);*/
-                    // print (selectedid);
-                  },
-                  //itemHeight: 70.0,
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  items: _myJson.map((Map map) {
-                    return DropdownMenuItem<String>(
-                        value: map['_id'].toString(), //map
-                        child: Container(
-                          //padding: EdgeInsets.all(10.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _prepSeed_login,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:
+
+                  Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Constants.black),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+
+                          hint: const Text("Select"),
+                          value: selectedid,
+                          onChanged: ( newValue) async {
+                            setState(() {
+                              selectedid = newValue!;
+  
+                              /*institutename = newValue!['name']!;
+                              institutelogo = newValue['logo']!;*/
+
+                            });
+                            /*final pref = await SharedPreferences.getInstance();
+                            pref.setString('InstituteName', institutename!);
+                            pref.setString('InstituteLogo', institutelogo!);*/
+
+                            // print (selectedid);
+                          },
+                          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                          items: _myJson.map((Map map) {
+                            return DropdownMenuItem<String>(
+                                value: map['_id'].toString(), //map
+                                child: Row(
+                                  children: [
+                                    // Image(image: NetworkImage(map['logo']),width: 45,),
+                                    CachedNetworkImage(
+                                      imageUrl: map['logo'],
+                                      placeholder: (context, url) => const CircleAvatar(
+                                        backgroundColor: Colors.amber,
+                                        // radius: 150,
+                                      ),
+                                      imageBuilder: (context, image) => CircleAvatar(
+                                        backgroundImage: image,
+                                        backgroundColor: Colors.transparent,
+                                        // radius: 150,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Text(
+                                      map["name"],
+                                    ),
+
+                                  ],
+                                )
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  /*DropdownButton<Map<dynamic,dynamic>>(
+                    isDense: true,
+                    hint: new Text("Select"),
+                    // value: institutename,
+                    onChanged: ( newValue) {
+
+                      setState(() {
+                        institutename = newValue!['name'];
+                      });
+
+                      print (_mySelection);
+                    },
+                    items: _myJson.map((Map map) {
+                      return DropdownMenuItem<Map<dynamic,dynamic>>(
+                          value: map,
+
                           child: Row(
                             children: [
                               Image(image: NetworkImage(map['logo']),width: 45,),
@@ -135,17 +191,82 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                               ),
 
                             ],
+
                           ),
                         )
                     );
                   }).toList(),
+
+                          )
+                      );
+                    }).toList(),
+                  ),*/
+                  /*DropdownSearch<String>(
+                    showSearchBox: true,
+                    *//*popupProps: PopupProps.menu(
+                      showSelectedItems: true,
+                      disabledItemFn: (String s) => s.startsWith('I'),
+                    ),*/
+                  /*
+                    // items: _myJson,
+                    popupItemBuilder: (context, item, isSelected) => Container(
+                      height: 200,
+                      child: ListView.builder
+                        (
+                          itemCount: _myJson?.length,
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            _myJson!.map((Map map) {
+                              return  DropdownMenuItem<String>(
+                                  value: map["id"].toString(),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        map["name"],
+                                      ),
+                                      Image(image: NetworkImage(map['logo']),width: 45,)
+                                    ],
+                                  )
+                              );
+                            }).toList();
+                            return Container();
+                          }
+                      ),
+                    ),
+                    dropdownSearchDecoration: const InputDecoration(
+                      labelText: "Select your Institute",
+                      // hintText: "country in menu mode",
+                    ),
+                    onChanged: (String? item) async {
+                      final pref = await SharedPreferences.getInstance();
+                      pref.setString('data', item!);
+                      // print(clientlogo[item]);
+                    },
+                    validator: (String? item) {
+                      if (item == null){
+                        return "Please select any one before proceeding further.";
+                      }
+                      else{
+                        setState(() {
+                          institutename = item;
+                        });
+                        return null;
+                      }
+                    },
+                    // selectedItem: "Brazil",
+                  ),*/
                 ),
               ),
             ),
             SizedBox(height: 70,),
-            ElevatedButton(onPressed: (){
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: Constants.black,
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    textStyle: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold)),
+                onPressed: (){
                 if (_prepSeed_login.currentState!.validate()) {
-
                   _myJson.forEach((element) async {
                     if(element['_id'] == selectedid){
                       print('matched id:'+ element['_id'].toString());
@@ -160,15 +281,17 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                       // print('nm');
                     }
                   });
-
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => signIn_signUp(clientname: institutename!,clientlogo: institutelogo!,)));
+                  (institutename != null)?
+                  Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => signIn_signUp(clientname: institutename!,clientlogo: institutelogo!,)))
+                  : ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
+                    content: Text("Select your Institute / Collage name"),
+                  ));
                 }else{
                   print('oops..');
                   return null;
                 }
-            },
-                child: Text('Next'))
+            }, child: Text('Next', style: GoogleFonts.poppins(fontSize: 16,color: Constants.backgroundColorlight),))
           ],
         ),
       ),

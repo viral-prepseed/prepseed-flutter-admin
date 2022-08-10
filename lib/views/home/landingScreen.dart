@@ -25,6 +25,7 @@ import 'package:prepseed/views/stats_analysis/analysis/analysis.dart';
 import 'package:prepseed/views/learning_module/videos/videos_homescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:prepseed/views/stats_analysis/reports/reports.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 class landingScreen extends StatefulWidget {
   const landingScreen({Key? key}) : super(key: key);
@@ -40,34 +41,39 @@ class _landingScreenState extends State<landingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ZoomDrawer(
-        controller: _drawerController,
-        style: DrawerStyle.Style1,
-        menuScreen: Builder(
-          builder: (context) =>
-              MenuScreen(
-                  currentItem: currentItem,
-                  onSelectedItem: (item) {
-                    setState(() {
-                      currentItem = item;
-                    });
-                    ZoomDrawer.of(context)!.close();
-                  }
-              ),
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(
+          content: Text('Tap back again to leave'),
         ),
-        mainScreen: getScreen(),
-        borderRadius: 24.0,
-        showShadow: true,
-        angle: 0.0,
-        // clipMainScreen: true,
-        // backgroundColor: Colors.grey,
-        slideWidth: MediaQuery
-            .of(context)
-            .size
-            .width * 0.65,
-        //(ZoomDrawer.isRTL() ? .45 :
-        openCurve: Curves.fastOutSlowIn,
-        closeCurve: Curves.bounceIn,
+        child: ZoomDrawer(
+          controller: _drawerController,
+          style: DrawerStyle.Style1,
+          menuScreen: Builder(
+            builder: (context) =>
+                MenuScreen(
+                    currentItem: currentItem,
+                    onSelectedItem: (item) {
+                      setState(() {
+                        currentItem = item;
+                      });
+                      ZoomDrawer.of(context)!.close();
+                    }
+                ),
+          ),
+          mainScreen: getScreen(),
+          borderRadius: 24.0,
+          showShadow: true,
+          angle: 0.0,
+          // clipMainScreen: true,
+          // backgroundColor: Colors.grey,
+          slideWidth: MediaQuery
+              .of(context)
+              .size
+              .width * 0.65,
+          //(ZoomDrawer.isRTL() ? .45 :
+          openCurve: Curves.fastOutSlowIn,
+          closeCurve: Curves.bounceIn,
+        ),
       ),
     );
   }
