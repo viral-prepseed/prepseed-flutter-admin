@@ -39,7 +39,6 @@ class ProviderClass extends ChangeNotifier {
         'Accept': 'application/json',
       });
       if (200 == response.statusCode) {
-        print(response.body);
         final List<DataClass> filesList = dataClassFromJson(response.body);
         listData = filesList; //udpate List<DataClass> data
         return filesList;
@@ -47,7 +46,6 @@ class ProviderClass extends ChangeNotifier {
         return [];
       }
     } catch (e) {
-      print(e);
       return [];
     }
   }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:prepseed/main.dart';
 import 'package:prepseed/model/assesments/getwrapper.dart';
 import 'package:prepseed/model/questions.dart';
-import 'package:prepseed/views/learn/assignments.dart';
 
 import '../../constants/strings.dart';
 import '../../model/execute/tests/list_questions.dart';

@@ -16,6 +16,11 @@ mixin Style {
       color: Colors.black,
       fontWeight: FontWeight.bold
   );
+  static TextStyle textStyleBold13 = const TextStyle(
+      fontSize: 15.0,
+      color: Colors.black,
+      fontWeight: FontWeight.bold
+  );
 
   //font style with size of 13 and white bold
   static TextStyle textStyleBold13White = const TextStyle(

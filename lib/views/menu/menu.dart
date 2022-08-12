@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:prepseed/repository/playlist_repo/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:api_cache_manager/api_cache_manager.dart';
 import '../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ class MenuItems{
   static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
   static const announcement = MainMenuItems('Announcements',Icons.announcement_outlined);
   static const doubt = MainMenuItems('Doubt', Icons.error);
-  // static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
+   static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
   static const chats = MainMenuItems("Chats", Icons.message);
 
   // static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
@@ -178,6 +178,7 @@ logout() {
                           SharedPreferences prefs = await SharedPreferences
                               .getInstance();
                           await prefs.clear();
+                          await APICacheManager().deleteCache('API_videoPlay');
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => prepSeed_login()
                           ));

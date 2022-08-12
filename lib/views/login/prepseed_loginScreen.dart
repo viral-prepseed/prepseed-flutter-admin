@@ -117,13 +117,11 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
-
                           hint: const Text("Select"),
                           value: selectedid,
                           onChanged: ( newValue) async {
                             setState(() {
                               selectedid = newValue!;
-  
                               /*institutename = newValue!['name']!;
                               institutelogo = newValue['logo']!;*/
 
@@ -135,6 +133,7 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                             // print (selectedid);
                           },
                           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                          isExpanded: true,
                           items: _myJson.map((Map map) {
                             return DropdownMenuItem<String>(
                                 value: map['_id'].toString(), //map
@@ -142,7 +141,8 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                                   children: [
                                     // Image(image: NetworkImage(map['logo']),width: 45,),
                                     CachedNetworkImage(
-                                      imageUrl: map['logo'],
+                                      imageUrl: map['logo'] ?? "",
+                                      errorWidget: (context,url,error) => Icon(Icons.error),
                                       placeholder: (context, url) => const CircleAvatar(
                                         backgroundColor: Colors.amber,
                                         // radius: 150,

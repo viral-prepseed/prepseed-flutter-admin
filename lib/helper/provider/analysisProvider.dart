@@ -118,8 +118,8 @@ class AnalysisClass extends ChangeNotifier {
   }
 
   Future<List<metaSections>> apiCall(userId,wrapperId) async {
-print(userId);
-print(wrapperId);
+/*print(userId);
+print(wrapperId);*/
     await SubmissionDetails(userId,wrapperId);
     var token = await sharedPref().getSharedPref('token');
     var phaseId = await sharedPref().getSharedPref('phaseId');

@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import '../../../constants/theme/style.dart';
 import '../../helper/api/functions.dart';
 import '../../helper/provider/analysisProvider.dart';
+import '../../helper/provider/reports/videoAttendanceProvider.dart';
 import '../../helper/provider/tests/assessmentWrappers.dart';
 import '../../helper/provider/testsProvider.dart';
 import '../../helper/sharedPref.dart';
@@ -76,6 +77,8 @@ class _mainScreenState extends State<mainScreen> {
           .getReportsAPI(),
       await Provider.of<TestProviderClass>(context, listen: false)
           .apiCall(),
+      await Provider.of<VideoAttendanceProviderClass>(context,listen: false)
+          .apiCall(),
       await Provider.of<VideosProvider>(context, listen: false)
           .getVideos(),
       await Provider.of<VideosProvider>(context, listen: false)
@@ -121,7 +124,7 @@ class _mainScreenState extends State<mainScreen> {
                     ),
                     Container(
                       height: 200.0,
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       //elevation: 2.0,
                       decoration:conDecoration,
                       child: Column(
@@ -165,9 +168,9 @@ class _mainScreenState extends State<mainScreen> {
                                              animationDuration: 2200,
                                              lineWidth: 07.0,
                                              percent: 0.0,
-                                             center: Text(
+                                             center: const Text(
                                                "0%",
-                                               style: const TextStyle(
+                                               style: TextStyle(
                                                    fontWeight: FontWeight.bold,
                                                    fontSize: 12.0),
                                              ),
@@ -195,7 +198,7 @@ class _mainScreenState extends State<mainScreen> {
                                 ),
                                 onTap: (){
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => practice())
+                                      builder: (context) => const practice())
                                   );
                                 },
                               ),
@@ -250,7 +253,7 @@ class _mainScreenState extends State<mainScreen> {
                                   }),
                                  onTap: (){
                                    Navigator.of(context).push(MaterialPageRoute(
-                                       builder: (context) => livetest())
+                                       builder: (context) => const livetest())
                                    );
                                  },
                                ),
@@ -277,9 +280,9 @@ class _mainScreenState extends State<mainScreen> {
                                             animationDuration: 2200,
                                             lineWidth: 07.0,
                                             percent: 0.0,
-                                            center: Text(
+                                            center: const Text(
                                               "0/3",
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12.0),
                                             ),
@@ -535,13 +538,21 @@ class _mainScreenState extends State<mainScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           // testDetails(),
                     const SizedBox(
                       height: 15,
                     ),
+                    // Behaviour needed
+                  ],
+                ),
+              ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+
                     Container(
                       decoration: conDecoration,
                       child: Column(
@@ -557,7 +568,7 @@ class _mainScreenState extends State<mainScreen> {
                                   fontSize: 15),
                             ),
                           ),
-                         // Style.divider(),
+                          // Style.divider(),
                           const SizedBox(height: 10.0,),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -622,15 +633,13 @@ class _mainScreenState extends State<mainScreen> {
                                       )
                                     ]
                                 )
-                                : Center(child: CircularProgressIndicator()) : Container();}
+                                    : const Center(child: CircularProgressIndicator()) : Container();}
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-
-                    // Behaviour needed
                     const SizedBox(
                       height: 15,
                     ),
@@ -653,7 +662,7 @@ class _mainScreenState extends State<mainScreen> {
                             padding: const EdgeInsets.all(10.0),
                             //width: MediaQuery.of(context).size.width - 32,
                             color: Constants.blacklight,
-                           // height: 400,
+                            // height: 400,
                             child: Column(
                               crossAxisAlignment:
                               CrossAxisAlignment.center,
@@ -691,14 +700,7 @@ class _mainScreenState extends State<mainScreen> {
                     const SizedBox(
                       height: 15,
                     ),
-
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    testDetails(),
-                  ],
-                ),
-              ),]
+                    testDetails(),]
             )));
           }
       ),
@@ -736,52 +738,52 @@ class _mainScreenState extends State<mainScreen> {
           scrollDirection: Axis.horizontal,
           child: DataTable(
             border:  TableBorder.all(width:1, color:Colors.black45),
-            columns: [
-                  DataColumn(label:  Text("Name")),
-                  DataColumn(label:  Text("Date")),
-                  DataColumn(label:  Text("Self")),
-                  DataColumn(label:  Text("High")),
-                  DataColumn(label:  Text("Avg")),
-                  DataColumn(label:  Text("Self")),
+            columns: const [
+                   DataColumn(label:  Text("Name")),
+                   DataColumn(label:  Text("Date")),
+                   DataColumn(label:  Text("Self")),
                    DataColumn(label:  Text("High")),
-                  DataColumn(label:  Text("Avg")),
-                  DataColumn(label:  Text("Self")),
-                  DataColumn(label:  Text("High")),
-                  DataColumn(label:  Text("Avg")),
-                  DataColumn(label:  Text("Self")),
-                  DataColumn(label:  Text("High")),
-                  DataColumn(label:  Text("Avg")),
-                  DataColumn(label:  Text("Max")),
-              DataColumn(label: Text("%age")),
-              DataColumn(label:  Text("Physics")),
-              DataColumn(label:  Text("Mathematics")),
-              DataColumn(label:  Text("Chemistry")),
-              DataColumn(label:  Text("overall")),
+                   DataColumn(label:  Text("Avg")),
+                   DataColumn(label:  Text("Self")),
+                    DataColumn(label:  Text("High")),
+                   DataColumn(label:  Text("Avg")),
+                   DataColumn(label:  Text("Self")),
+                   DataColumn(label:  Text("High")),
+                   DataColumn(label:  Text("Avg")),
+                   DataColumn(label:  Text("Self")),
+                   DataColumn(label:  Text("High")),
+                   DataColumn(label:  Text("Avg")),
+                   DataColumn(label:  Text("Max")),
+               DataColumn(label: Text("%age")),
+               DataColumn(label:  Text("Physics")),
+               DataColumn(label:  Text("Mathematics")),
+               DataColumn(label:  Text("Chemistry")),
+               DataColumn(label:  Text("overall")),
             ],
             rows: listOfItems.map((element) =>
                 DataRow(
                 cells: [
                   DataCell(Text(element.details![0].name.toString())),
                   DataCell(Text(element.details![0].availableFrom.toString())),
-                  element.user != null ? element.user!.physics/*!.marks*/ != null ? DataCell(Text(element.user!.physics!.marks.toString()/*element['physics'].elementAt(0).toString()*/)) : DataCell(Text("0")): DataCell(Text("0")),
-                  element.topper!.physics != null ? DataCell(Text(element.topper!.physics!.marks.toString())) : DataCell(Text("0")),
-                  element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.averageMarks.toString())) : DataCell(Text("0")),
-                  element.user != null ? element.user!.mathematics != null ? DataCell(Text(element.user!.mathematics!.marks.toString()/*element['mathematics'].elementAt(0).toString()*/)) : DataCell(Text("0")) : DataCell(Text("0")),
-                  element.topper!.mathematics != null ? DataCell(Text(element.topper!.mathematics!.marks.toString())) : DataCell(Text("0")),
-                  element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.averageMarks.toString())): DataCell(Text("0")),
-                  element.user != null ? element.user!.chemistry != null ? DataCell(Text(element.user!.chemistry!.marks.toString()/*(element['chemistry'].elementAt(0).toString()*/)) : DataCell(Text("0")) : DataCell(Text("0")),
-                  element.topper!.chemistry != null ? DataCell(Text(element.topper!.chemistry!.marks.toString())) : DataCell(Text("0")),
-                  element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.averageMarks.toString())) : DataCell(Text("0")),
-                  element.user != null ? DataCell(Text(element.user!.overall!.marks.toString()/*element['overall'].elementAt(0).toString()*/)) : DataCell(Text("0")),
-                  element.topper!.overall!.marks != null ? DataCell(Text(element.topper!.overall!.marks.toString())) : DataCell(Text("0")),
+                  element.user != null ? element.user!.physics/*!.marks*/ != null ? DataCell(Text(element.user!.physics!.marks.toString()/*element['physics'].elementAt(0).toString()*/)) : const DataCell(Text("0")): const DataCell(Text("0")),
+                  element.topper!.physics != null ? DataCell(Text(element.topper!.physics!.marks.toString())) : const DataCell(Text("0")),
+                  element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.averageMarks.toString())) : const DataCell(Text("0")),
+                  element.user != null ? element.user!.mathematics != null ? DataCell(Text(element.user!.mathematics!.marks.toString()/*element['mathematics'].elementAt(0).toString()*/)) : const DataCell(Text("0")) : const DataCell(Text("0")),
+                  element.topper!.mathematics != null ? DataCell(Text(element.topper!.mathematics!.marks.toString())) : const DataCell(Text("0")),
+                  element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.averageMarks.toString())): const DataCell(Text("0")),
+                  element.user != null ? element.user!.chemistry != null ? DataCell(Text(element.user!.chemistry!.marks.toString()/*(element['chemistry'].elementAt(0).toString()*/)) : const DataCell(Text("0")) : const DataCell(Text("0")),
+                  element.topper!.chemistry != null ? DataCell(Text(element.topper!.chemistry!.marks.toString())) : const DataCell(Text("0")),
+                  element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.averageMarks.toString())) : const DataCell(Text("0")),
+                  element.user != null ? DataCell(Text(element.user!.overall!.marks.toString()/*element['overall'].elementAt(0).toString()*/)) : const DataCell(Text("0")),
+                  element.topper!.overall!.marks != null ? DataCell(Text(element.topper!.overall!.marks.toString())) : const DataCell(Text("0")),
                   DataCell(Text(element.statsBySection!.overall!.averageMarks.toString())),
                   DataCell(Text(element.maxMarks!.overall.toString())),
                   element.user != null ? DataCell(Text(
                       (element.user!.overall!.marks! / element.maxMarks!.overall!*100).toString().substring(0,3)))
-                  : DataCell(Text("0")),
-                  element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.percentile.toString())) : DataCell(Text("0")),
-                  element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.percentile.toString())) : DataCell(Text("0")),
-                  element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.percentile.toString())) : DataCell(Text("0")),
+                  : const DataCell(Text("0")),
+                  element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.percentile.toString())) : const DataCell(Text("0")),
+                  element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.percentile.toString())) : const DataCell(Text("0")),
+                  element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.percentile.toString())) : const DataCell(Text("0")),
                   DataCell(Text(element.statsBySection!.overall!.percentile.toString())),
                 ]
             )).toList()

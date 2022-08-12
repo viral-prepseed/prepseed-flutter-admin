@@ -135,8 +135,7 @@ class ReportClass extends ChangeNotifier {
               finalListData.add(value);
             }
           });
-
-          allMarksHigh.forEach((key, value) {
+          allCP.forEach((key, value) {
             if(key == element){
               finalListData.add(value);
             }
@@ -160,6 +159,16 @@ class ReportClass extends ChangeNotifier {
               // finalMapData[key] = value;
             }
           });
+          allMarksHigh.forEach((key, value) {
+            if(key == element){
+              finalListData.add(value);
+            }
+          });
+          allMarksTopper.forEach((key, value) {
+            if(key == element){
+              finalListData.add(value);
+            }
+          });
           finalMapData[element] = finalListData;
 
           finalListData = [];
@@ -170,14 +179,14 @@ class ReportClass extends ChangeNotifier {
         // print(finalMapData);
       }
       listOfColumns = _listOfColumns;
-      print(allMarksSelf);
+     /* print(allMarksSelf);
       print(allPercentage);
       print(allMarksAvg);
       print(allMarksHigh);
       print(allMarksTopper);
       print(allPercentile);
       print(allCP);
-      print(_repAllList);
+      print(_repAllList);*/
       /*mapUser.forEach((key, value) {
         allMarks = {keys : value['marks']};
         print(allMarks);

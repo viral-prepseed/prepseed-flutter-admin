@@ -176,7 +176,6 @@ class VideosProvider extends ChangeNotifier {
   VideoRepo videoRepo = VideoRepo();
   getVideoPlaylist(String id) async {
     list = await videoRepo.getVideoPlaylist(id);
-    print(list);
     notifyListeners();
   }
 
@@ -328,8 +327,6 @@ class VideosProvider extends ChangeNotifier {
             menuItems.all.addAll([MenuItems.announcement,MenuItems.chats,MenuItems.doubt]);
             config = true;
           }
-          print(menuItems);
-          print(config);
         });
       });
     });

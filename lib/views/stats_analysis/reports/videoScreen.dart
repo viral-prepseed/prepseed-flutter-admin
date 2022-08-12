@@ -14,7 +14,7 @@ class _videoScreenState extends State<videoScreen> {
     return Container(
       child: Center(
         child: Text(
-          "You haven't watched enough videos",
+          "You haven't enough videos",
           style: GoogleFonts.poppins(fontSize: 20),
         ),
       ),

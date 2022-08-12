@@ -43,7 +43,6 @@ class ProviderClassRepo{
       var cacheData = await APICacheManager().getCacheData("API_videoPlay");
       _model = playlist_model.fromJson(json.decode(cacheData.syncData));
       print("CACHEv: HIT");
-
       return _model;
     }
   }

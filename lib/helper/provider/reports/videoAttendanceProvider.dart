@@ -16,19 +16,22 @@ class VideoAttendanceProviderClass extends ChangeNotifier {
   int _count = 1; // dummy parameter to check working!!
   int get count => _count; //to set value for _count
   List<Items> get listData => post; //to set value for post
+  videos_attendance filesList = videos_attendance();
+  List items = [];
 
-
+  List subjectName = [];
   set listData(List<Items> value) {
     //function to update list data and notify
     post = value;
     isLoading = false;
-    notifyListeners();
-  }
 
+  }
+  Map<dynamic,dynamic> map ={};
   Future<List<Items>> apiCall() async {
+    subjectName = [];
     //function to call API using Http package
     var phaseId = await sharedPref().getSharedPref('phaseId');
-    String url = Strings.videoAttendance+'/628c8a6d7640243d911a6cc6';//+phaseId;
+    String url = Strings.videoAttendance+'/$phaseId';//+phaseId;
     // try {
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
@@ -38,13 +41,31 @@ class VideoAttendanceProviderClass extends ChangeNotifier {
       if (200 == response.statusCode) {
         final List<Items> lst = [];
         // print(response.body);
-        final videos_attendance filesList = videos_attendance.fromJson(json.decode(response.body));
+        filesList = videos_attendance.fromJson(json.decode(response.body));
 /*        if(filesList.items != null){
           if(filesList.items!.first.resourceModel == "Video"){
             listData.addAll(filesList.items!);
           }
-        }*/
-        print(filesList.items);
+        }*/;
+        filesList.items!.forEach((element) {
+            if(element.subject != null){
+              subjectName.add(element.subject);
+            }
+        });
+        //print(subjectName);
+        subjectName = subjectName.toSet().toList();
+        subjectName.forEach((element) {
+          List playList = [];
+          filesList.items!.forEach((elementItems) {
+            if(element == elementItems.subject){
+              if(elementItems.resourceModel == "Video"){
+                playList.add(elementItems);
+              }
+            }
+          });
+          map[element] = playList;
+        });
+        //print(items);
         return lst;
       } else {
         return [];
@@ -54,4 +75,5 @@ class VideoAttendanceProviderClass extends ChangeNotifier {
       return [];
     }*/
   }
+  notifyListeners();
 }
