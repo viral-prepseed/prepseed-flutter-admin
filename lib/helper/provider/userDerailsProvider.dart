@@ -23,6 +23,7 @@ class UserClass extends ChangeNotifier {
   bool isLoading = false; //loading parameter
   List<US_Topics> post = [];
   List<List<TopicsList>> topicpost = [];
+  List<List<TopicsList>> topicFullPost = [];
   List<GASections> postList = [];
   List<Roadmap> roadmapList = [];
   List<ChartSampleData> chartList = [];
@@ -32,6 +33,7 @@ class UserClass extends ChangeNotifier {
   Map<dynamic, dynamic> TabContainMap = {};
   List<US_Topics> get listData => post;
   List<List<TopicsList>> get topicListData => topicpost;
+  List<List<TopicsList>> get topicListFullData => topicFullPost;
 
 
   set listData(List<US_Topics> value) {
@@ -43,6 +45,13 @@ class UserClass extends ChangeNotifier {
 
   set topicListData(List<List<TopicsList>> value) {
     topicpost = value;
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  set topicListFullData(List<List<TopicsList>> value) {
+    topicFullPost = value;
 
     isLoading = false;
     notifyListeners();
@@ -63,6 +72,10 @@ class UserClass extends ChangeNotifier {
       var value = await FuncTopics().getObjectsById(elelist.id!);
       topicListData.add(value);
     }
+
+    var topicValue = await FuncTopics().getObjects();
+    topicListFullData.add(topicValue);
+    topicListFullData.toSet().toList();
     // print(topicListData.elementAt(0).elementAt(0).name);
   }
 

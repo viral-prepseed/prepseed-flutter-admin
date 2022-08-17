@@ -171,6 +171,8 @@ class TestProviderClass extends ChangeNotifier {
 
         var _optImage = '';
 
+        var list = ['A','B','C','D','E'];
+
         for (var element in _listQue.core!.sections!) {
           List<QuestionClass> _questions = [];
           for (var elementQue in element.questions!) {
@@ -215,12 +217,13 @@ class TestProviderClass extends ChangeNotifier {
               }
 
               if(elementQue.question!.type == "MULTIPLE_CHOICE_SINGLE_CORRECT"){
-
-
+                int incNum = 0;
                   for (var multiOp in elementQue.question!.options!) {
+
                     var _isimageopt = multiOp.content;
                     if(_isimageopt == null){
-                      _options.add(Option(text: 'ABC',id: 1));
+                      _options.add(Option(text: list[incNum],id: multiOp.sId));
+
                     }else{
                       var opCont = multiOp.content!.rawContent;
                       if(opCont.runtimeType.toString() == 'String'){
@@ -228,8 +231,8 @@ class TestProviderClass extends ChangeNotifier {
                       }
                       _options.add(Option(text: convertLetX(opCont['blocks'][0]['text']),id: multiOp.sId));
                     }
+                    incNum++;
                   }
-
 
               }
 

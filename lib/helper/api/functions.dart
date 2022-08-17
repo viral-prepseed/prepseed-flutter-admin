@@ -27,24 +27,34 @@ class functions{
       }
     }
     // print(listObj.length);
-    return listObj;
+      return listObj;
   }
 
-  Future<List<SubTopicsUsr>> getObjectsBySubId( String subtopicId) async{
+  Future<List<SubTopicsUsr>> getObjectsBySubId(String topicId, String subtopicId) async{
     List<SubTopicsUsr> listObj = [];
     var datalist = await sharedPref().getSharedPref('topics');
-    var list = json.decode(datalist)[0]['sub_topics'];
-    // print(subtopicId);
-    for (var elementlist in list) {
-      // print(elementlist);
-      var usertopics = SubTopicsUsr.fromJson(elementlist);
-      if(usertopics.sId!.contains(subtopicId)){
-        listObj.add(usertopics);
-        // print(usertopics.name);
-      }else{
-        // print(usertopics.name);
+    var topicsObj;
+    var list;
+    for(var topicEle in json.decode(datalist)){
+      topicsObj = Topics.fromJson((topicEle));
+      if(topicsObj.sId == topicId){
+        list = topicsObj.subTopics;
       }
     }
+
+    if(list != null){
+      for (var elementlist in list) {
+        // print(elementlist);
+        // var usertopics = SubTopicsUsr.fromJson(elementlist);
+        if(elementlist.sId!.contains(subtopicId)){
+          listObj.add(elementlist);
+          // print(usertopics.name);
+        }else{
+          // print(usertopics.name);
+        }
+      }
+    }
+
     return listObj;
   }
 
@@ -79,7 +89,7 @@ class functions{
     var token = await sharedPref().getSharedPref('token');
     var phaseId = qId;
     var url = Strings.listQuestions+'/'+phaseId;
-    print(url);
+    // print(url);
     try {
       final res = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',

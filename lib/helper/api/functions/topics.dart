@@ -21,5 +21,18 @@ class FuncTopics{
     // print(listObj.length);
     return listObj;
   }
+
+  Future<List<TopicsList>> getObjects() async{
+    List<TopicsList> listObj = [];
+    var datalist = await sharedPref().getSharedPref('topics');
+    var list = json.decode(datalist);
+    // print(topicId);
+    for (var elementlist in list) {
+      var usertopics = TopicsList.fromJson(elementlist);
+      listObj.add(usertopics);
+    }
+    // print(listObj.length);
+    return listObj;
+  }
   
 }

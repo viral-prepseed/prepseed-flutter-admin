@@ -142,7 +142,7 @@ class _prepSeed_loginState extends State<prepSeed_login> {
                                   children: [
                                     // Image(image: NetworkImage(map['logo']),width: 45,),
                                     CachedNetworkImage(
-                                      imageUrl: map['logo'],
+                                      imageUrl: map['logo'] ?? "",
                                       placeholder: (context, url) => const CircleAvatar(
                                         backgroundColor: Colors.amber,
                                         // radius: 150,

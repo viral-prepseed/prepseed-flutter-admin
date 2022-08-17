@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:prepseed/model/execute/tests/list_questions.dart';
 import 'package:prepseed/model/questions.dart';
 
@@ -528,6 +529,7 @@ class _questionWidgetState extends State<questionWidget> {
           Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
           const SizedBox(height: 10,),
           linked_ques(question),
+          (s.toString() != '') ?
           TeXView(
           child: TeXViewColumn(children: [
             _teXViewWidget((s.toString())),
@@ -542,11 +544,13 @@ class _questionWidgetState extends State<questionWidget> {
               borderWidth: 5)),
           backgroundColor: Colors.white,
         ),
-      ),
+      ) : Container(),
 
           // Text(question.text, style: GoogleFonts.poppins(fontSize: 13),),
           (question.queImage != '')?
-          Image(image: NetworkImage(question.queImage)) :
+          Image(image: NetworkImage(question.queImage),
+            // height: 190,
+            fit: BoxFit.contain,) :
           Container(),
           (question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT') ?
           Column(
@@ -595,7 +599,10 @@ class _questionWidgetState extends State<questionWidget> {
           ) : (question.type == 'RANGE') ?
           TextField(
             controller: Provider.of<TestProviderClass>(context,listen: false).textController,
-            decoration: InputDecoration(labelText: "Your Answer"),
+            inputFormatters: [
+              FilteringTextInputFormatter(RegExp(r"(\-)?\d+\.?\d{0,30}"), allow: true),
+            ],
+            decoration: const InputDecoration(labelText: "Your Answer"),
             keyboardType: TextInputType.number,
           ) : Column(
             children: List.generate(question.options.length, (index) {
@@ -661,5 +668,3 @@ class _questionWidgetState extends State<questionWidget> {
   }
 
 }
-
-

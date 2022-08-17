@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:prepseed/views/menu/menu_widget.dart';
 
 import '../../../constants/colorPalate.dart';
 import '../../../helper/provider/testsProvider.dart';
+import '../../helper/api/functions/execute.dart';
 import '../../model/assesments/getwrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,9 +33,6 @@ class _livetestState extends State<livetest> {
   Map finalMap = Map();
   Map finalMapTopicMock = Map();
   late Map<String, List<dynamic>> testMapped = {};
-
-
-
 
   @override
   void initState() {
@@ -74,16 +73,6 @@ class _livetestState extends State<livetest> {
                           return Tab(
                             text: '${context.watch<TestProviderClass>().tabValues.elementAt(index)}',);
                         }
-
-                        /*[
-
-                          List.(
-                            itemCount: 4, //length according to data present
-                            itemBuilder: (BuildContext context, int index) {
-                              return Tab(text: '${context.watch<TestProviderClass>().tabValues.elementAt(index)}',);
-                            },
-                          )
-                        ],*/
                       ),
                       ),
                       SizedBox(height: 15.0,),
@@ -199,8 +188,56 @@ class _livetestState extends State<livetest> {
   }
 
 
-  showDialogBox(){
+
+  showDialogBox() async {
+    var res = await executeFunc().assignment();
+    var response = json.decode(res.body);
+    // getCore(response);
     Map<dynamic,List<SubInstructions>> maplist = {};
+    late var coreobjlist = [];
+    List topicList = [];
+    List subtopicList = [];
+    Map topic_subTopics = {};
+
+    for(var eleinst in response['core']['instructions']){
+      var coreobj = Instructions.fromJson(eleinst);
+
+      // coreobj.instructions?.forEach((element) {
+      maplist[coreobj.instruction] = (coreobj.subInstructions!.isNotEmpty)? ((coreobj.subInstructions!)) : [];
+      coreobjlist.add(coreobj.instruction);
+      // });
+
+      setState(() {
+        maplist;
+        coreobjlist;
+      });
+    }
+
+    var syllabusObj = Syllabus.fromJson(response['core']['syllabus']).topics;
+
+    for(var eleSyllabus in syllabusObj!){
+
+      var data = await functions().getObjectsById(eleSyllabus.id!);
+      if(data.isNotEmpty){
+        topicList.add(data.first.name);
+      }
+      // print(data.first.name);
+
+      for(var eleTopics in eleSyllabus.subTopics!){
+        var datas = await functions().getObjectsBySubId(eleSyllabus.id!,eleTopics.id!);
+        if(datas.isNotEmpty){
+          subtopicList.add(datas.first.name);
+          topic_subTopics[data.first.name] = datas.first.name;
+        }
+        // print(datas.first.name);
+      }
+    }
+
+/*    print(topicList);
+    print(subtopicList);
+    print(topic_subTopics);*/
+
+
     Future.delayed(Duration.zero, () async {
       return showDialog(context: context, builder: (context){
         return Dialog(
@@ -243,7 +280,8 @@ class _livetestState extends State<livetest> {
                                             itemCount: values.length,
                                             itemBuilder: (cntx,idx){
                                               var data = values.elementAt(idx).instruction;
-                                              return Text(data??'', style: GoogleFonts.poppins(fontSize: 12,));
+                                              return Text(data??'', style: GoogleFonts.poppins(fontSize: 12,
+                                                  color: Constants.black));
                                             }),
                                         const SizedBox(height: 5,)
                                       ],
@@ -258,17 +296,24 @@ class _livetestState extends State<livetest> {
                                 // activeSession = true;
                               });
                               Navigator.of(context).pop();
-
-
-
                               var route = MaterialPageRoute(builder: (BuildContext context) => attempt_liveTest());
                               Navigator.of(context).push(route);
                             }, child: const Text('Begin Test')),
                           ),
                         ],
                       ),
-                      Container()
-                      // Container(child: Text('smdfnjskfb'),),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: List.generate(topic_subTopics.length, (index) => Column(
+                            children: [
+                              Text(topic_subTopics.keys.elementAt(index),
+                                  style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
+                              Text(topic_subTopics.values.elementAt(index)),
+                              const Divider(color: Colors.grey,)
+                            ],
+                          )),
+                        ),
+                      )
                     ],
                   ))
                 ],

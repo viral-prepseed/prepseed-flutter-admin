@@ -53,7 +53,7 @@ class _InitializeProviderScreenState extends State<InitializeProviderScreen> {
           case ConnectionState.active:
             return Text('');
           case ConnectionState.waiting:
-            return Commons.loading("Fetching Data For You...");
+            return Commons.loading("Fetching Data...");
           case ConnectionState.done:
             if (snapshot.hasError) {
               /*return Error(
@@ -63,7 +63,7 @@ class _InitializeProviderScreenState extends State<InitializeProviderScreen> {
               return viewAnalysis();
             }
         }
-        return Commons.loading("Fetching Data For You...");
+        return Commons.loading("Fetching Data...");
       },
     );
   }
