@@ -42,9 +42,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     var InstituteName = prefs.getString('InstituteName');
     var InstituteLogo = prefs.getString('InstituteLogo');
 
-    print(username);
+    /*print(username);
     print(InstituteName);
-    print(InstituteLogo);
+    print(InstituteLogo);*/
 
     Timer(Duration(seconds: 1), () => Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (BuildContext context) =>

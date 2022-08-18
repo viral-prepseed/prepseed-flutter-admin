@@ -73,6 +73,8 @@ class _mainScreenState extends State<mainScreen> {
 
   initProvider(){
     Future.microtask(() async => {
+      await Provider.of<VideosProvider>(context, listen: false)
+          .getSubscriptions(),
       await Provider.of<ReportClass>(context, listen: false)
           .getReportsAPI(),
       await Provider.of<TestProviderClass>(context, listen: false)
@@ -85,8 +87,7 @@ class _mainScreenState extends State<mainScreen> {
           .getAnnouncement(),
       await Provider.of<VideosProvider>(context, listen: false)
           .getDoubt(),
-      await Provider.of<VideosProvider>(context, listen: false)
-          .getSubscriptions(),
+
       await Provider.of<LeadershipClass>(context, listen: false)
           .apiCall(),
       await Provider.of<AssessmentWrappersClass>(context, listen: false)

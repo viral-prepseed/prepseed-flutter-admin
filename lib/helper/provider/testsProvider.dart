@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:prepseed/main.dart';
 import 'package:prepseed/model/assesments/getwrapper.dart';
 import 'package:prepseed/model/questions.dart';
+import 'package:prepseed/views/learn/assignments.dart';
 
 import '../../constants/strings.dart';
 import '../../model/execute/tests/list_questions.dart';
@@ -21,6 +22,14 @@ class TestProviderClass extends ChangeNotifier {
   List<AssessmentWrappers> post = [];
   list_questions? _assessment;
   List TabValues = [];
+  List str = [];
+  List type = [];
+  List strVal = [];
+  List dataValue = [];
+  Map<dynamic,dynamic> map ={};
+  Map<dynamic,dynamic> mapList ={};
+  Map<dynamic,dynamic> mapData = {};
+  Map<dynamic,dynamic> mapItems = {};
   List<QuestionClass> questions = [];
   List<AssessmentWrappers> TabContainList = [];
   Map<dynamic, dynamic> TabContainMap = {};
@@ -31,6 +40,7 @@ class TestProviderClass extends ChangeNotifier {
   Map get listTopics => mapTopic;
   String get optionVal => _optionVal;
   bool get isReset => _isReset;
+  List<AssessmentWrappers> tagValue = [];
   TextEditingController get textController => _textController;
 
   get listLength => listData.length;
@@ -48,6 +58,7 @@ class TestProviderClass extends ChangeNotifier {
     notifyListeners();
   }
 
+
   set isReset(bool _val){
     _isReset = _val;
     notifyListeners();
@@ -57,7 +68,9 @@ class TestProviderClass extends ChangeNotifier {
   get tabValues => TabValues.toSet().toList();*/
 
   Map<dynamic, dynamic> get tabContains => TabContainMap;
+  Map<dynamic, dynamic> get mapTab => map;
 
+  Map<dynamic, dynamic> get mapItemsList => mapItems;
 
   set listData(List<AssessmentWrappers> value) {
     post = value;
@@ -121,9 +134,8 @@ class TestProviderClass extends ChangeNotifier {
         for (var element in resbodyWrapper.assessmentWrappers!) {
           filesList.add(element);
         }
-
         listData = filesList;
-        // print(listData);
+        calTag();
         return listData;
       } else {
         ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(const SnackBar(
@@ -143,8 +155,69 @@ class TestProviderClass extends ChangeNotifier {
       return [];
     }
   }
+  List playList = [];
+  List data = [];
 
+  calTag(){
 
+    listData.forEach((element) {
+      if(element.tags!.isNotEmpty){
+      str.add(element.tags![0].value.toString().trim());
+
+      }
+      type.add(element.type);
+    });
+
+    //str = str.toSet().toList(); //tabValues
+    str = str.toSet().toList();
+    type = type.toSet().toList();
+      listData.forEach((list) {
+        if(list.tags!.isEmpty){
+          if(type[0] != list.type){
+            tagValue.add(list);
+          }
+        }
+      });
+    print(tagValue);
+    str.forEach((element) {
+      playList = [];
+      listData.forEach((elementList) {
+        if(elementList.tags!.isNotEmpty){
+        if(element == elementList.tags![0].value.toString().trim()){
+          playList.add(elementList);
+        }}
+      });
+      map[element] = playList;
+      map.forEach((key, value) {
+        value.forEach((element){
+          if(element.tags!.isNotEmpty){
+          data.add(element.tags[1].value);}
+        });
+        data = data.toSet().toList();
+        mapList[key] = data;
+        data = [];
+      });
+      mapList.forEach((key, value) {
+        value.forEach((val){
+         map.forEach((keys,values) {
+           values.forEach((data){
+             if(data.tags!.isNotEmpty){
+             if(val == data.tags![1].value){
+               dataValue.add(data);
+             }}
+           });
+           mapData[val] = dataValue;
+           dataValue = [];
+           //mapList[key] = mapData;
+         });
+        });
+        mapItems[element] = mapData;
+        mapData = {};
+      });
+    });
+
+  }
+  Map<dynamic,dynamic> fin = {};
   Future<list_questions?> assessments(assessmentWrapperId) async {
     //function to call API using Http package
     var token = await sharedPref().getSharedPref('token');

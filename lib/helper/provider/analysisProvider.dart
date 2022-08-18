@@ -206,11 +206,10 @@ print(wrapperId);*/
           'authorization': 'Bearer $token',
         },
         body: json.encode(bodydata));
-    if (200 == response.statusCode) {
+    if (response.statusCode == 200 ) {
       var responseJson = json.decode(response.body);
       heldOn = responseJson['from'];
       submittedOn = responseJson['submittedOn'];
-
 
       return listData;
     } else {

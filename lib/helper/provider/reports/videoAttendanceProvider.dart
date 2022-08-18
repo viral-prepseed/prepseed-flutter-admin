@@ -32,13 +32,14 @@ class VideoAttendanceProviderClass extends ChangeNotifier {
     //function to call API using Http package
     var phaseId = await sharedPref().getSharedPref('phaseId');
     String url = Strings.videoAttendance+'/$phaseId';//+phaseId;
-    // try {
-      final response = await http.get(Uri.parse(url), headers: {
+    final response = await http.get(Uri.parse(url),
+        headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       });
       // var resp = json.decode(response.body)['items'];
       if (200 == response.statusCode) {
+
         final List<Items> lst = [];
         // print(response.body);
         filesList = videos_attendance.fromJson(json.decode(response.body));
@@ -46,13 +47,13 @@ class VideoAttendanceProviderClass extends ChangeNotifier {
           if(filesList.items!.first.resourceModel == "Video"){
             listData.addAll(filesList.items!);
           }
-        }*/;
+        }*/
         filesList.items!.forEach((element) {
             if(element.subject != null){
               subjectName.add(element.subject);
             }
         });
-        //print(subjectName);
+
         subjectName = subjectName.toSet().toList();
         subjectName.forEach((element) {
           List playList = [];
@@ -65,7 +66,6 @@ class VideoAttendanceProviderClass extends ChangeNotifier {
           });
           map[element] = playList;
         });
-        //print(items);
         return lst;
       } else {
         return [];

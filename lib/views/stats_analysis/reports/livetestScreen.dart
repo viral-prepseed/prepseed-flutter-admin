@@ -124,8 +124,8 @@ class _liveScreenState extends State<liveScreen> {
    //final provMdl = Provider.of<ReportClass>(context);
     listOfColumns = Provider.of<ReportClass>(context).listOfColumns;
     listOfItems = Provider.of<ReportClass>(context).items;
-    print(listOfColumns);
-    print(listOfItems);
+   /* print(listOfColumns);
+    print(listOfItems);*/
     /*listOfColumns =  [{'Name': 'APT01 Paper 1', 'Date': '2022-05-15T03:30:48.289Z', 'overall': [71, 112, 66], 'physics': [48, 56, 31], 'chemistry': [6, 37, 16], 'mathematics': [17, 38, 18]},
     {'Name': 'APT01 Paper 1', 'Date': '2022-05-15T03:30:48.289Z', 'overall': [71, 112, 66], 'physics': [48, 56, 31], 'chemistry': [6, 37, 16], 'mathematics': [17, 38, 18]}];
     */
@@ -153,22 +153,34 @@ class _liveScreenState extends State<liveScreen> {
                     Text(listOfColumns[index].values.elementAt(0).toString()),
                     SizedBox(height: 5.0,),
                     Container(
-                      height: 110.0,
+                      height: 120.0,
                      // padding: EdgeInsets.all(10.0),
                       decoration:conDecoration,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: [
-                          Padding(
+                          Container(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Subject',style: Style.textStyleBold13,),
-                                Text(listOfColumns[index].keys.elementAt(2).toString()),
-                                Text(listOfColumns[index].keys.elementAt(3).toString()),
+                                Container(
+                                  height: 70.0,
+                                  width: 70.0,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: listOfColumns[index].length,
+                                    itemBuilder: (context,ind){
+                                      return listOfColumns[index].values.elementAt(ind).runtimeType != String ? Text(listOfColumns[index].keys.elementAt(ind).toString(),overflow: TextOverflow.ellipsis,)
+                                      : Container();
+                                    },
+                                  ),
+                                ),
+                           /*     Text(listOfColumns[index].keys.elementAt(2).toString()),
+                                ,
                                 Text(listOfColumns[index].keys.elementAt(4).toString()),
-                                Text(listOfColumns[index].keys.elementAt(5).toString()),
+                                Text(listOfColumns[index].keys.elementAt(5).toString()),*/
                               ],
                             ),
                           ),
@@ -181,10 +193,22 @@ class _liveScreenState extends State<liveScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Your Marks',style: Style.textStyleBold13,),
-                                Text("${listOfColumns[index].values.elementAt(2)[0].toString()}/${listOfColumns[index].values.elementAt(2)[2].toString()}"),
-                                Text("${listOfColumns[index].values.elementAt(3)[0].toString()}/${listOfColumns[index].values.elementAt(3)[2].toString()}"),
-                                Text("${listOfColumns[index].values.elementAt(4)[0].toString()}/${listOfColumns[index].values.elementAt(4)[2].toString()}"),
-                                Text("${listOfColumns[index].values.elementAt(5)[0].toString()}/${listOfColumns[index].values.elementAt(5)[2].toString()}"),
+                                Container(
+                                  height: 70.0,
+                                  width: 50.0,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: listOfColumns[index].length,
+                                    itemBuilder: (context,ind){
+                                      return listOfColumns[index].values.elementAt(ind).runtimeType != String ? Text("${listOfColumns[index].values.elementAt(ind)[0].toString()}/${listOfColumns[index].values.elementAt(ind)[2].toString()}"):
+                                      Container();
+                                    },
+                                  ),
+                                ),
+                               // Text("${listOfColumns[index].values.elementAt(2)[0].toString()}/${listOfColumns[index].values.elementAt(2)[2].toString()}"),
+
+                               /* Text("${listOfColumns[index].values.elementAt(4)[0].toString()}/${listOfColumns[index].values.elementAt(4)[2].toString()}"),
+                                Text("${listOfColumns[index].values.elementAt(5)[0].toString()}/${listOfColumns[index].values.elementAt(5)[2].toString()}"),*/
                               ],
                             ),
                           ),
@@ -197,10 +221,24 @@ class _liveScreenState extends State<liveScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Percentage',style: Style.textStyleBold13,),
-                                Text((listOfColumns[index].values.elementAt(2)[0]/listOfColumns[index].values.elementAt(2)[2]*100).toString().substring(0,3)),
-                                Text((listOfColumns[index].values.elementAt(3)[0]/listOfColumns[index].values.elementAt(3)[2]*100).toString().substring(0,3)),
-                                Text((listOfColumns[index].values.elementAt(4)[0]/listOfColumns[index].values.elementAt(4)[2]*100).toString().substring(0,3)),
-                                Text((listOfColumns[index].values.elementAt(5)[0]/listOfColumns[index].values.elementAt(5)[2]*100).toString().substring(0,3)),
+                                Container(
+                                  height: 70.0,
+                                  width: 50.0,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: listOfColumns[index].length,
+                                    itemBuilder: (context,ind){
+                                      return listOfColumns[index].values.elementAt(ind).runtimeType != String ? listOfColumns[index].values.elementAt(ind)[2] != null ? Text((listOfColumns[index].values.elementAt(ind)[0]/listOfColumns[index].values.elementAt(ind)[2]*100).toString().substring(0,3))
+                                      : Text((listOfColumns[index].values.elementAt(ind)[0]/0*100).toString().substring(0,3))
+                                      : Container();
+                                    },
+                                  ),
+                                ),
+                                //Text((listOfColumns[index].values.elementAt(3)[0]/listOfColumns[index].values.elementAt(3)[2]*100).toString().substring(0,3)),
+                              /*  Text((listOfColumns[index].values.elementAt(4)[0]/listOfColumns[index].values.elementAt(4)[2]*100).toString().substring(0,3)),
+                                listOfColumns[index].values.elementAt(5)[2] != null
+                                    ? Text((listOfColumns[index].values.elementAt(5)[0]/listOfColumns[index].values.elementAt(5)[2]*100).toString().substring(0,3))
+                                :Text((listOfColumns[index].values.elementAt(5)[0]/0*100).toString().substring(0,3)),*/
                               ],
                             ),
                           ),
@@ -212,11 +250,23 @@ class _liveScreenState extends State<liveScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Avarage Marks',style: Style.textStyleBold13,),
-                                Text(listOfColumns[index].values.elementAt(2)[3].toString()),
-                                Text(listOfColumns[index].values.elementAt(3)[3].toString()),
-                                Text(listOfColumns[index].values.elementAt(4)[3].toString()),
-                                Text(listOfColumns[index].values.elementAt(5)[3].toString()),
+                                Text('Average Marks',style: Style.textStyleBold13,),
+                                Container(
+                                  height: 70.0,
+                                  width: 50.0,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: listOfColumns[index].length,
+                                    itemBuilder: (context,ind){
+                                      return listOfColumns[index].values.elementAt(ind).runtimeType != String ? Text(listOfColumns[index].values.elementAt(ind)[3].toString())
+                                          : Container();
+                                    },
+                                  ),
+                                ),
+
+                                //   Text(listOfColumns[index].values.elementAt(3)[4].toString()),
+                                /*    Text(listOfColumns[index].values.elementAt(4)[4].toString()),
+                                Text(listOfColumns[index].values.elementAt(5)[4].toString()),*/
                               ],
                             ),
                           ),
@@ -229,10 +279,22 @@ class _liveScreenState extends State<liveScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Highest Marks',style: Style.textStyleBold13,),
-                                Text(listOfColumns[index].values.elementAt(2)[4].toString()),
-                                Text(listOfColumns[index].values.elementAt(3)[4].toString()),
-                                Text(listOfColumns[index].values.elementAt(4)[4].toString()),
-                                Text(listOfColumns[index].values.elementAt(5)[4].toString()),
+                                Container(
+                                  height: 70.0,
+                                  width: 50.0,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: listOfColumns[index].length,
+                                    itemBuilder: (context,ind){
+                                      return listOfColumns[index].values.elementAt(ind).runtimeType != String ?  Text(listOfColumns[index].values.elementAt(ind)[4].toString())
+                                      : Container();
+                                    },
+                                  ),
+                                ),
+
+                             //   Text(listOfColumns[index].values.elementAt(3)[4].toString()),
+                            /*    Text(listOfColumns[index].values.elementAt(4)[4].toString()),
+                                Text(listOfColumns[index].values.elementAt(5)[4].toString()),*/
                               ],
                             ),
                           ),
@@ -245,10 +307,23 @@ class _liveScreenState extends State<liveScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Toper Marks',style: Style.textStyleBold13,),
-                                Text(listOfColumns[index].values.elementAt(2)[5].toString()),
-                                Text(listOfColumns[index].values.elementAt(3)[5].toString()),
-                                Text(listOfColumns[index].values.elementAt(4)[5].toString()),
-                                Text(listOfColumns[index].values.elementAt(5)[5].toString()),
+                                Container(
+                                  height: 70.0,
+                                  width: 50.0,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: listOfColumns[index].length,
+                                    itemBuilder: (context,ind){
+                                      return listOfColumns[index].values.elementAt(ind).runtimeType != String ? Text(listOfColumns[index].values.elementAt(ind)[5].toString())
+                                      : Container();
+                                    },
+                                  ),
+                                ),
+
+
+                               // Text(listOfColumns[index].values.elementAt(3)[5].toString()),
+                             /*   Text(listOfColumns[index].values.elementAt(4)[5].toString()),
+                                Text(listOfColumns[index].values.elementAt(5)[5].toString()),*/
                               ],
                             ),
                           ),
@@ -261,10 +336,21 @@ class _liveScreenState extends State<liveScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Percentile',style: Style.textStyleBold13,),
-                                Text('16.66'),
-                                Text('16.66'),
-                                Text('16.66'),
-                                Text('16.66'),
+                                Container(
+                                  height: 70.0,
+                                  width: 50.0,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: listOfColumns[index].length,
+                                    itemBuilder: (context,ind){
+                                      return  listOfColumns[index].values.elementAt(ind).runtimeType != String ? Text('16.66') : Container();
+                                    },
+                                  ),
+                                ),
+
+                               // Text('16.66'),
+                               /* Text('16.66'),
+                                Text('16.66'),*/
                               ],
                             ),
                           ),
@@ -277,10 +363,22 @@ class _liveScreenState extends State<liveScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Cumulative Percentile',style: Style.textStyleBold13,),
-                                Text(listOfColumns[index].values.elementAt(2)[1].toString()),
-                                Text(listOfColumns[index].values.elementAt(3)[1].toString()),
-                                Text(listOfColumns[index].values.elementAt(4)[1].toString()),
-                                Text(listOfColumns[index].values.elementAt(5)[1].toString()),
+                                Container(
+                                  height: 70.0,
+                                  width: 50.0,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: listOfColumns[index].length,
+                                    itemBuilder: (context,ind){
+                                      return listOfColumns[index].values.elementAt(ind).runtimeType != String ? Text(listOfColumns[index].values.elementAt(ind)[1].toString()):
+                                      Container();
+                                    },
+                                  ),
+                                ),
+
+                               // Text(listOfColumns[index].values.elementAt(3)[1].toString()),
+                              /*  Text(listOfColumns[index].values.elementAt(4)[1].toString()),
+                                Text(listOfColumns[index].values.elementAt(5)[1].toString()),*/
                               ],
                             ),
                           ),

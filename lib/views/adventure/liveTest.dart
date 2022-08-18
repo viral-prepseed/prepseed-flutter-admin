@@ -9,6 +9,7 @@ import 'package:prepseed/views/menu/menu_widget.dart';
 
 import '../../../constants/colorPalate.dart';
 import '../../../helper/provider/testsProvider.dart';
+import '../../constants/theme/style.dart';
 import '../../model/assesments/getwrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../helper/sharedPref.dart';
 import '../execute/test/AttemptTest.dart';
 import '../execute/test/viewAnalysis.dart';
+import '../stats_analysis/reports/testScreen.dart';
 
 class livetest extends StatefulWidget {
   const livetest({Key? key}) : super(key: key);
@@ -35,7 +37,7 @@ class _livetestState extends State<livetest> {
 
 
 
-  @override
+ /* @override
   void initState() {
      Future.microtask(() async => {
       await Provider.of<TestProviderClass>(context, listen: false)
@@ -43,9 +45,17 @@ class _livetestState extends State<livetest> {
     });
     // getWrappers_res = getWrappers();
   }
-
+*/
   @override
   Widget build(BuildContext context) {
+    BoxDecoration conDecoration = BoxDecoration(
+        border: Border.all(
+          color: Colors.grey,
+        ),
+        borderRadius: const BorderRadius.all(
+            Radius.circular(10.0))
+    );
+    final myModel = Provider.of<TestProviderClass>(context);
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
@@ -55,45 +65,157 @@ class _livetestState extends State<livetest> {
               backgroundColor: Constants.backgroundColor,
             ),
             // backgroundColor: Constants.backgroundColor,
-            body: Consumer<TestProviderClass>(builder: (context, myModel, child){
-              return DefaultTabController(
-                length: myModel.tabLength,
-                child: Scaffold(
-                  body: Column(
+            body: ChangeNotifierProvider.value(
+              value: myModel,
+              child: Consumer(builder: (context, model, child){
+                return  Column(
                     children: [
-                      TabBar(
-                        isScrollable: true,
-                        indicatorColor: Constants.blue,
-                        labelColor: Constants.white.withOpacity(0.8),
-                        unselectedLabelColor: Constants.white.withOpacity(0.5),
-                        labelStyle: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                        ),
-                        tabs: List.generate(myModel.tabLength, (index) {
-                          return Tab(
-                            text: '${context.watch<TestProviderClass>().tabValues.elementAt(index)}',);
-                        }
 
-                        /*[
+                      SizedBox(height: 15.0,),
+                      Expanded(
+                          child: ListView.builder(
+                            itemCount: myModel.mapItemsList.length,
+                            itemBuilder: (context,index){
+                              return Container(
+                                child: ExpansionTile(
+                                  title: Text(myModel.mapItemsList.keys.elementAt(index).toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                  ),
+                                  children: [
+                                    Container(
+                                     /* height : MediaQuery.of(context).size.height/4,*/
+                                      child: GridView.builder(
+                                        physics: ScrollPhysics(),
 
-                          List.(
-                            itemCount: 4, //length according to data present
-                            itemBuilder: (BuildContext context, int index) {
-                              return Tab(text: '${context.watch<TestProviderClass>().tabValues.elementAt(index)}',);
+                                        shrinkWrap: true,
+                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            mainAxisSpacing: 1.0,
+                                            crossAxisSpacing: 1.0,
+                                            mainAxisExtent: 90.0
+                                        ),
+                                        itemCount: myModel.mapItemsList.values.elementAt(index).length,
+                                       // scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context,ind){
+                                          return InkWell(
+                                            onTap: (){
+                                              print('hyy');
+                                              Navigator.of(context).push(MaterialPageRoute(
+                                                  builder: (context) => TestScreen(list: myModel.mapItemsList.values.elementAt(index).values.elementAt(ind))));
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10.0),
+                                              margin: const EdgeInsets.all(10.0),
+                                              decoration:conDecoration,
+                                              child: Column(
+                                                // mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(myModel.mapItemsList.values.elementAt(index).keys.elementAt(ind).toString(),
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: Style.textStyleRegular13Black),
+                                                  SizedBox(height: 10.0,),
+                                                  Text('0/${myModel.mapItemsList.values.elementAt(index).values.elementAt(ind).length}',
+                                                      style: Style.textStyleRegular13Black)
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+
+                                      ),
+                                      padding: EdgeInsets.all(10.0),
+                                    ),
+                                  ],
+                                ),
+                              );/* Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ExpansionTile(
+                                    title: Text(myModel.mapItemsList.keys.elementAt(index).toString()),
+                                    children: [
+                                      ListView.builder(
+                                        itemCount: myModel.mapItemsList.values.elementAt(index).length,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context,ind){
+                                          return InkWell(
+                                            onTap: (){
+                                              print('hyy');
+                                              Navigator.of(context).push(MaterialPageRoute(
+                                                  builder: (context) => TestScreen(list: myModel.mapItemsList.values.elementAt(index).values.elementAt(ind))));
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10.0),
+                                              margin: const EdgeInsets.all(10.0),
+                                              width: 150.0,
+                                              decoration:conDecoration,
+                                              child: Column(
+                                                // mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(myModel.mapItemsList.values.elementAt(index).keys.elementAt(ind).toString(),
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: Style.textStyleBold13),
+                                                  SizedBox(height: 10.0,),
+                                                  Text('0/${myModel.mapItemsList.values.elementAt(index).values.elementAt(ind).length}',
+                                                      style: Style.textStyleRegular13Black)
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+
+                                      ),
+                                    ],
+                                  ),
+                                 *//* Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(myModel.mapItemsList.keys.elementAt(index).toString(),
+                                        style: Style.textStyleBold15),
+                                  ),
+                                  SizedBox(
+                                    height: 90,
+                                    child: ListView.builder(
+                                      itemCount: myModel.mapItemsList.values.elementAt(index).length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context,ind){
+                                        return InkWell(
+                                          onTap: (){
+                                            print('hyy');
+                                            Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) => TestScreen(list: myModel.mapItemsList.values.elementAt(index).values.elementAt(ind))));
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10.0),
+                                            margin: const EdgeInsets.all(10.0),
+                                            width: 150.0,
+                                            decoration:conDecoration,
+                                            child: Column(
+                                             // mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(myModel.mapItemsList.values.elementAt(index).keys.elementAt(ind).toString(),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: Style.textStyleBold13),
+                                                SizedBox(height: 10.0,),
+                                                Text('0/${myModel.mapItemsList.values.elementAt(index).values.elementAt(ind).length}',
+                                                    style: Style.textStyleRegular13Black)
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+
+                                    ),
+                                  )*//*
+                                ],
+                              );*/
                             },
                           )
-                        ],*/
-                      ),
-                      ),
-                      SizedBox(height: 15.0,),
-                      Expanded(child:
-                      TabBarView(
-                        children:
-                        List.generate(myModel.tabLength, (index) {
-                          // print(myModel.tabContains);
-                          var tablen = myModel.tabContains.values.elementAt(index).length;
-                          return ListView.separated(
+                           /*ListView.separated(
                             separatorBuilder: (context, index) => SizedBox(height: 20,),
                             itemCount: myModel.tabContains.values.elementAt(index).length == null ? 0 : myModel.tabContains.values.elementAt(index).length,
                             itemBuilder: (BuildContext context, int idx) {
@@ -161,8 +283,8 @@ class _livetestState extends State<livetest> {
 
                                                   (snapshot.data!.contains('Attempt'))? showDialogBox() :
                                                   Navigator.of(context).push(route);
-                                                  /*var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
-                                                  Navigator.of(context).push(route);*/
+                       // var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
+                                                  Navigator.of(context).push(route);
                                           },
                                               child: Text(snapshot.data!)
                                           );
@@ -170,14 +292,15 @@ class _livetestState extends State<livetest> {
                                                 return Text('Loading data');
                                               }
                                             },
-                                          )
+                                          ),
 
-                                          /*ElevatedButton(onPressed: (){
-                                            *//*var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
-                                            Navigator.of(context).push(route);*//*
+                       */
+                          /* ElevatedButton(onPressed: (){
+                                            var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
+                                            Navigator.of(context).push(route);
                                           },
                                               child: Text('${functions().getWrapperApiCall('${asw.elementAt(idx).sId}').then((String value) => value)}')
-                                          )*/
+                                          )*//*
                                         ],
                                       ),
                                     ),
@@ -185,15 +308,14 @@ class _livetestState extends State<livetest> {
                                 ),
                               );
                             },
-                          );
-                        })
-                      )
+                          );*/
+
                       ),
                     ],
-                  ),
-                ),
-              );
-            })
+                  );
+
+              }),
+            )
         )
     );
   }

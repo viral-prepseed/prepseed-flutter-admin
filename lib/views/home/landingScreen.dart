@@ -23,6 +23,7 @@ import 'package:prepseed/views/home/mainScreen.dart';
 import 'package:prepseed/views/login/prepseed_loginScreen.dart';
 import 'package:prepseed/views/stats_analysis/analysis/analysis.dart';
 import 'package:prepseed/views/learning_module/videos/videos_homescreen.dart';
+import 'package:prepseed/views/stats_analysis/reports/topicTest.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:prepseed/views/stats_analysis/reports/reports.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -107,6 +108,8 @@ class _landingScreenState extends State<landingScreen> {
         return quantized_sheet();*/
 /*      case MenuItems.logout:
         return logout();*/
+      case MenuItems.topicTests :
+        return TopicTest();
       case MenuItems.Tests :
       default:
         return livetest();//test();

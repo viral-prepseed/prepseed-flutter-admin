@@ -55,7 +55,7 @@ class UserClass extends ChangeNotifier {
   apiCall() async {
     var datalist = await sharedPref().getSharedPref('stats');
     UserStats list = UserStats.fromJson(json.decode(datalist)) ;
-    print(list.runtimeType);
+    /*print(list.runtimeType);*/
     /*var userStats = US_Topics.fromJson(list);
     print(userStats);*/
     for(var elelist in list.topics!){

@@ -23,6 +23,8 @@ class MenuItems{
   static const announcement = MainMenuItems('Announcements',Icons.announcement_outlined);
   static const doubt = MainMenuItems('Doubt', Icons.error);
    static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
+  static const topicTests = MainMenuItems('Topic Tests',Icons.assignment_outlined);
+
   static const chats = MainMenuItems("Chats", Icons.message);
 
   // static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
@@ -39,6 +41,7 @@ class MenuItems{
     practice,
     // quantizedSheet,
     Tests,
+     topicTests
    /* announcement,
     doubt,
     chats*/
