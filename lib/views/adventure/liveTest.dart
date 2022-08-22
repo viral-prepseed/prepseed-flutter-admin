@@ -68,10 +68,11 @@ class _livetestState extends State<livetest> {
             body: ChangeNotifierProvider.value(
               value: myModel,
               child: Consumer(builder: (context, model, child){
-                return  Column(
+                return myModel.mapItemsList.isNotEmpty ?
+                Column(
                     children: [
-
                       SizedBox(height: 15.0,),
+
                       Expanded(
                           child: ListView.builder(
                             itemCount: myModel.mapItemsList.length,
@@ -312,7 +313,7 @@ class _livetestState extends State<livetest> {
 
                       ),
                     ],
-                  );
+                  ) : Center(child: Text("No Live Test Found..."),);
 
               }),
             )

@@ -173,7 +173,7 @@ class TestProviderClass extends ChangeNotifier {
     type = type.toSet().toList();
       listData.forEach((list) {
         if(list.tags!.isEmpty){
-          if(type[0] != list.type){
+          if(type[0] == list.type){
             tagValue.add(list);
           }
         }

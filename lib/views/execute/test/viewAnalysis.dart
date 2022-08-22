@@ -134,16 +134,16 @@ class _viewAnalysisState extends State<viewAnalysis> with SingleTickerProviderSt
     final myModel = Provider.of<AnalysisClass>(context);
     return Scaffold(
       body: myModel.submissionObj != null
-          ? ChangeNotifierProvider.value(
-        value: myModel,
-        child: Consumer(builder: (context,my, child){
-          List<GASections> sectionList = myModel.sectionList;
-          double correctTime = (myModel.submissionObj!.meta!.correctTime/60) ?? 0.0;
-          double incorrectTime = (myModel.submissionObj!.meta!.incorrectTime/60) ?? 0.0;
-          double unattemptedTime = (myModel.submissionObj!.meta!.unattemptedTime/60) ?? 0.0;
-          // print(myModel.core!.hist);
-          return SafeArea(
-            child: SingleChildScrollView(
+        ? ChangeNotifierProvider.value(
+          value: myModel,
+          child: Consumer(builder: (context,my, child){
+            List<GASections> sectionList = myModel.sectionList;
+            double correctTime = (myModel.submissionObj!.meta!.correctTime/60) ?? 0.0;
+            double incorrectTime = (myModel.submissionObj!.meta!.incorrectTime/60) ?? 0.0;
+            double unattemptedTime = (myModel.submissionObj!.meta!.unattemptedTime/60) ?? 0.0;
+            // print(myModel.core!.hist);
+            return SafeArea(
+              child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(

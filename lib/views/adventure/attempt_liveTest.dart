@@ -555,7 +555,7 @@ class _questionWidgetState extends State<questionWidget> {
                 title:
                 TeXView(
                   child: TeXViewColumn(children: [
-                    _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
+                    _teXViewWidget((question.options.elementAt(index).text.toString())),
                   ]),
                 ),
                 // Text(question.options.elementAt(index).text.toString()),
@@ -580,7 +580,7 @@ class _questionWidgetState extends State<questionWidget> {
               return RadioListTile(
                 title: TeXView(
                   child: TeXViewColumn(children: [
-                    _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
+                    _teXViewWidget((question.options.elementAt(index).text.toString())),
                     ]),
                 ),
                 // Text(question.options.elementAt(index).text.toString()),

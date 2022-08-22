@@ -60,8 +60,8 @@ class _AssignmentHomeScreenState extends State<AssignmentHomeScreen> {
                 create: (context) => provMdl,
                 child:
                     Consumer(builder: (context, dataItems, _) {
-                  if (provMdl.data.playlists != null) {
-                    return ListView.builder(
+                  if (provMdl.data.playlists!.isNotEmpty) {
+                      return ListView.builder(
                         itemCount: provMdl.strAssi.length,
                         itemBuilder: (context, index) {
                           return  Column(
@@ -146,8 +146,8 @@ class _AssignmentHomeScreenState extends State<AssignmentHomeScreen> {
                                   ],
                                 );
                         });
-                  }
-                    return const Center(child: CircularProgressIndicator());
+                     }
+                    return const Center(child: Text('No Assignment Found...'));
                 }),
               ),
             ),

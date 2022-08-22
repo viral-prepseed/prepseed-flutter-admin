@@ -50,7 +50,7 @@ class _DocumentHomeScreenState extends State<DocumentHomeScreen> {
               height: size.height,
               padding: const EdgeInsets.all(10.0),
               child: Consumer<VideosProvider>(builder: (context, dataItems, _) {
-               return provMdl.data.playlists != null ?
+               return provMdl.data.playlists!.isNotEmpty ?
                 Column(
                     children: [
                        //SearchBar(controller:_controller,isSearching: isSearching,searchResult: searchResult,filteredList: provMdl.tagValueDoc),
@@ -169,7 +169,7 @@ class _DocumentHomeScreenState extends State<DocumentHomeScreen> {
                        ),
                      ],
                  ) :
-               const Center(child: CircularProgressIndicator());
+               const Center(child: Text('No Documents Found...'));
               }),
             ),
           )

@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:prepseed/helper/provider/userDerailsProvider.dart';
 import 'package:prepseed/helper/sharedPref.dart';
@@ -145,7 +147,7 @@ class _signIn_signUp extends State<signIn_signUp>{
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent
     ));
-
+    print(widget.clientlogo);
     return SafeArea(
       child: GestureDetector(
         onTap: (){
@@ -199,9 +201,22 @@ class _signIn_signUp extends State<signIn_signUp>{
                           decoration: BoxDecoration(
                             // color: Colors.blue
                           ),
-                          child: Image(
+                          child: /*Image(
                             image: NetworkImage(widget.clientlogo),
                             fit: BoxFit.fill,
+                          ),*/
+                          CachedNetworkImage(
+                            imageUrl: widget.clientlogo,
+                           /* errorWidget: (context,url,error) => Icon(Icons.error),
+                            placeholder: (context, url) => const CircleAvatar(
+                              backgroundColor: Colors.amber,
+                              // radius: 150,
+                            ),*/
+                           /* imageBuilder: (context, image) => CircleAvatar(
+                              backgroundImage: image,
+                              backgroundColor: Colors.transparent,
+                              // radius: 150,
+                            ),*/
                           ),
                         ),
                         /**/

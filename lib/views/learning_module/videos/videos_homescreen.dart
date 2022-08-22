@@ -51,7 +51,7 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
               child:  ChangeNotifierProvider.value(
                 value:  provMdl,
                 child: Consumer(builder: (context, dataItems, _) {
-                  return provMdl.data.playlists != null ?
+                  return provMdl.data.playlists!.isNotEmpty ?
                   Column(
                     children: [
                       Container(
@@ -164,7 +164,7 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
                               })
                       ),
                     ],
-                  ) : const Center(child: CircularProgressIndicator());
+                  ) : const Center(child: Text('No Playlist Found...'));
                 }),
               )
             ),

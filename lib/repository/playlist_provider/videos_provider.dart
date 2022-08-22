@@ -58,6 +58,18 @@ class VideosProvider extends ChangeNotifier {
   List strDoc= [];
   List strAssi = [];
   calTag(){
+     tagValue = [];
+     tagValueDoc = [];
+     tagValueAssi = [];
+     tagVideo = [];
+     tagDoc = [];
+     str = [];
+     strDoc= [];
+     strAssi = [];
+
+     map ={};
+     mapDoc ={};
+     mapAssi ={};
     data.playlists!.forEach((element) {
       if(element.resourceType == "Video"){
         if(element.tags!.length != 0){
@@ -134,6 +146,7 @@ class VideosProvider extends ChangeNotifier {
         }
       });
       map[element] = playList;
+      print(map);
     });
     strDoc.forEach((element) {
       List playList = [];
@@ -320,12 +333,16 @@ class VideosProvider extends ChangeNotifier {
   MenuItems menuItems = MenuItems();
   getSubscriptions() async{
     subscriptions = await providerClassRepo.getUserData();
+    config = false;
     subscriptions.forEach((element) {
       element.subgroups!.forEach((element) {
         element.phases!.forEach((element) {
-          if( element.phase!.config != null){
+          if( element.phase!.config != null && !(menuItems.all.contains(MenuItems.announcement))){
             menuItems.all.addAll([MenuItems.announcement,MenuItems.chats,MenuItems.doubt]);
             config = true;
+          }
+          else{
+            menuItems.all.remove([MenuItems.announcement,MenuItems.chats,MenuItems.doubt]);
           }
         });
       });

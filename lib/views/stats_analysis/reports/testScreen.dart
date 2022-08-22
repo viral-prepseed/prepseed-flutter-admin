@@ -62,10 +62,11 @@ class _TestScreenState extends State<TestScreen> {
                       decoration:conDecoration,
                       child: Column(
                         children: [
-                          Padding(
+                          Container(
+                            height : 40.0,
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(widget.list[index].name.toString(),
-                            style: Style.textStyleRegular13Black,overflow: TextOverflow.ellipsis,),
+                            child: Text(widget.list[index].name.toString(),overflow: TextOverflow.ellipsis,
+                            /*style: Style.textStyleRegular13Black,*/),
                           ),
                           Style.divider(),
                           Padding(
@@ -116,7 +117,7 @@ class _TestScreenState extends State<TestScreen> {
                                            side: BorderSide(width:1, color:Colors.grey),
                                            elevation: 1, //elevation of button
                                            shape: RoundedRectangleBorder(
-                                               borderRadius: BorderRadius.circular(10)
+                                               borderRadius: BorderRadius.circular(8)
                                            ),
                                        ),
                                         onPressed: (){

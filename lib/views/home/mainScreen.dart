@@ -148,7 +148,8 @@ class _mainScreenState extends State<mainScreen> {
                                 child: ChangeNotifierProvider.value(
                                   value: vdoProv,
                                   child: Consumer(builder: (context, vdo, child){
-                                     return vdoProv.config ? Container(
+                                     return vdoProv.config ?
+                                     Container(
                                        margin: const EdgeInsets.all(10.0),
                                        padding: const EdgeInsets.all(10.0),
                                        width: MediaQuery.of(context).size.width - 70,
@@ -487,7 +488,8 @@ class _mainScreenState extends State<mainScreen> {
                                                     children: [
                                                       const Text('Duration'),
                                                       const SizedBox(width: 10.0,),
-                                                      Text(provMdl.printDuration(Duration(seconds: asw.elementAt(idx).core!.duration!))),
+                                                      //Text(provMdl.printDuration(Duration(seconds: asw.elementAt(idx).core!.duration!))),
+                                                      Text('${(asw.elementAt(idx).core!.duration! /60).toInt().toString()} mins')
                                                     ],
                                                   ),
                                                 ),

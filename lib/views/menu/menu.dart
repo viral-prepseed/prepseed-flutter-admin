@@ -181,7 +181,7 @@ logout() {
                           SharedPreferences prefs = await SharedPreferences
                               .getInstance();
                           await prefs.clear();
-                          await APICacheManager().deleteCache('API_videoPlay');
+                          await APICacheManager().emptyCache();
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => prepSeed_login()
                           ));
