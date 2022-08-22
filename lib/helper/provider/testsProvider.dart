@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:prepseed/helper/api/functions.dart';
 import 'package:prepseed/main.dart';
 import 'package:prepseed/model/assesments/getwrapper.dart';
 import 'package:prepseed/model/questions.dart';
@@ -239,8 +240,11 @@ class TestProviderClass extends ChangeNotifier {
         Map _mapTopic = {};
         List listType = [];
         dynamic _linkTextMain;
+        dynamic _linkImageMain;
 
         var _optImage = '';
+
+        var list = ['A','B','C','D','E','F','G','H'];
 
         for (var element in _listQue.core!.sections!) {
           List<QuestionClass> _questions = [];
@@ -270,7 +274,7 @@ class TestProviderClass extends ChangeNotifier {
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(multiOp.content['rawContent']);
                   }
-                  _options.add(Option(text: convertLetX(opCont['blocks'][0]['text']),id: multiOp.id));
+                  _options.add(Option(text: functions().convertLetX(opCont['blocks'][0]['text']),id: multiOp.id));
                 });
               }
 
@@ -281,26 +285,40 @@ class TestProviderClass extends ChangeNotifier {
                   if(opCont.runtimeType.toString() == 'String'){
                     opCont = json.decode(opCont);
                   }
-                  _options.add(Option(text: convertLetX(opCont['blocks'][0]['text']),id: multiOp.sId));
+                  // _linkImageMain = opCont[]
+                  _options.add(Option(text: functions().convertLetX(opCont['blocks'][0]['text']),id: multiOp.sId));
+                }
+              }
+
+              if(elementQue.question!.type == "LINKED_MULTIPLE_CHOICE_MULTIPLE_CORRECT"){
+                _linkTextMain = elementQue.question!.linkQuestions ?? '';
+                for(var multiOp in elementQue.question!.multiOptions!) {
+                  var opCont = multiOp.content!['rawContent'];
+                  if(opCont.runtimeType.toString() == 'String'){
+                    opCont = json.decode(opCont);
+                  }
+                  _options.add(Option(text: functions().convertLetX(opCont['blocks'][0]['text']),
+                      id: multiOp.id));
                 }
               }
 
               if(elementQue.question!.type == "MULTIPLE_CHOICE_SINGLE_CORRECT"){
-
-
+                int incNum = 0;
                   for (var multiOp in elementQue.question!.options!) {
+
                     var _isimageopt = multiOp.content;
                     if(_isimageopt == null){
-                      _options.add(Option(text: 'ABC',id: 1));
+                      _options.add(Option(text: list[incNum],id: multiOp.sId));
+
                     }else{
                       var opCont = multiOp.content!.rawContent;
                       if(opCont.runtimeType.toString() == 'String'){
                         opCont = json.decode(opCont);
                       }
-                      _options.add(Option(text: convertLetX(opCont['blocks'][0]['text']),id: multiOp.sId));
+                      _options.add(Option(text: functions().convertLetX(opCont['blocks'][0]['text']),id: multiOp.sId));
                     }
+                    incNum++;
                   }
-
 
               }
 
@@ -322,10 +340,11 @@ class TestProviderClass extends ChangeNotifier {
                 correctMarks: elementQue.correctMark,
                 incorrectMarks: elementQue.incorrectMark,
                 type: elementQue.question!.type!,
-                text: convertLetX(QuestionContents.fromJson(rawCont).blocks!.first.text!),
+                text: functions().convertLetX(QuestionContents.fromJson(rawCont).blocks!.first.text!),
                 queImage: _queImage,
                 optImage: _optImage,
                 linkedText: _linkTextMain,
+                linkedImg: _linkImageMain,
                 options: _options
             ));
           }
@@ -347,48 +366,6 @@ class TestProviderClass extends ChangeNotifier {
     }*/
   }
 
-  convertLetX(String text){
-    var count = text.length - text.replaceAll("\$","").length;
-    // print(count);
-    // String _text = text.replaceAll(r'\+', r'\');
-    // replaceData(_text);
-    String _response = text;
-    for(int i=0; i<=count/2; i++){
-      _response = replaceData(_response);
-    }
-
-/*  String _response = replaceData(_text);
-  if(_response != null){
-    if(_response.contains(r'$')){
-      return replaceData(_response);
-    }else{
-      return _response;
-    }
-  }*/
-    return _response;
-  }
-
-  replaceData(String replaceableText){
-    String? _textData;
-    String? _text_sec_Data;
-    // if(replaceableText.contains(r'$')){
-    _textData = replaceableText.replaceFirst('\$', r'\(');
-    _text_sec_Data = _textData.replaceFirst('\$', r'\)');
-    // convertLetX(_text_sec_Data);
-    // replaceData(_text_sec_Data);
-    // }else{}
-/*
-    // print(_text_sec_Data);
-    if(_text_sec_Data != null){
-      if(_text_sec_Data.contains('\$')){
-        return _text_sec_Data;
-      }else{
-        // print(_text_sec_Data);
-        return _text_sec_Data;
-      }
-    }*/
-    return _text_sec_Data;
-  }
 
 
   String printDuration(Duration duration) {
