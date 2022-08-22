@@ -6,22 +6,22 @@ import 'package:flutter/services.dart';
 import 'package:prepseed/model/execute/tests/list_questions.dart';
 import 'package:prepseed/model/questions.dart';
 
-import '../../constants/colorPalate.dart';
+import '../../../constants/colorPalate.dart';
 
 import 'package:provider/provider.dart';
-import '../../helper/api/functions.dart';
-import '../../helper/provider/testsProvider.dart';
+import '../../../helper/api/functions.dart';
+import '../../../helper/provider/testsProvider.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class attempt_liveTest extends StatefulWidget {
-  const attempt_liveTest({Key? key}) : super(key: key);
+class attempt_practice extends StatefulWidget {
+  const attempt_practice({Key? key}) : super(key: key);
 
   @override
-  _attempt_liveTestState createState() => _attempt_liveTestState();
+  _attempt_practiceState createState() => _attempt_practiceState();
 }
 
-class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerProviderStateMixin {
+class _attempt_practiceState extends State<attempt_practice> with SingleTickerProviderStateMixin {
 
   List _store = [];
   Duration duration1 = Duration();

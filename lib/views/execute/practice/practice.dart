@@ -55,7 +55,7 @@ class _practiceState extends State<practice> {
         leading: MenuWidget(),
       ),
       body: Consumer<UserClass>(builder: (context, userModel, child){
-        print(userModel.topicListFullData.length);
+        // print(userModel.topicListFullData.length);
         return Column(
           children: [
             Expanded(

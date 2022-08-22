@@ -6,6 +6,7 @@ class QuestionClass{
   dynamic queImage;
   dynamic optImage;
   dynamic linkedText;
+  dynamic linkedImg;
   final List<Option> options;
   bool isMarked;
   Option? selectedOption;
@@ -18,6 +19,7 @@ class QuestionClass{
     this.queImage,
     this.optImage,
     this.linkedText,
+    this.linkedImg,
     required this.options,
     this.isMarked = false,
     this.selectedOption

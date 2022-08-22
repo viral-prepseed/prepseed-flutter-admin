@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:prepseed/views/execute/practice/attempt_practice.dart';
 import '../../../constants/theme/style.dart';
-import 'package:provider/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../../model/userDetails/topics.dart';
@@ -99,7 +99,12 @@ class _PracticeSubTopicsState extends State<PracticeSubTopics> {
                           )
                               : Container(),
                           SizedBox(height: 10,),
-                          ElevatedButton(onPressed: (){}, child: const Text('Practice Now'))
+                          ElevatedButton(onPressed: (){
+                            // print(subList.elementAt(index).sId);
+
+                            var newRoute = MaterialPageRoute(builder: (BuildContext context) => attempt_practice());
+                            Navigator.of(context).push(newRoute);
+                          }, child: const Text('Practice Now'))
                         ],
                       ),
                     ),

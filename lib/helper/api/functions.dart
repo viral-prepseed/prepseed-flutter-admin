@@ -11,9 +11,54 @@ import 'package:http/http.dart' as http;
 class functions{
 
 
+  /*============================== Convert to Letx ==============================*/
+
+  convertLetX(String text){
+    var count = text.length - text.replaceAll("\$","").length;
+    // print(count);
+    // String _text = text.replaceAll(r'\+', r'\');
+    // replaceData(_text);
+    String _response = text;
+    for(int i=0; i<=count/2; i++){
+      _response = replaceData(_response);
+    }
+
+/*  String _response = replaceData(_text);
+  if(_response != null){
+    if(_response.contains(r'$')){
+      return replaceData(_response);
+    }else{
+      return _response;
+    }
+  }*/
+    return _response;
+  }
+
+  replaceData(String replaceableText){
+    String? _textData;
+    String? _text_sec_Data;
+    // if(replaceableText.contains(r'$')){
+    _textData = replaceableText.replaceFirst('\$', r'\(');
+    _text_sec_Data = _textData.replaceFirst('\$', r'\)');
+    // convertLetX(_text_sec_Data);
+    // replaceData(_text_sec_Data);
+    // }else{}
+/*
+    // print(_text_sec_Data);
+    if(_text_sec_Data != null){
+      if(_text_sec_Data.contains('\$')){
+        return _text_sec_Data;
+      }else{
+        // print(_text_sec_Data);
+        return _text_sec_Data;
+      }
+    }*/
+    return _text_sec_Data;
+  }
+
   /*============================== TOPIC ==============================*/
 
-  Future<List<Topics>> getObjectsById( String topicId) async{
+  Future<List<Topics>> getObjectsById(String topicId) async{
     List<Topics> listObj = [];
     var datalist = await sharedPref().getSharedPref('topics');
     var list = json.decode(datalist);
