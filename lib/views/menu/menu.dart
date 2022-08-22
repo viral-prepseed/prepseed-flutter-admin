@@ -6,10 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../../helper/sharedPref.dart';
 import '../../main.dart';
 import '../../model/menuItem.dart';
 import '../../repository/playlist_provider/videos_provider.dart';
 import '../login/prepseed_loginScreen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MenuItems{
   static const home = MainMenuItems('Home',Icons.widgets_outlined);
@@ -59,11 +61,15 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   var username,role,email;
+  var logo;
+
 
   @override
   void initState() {
     fetchPref();
+    // getprefs();
   }
+
 
   Widget buildMenuItem(MainMenuItems item) => ListTileTheme(
     selectedColor: Colors.black87,
@@ -78,10 +84,11 @@ class _MenuScreenState extends State<MenuScreen> {
   );
 
   fetchPref() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    username = prefs.getString('username');
-    role = prefs.getString('role');
-    email = prefs.getString('email');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    username = await sharedPref().getSharedPref('username');
+    role = await sharedPref().getSharedPref('role');
+    email = await sharedPref().getSharedPref('email');
+    logo = await sharedPref().getSharedPref('InstituteLogo');
   }
 
 
@@ -110,6 +117,27 @@ class _MenuScreenState extends State<MenuScreen> {
              // Spacer(),
             //  ...MenuItems.all.map(buildMenuItem).toList(),
               SizedBox(height: 25.0,),
+              CachedNetworkImage(
+                  imageUrl: logo,
+                  placeholder: (context, url) => Image(
+                    image: const AssetImage("assets/images/logo.png"),
+                    width: MediaQuery.of(context).size.width / 4,
+                    height: MediaQuery.of(context).size.height / 9,
+                    fit: BoxFit.contain,),
+                  imageBuilder: (context, image) => Image(
+                    image: image,
+                    width: MediaQuery.of(context).size.width / 4,
+                    height: MediaQuery.of(context).size.height / 9,
+                    fit: BoxFit.contain,)
+              ),
+              const SizedBox(height: 10.0,),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(username),
+              ),
+/*              SizedBox(height: 10.0,),
+              Text(email),*/
+              Divider(),
               Expanded(
                 child: ChangeNotifierProvider.value(
                   value:  provMdl,
