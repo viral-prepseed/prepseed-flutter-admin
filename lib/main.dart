@@ -9,10 +9,13 @@ import 'package:prepseed/repository/playlist_provider/videos_provider.dart';
 import 'package:prepseed/views/SplashScreen.dart';
 import 'package:prepseed/views/execute/test/test_.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'helper/database_helper.dart';
 import 'helper/provider/analysisProvider.dart';
 import 'helper/provider/tests/assessmentWrappers.dart';
 import 'helper/provider/testsProvider.dart';
+
 import 'model/dataclass.dart';
 import 'views/login/prepseed_loginScreen.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -51,71 +54,5 @@ class MyApp extends StatelessWidget {
         home: SplashScreen() //quantized_sheet_new()//,
       ),
     );
-  }
-}
-
-
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  // Generating a long list to fill the ListView
-  final List<Map> data = List.generate(100,
-          (index) => {'id': index, 'name': 'Item $index', 'isSelected': false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Kindacode.com'),
-        ),
-        body: SafeArea(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 8,
-                mainAxisSpacing: 5,
-                mainAxisExtent: 45,
-                crossAxisSpacing: 10,
-                childAspectRatio: (2),
-              ),
-              itemCount: data.length,
-              itemBuilder: (BuildContext ctx, index) {
-               return Container(
-                  // color: data[index]['isSelected'] = true ? Colors.amber : Colors.white,
-                  child: Card(
-                    key: ValueKey(data[index]['name']),
-                    color: data[index]['isSelected'] == true
-                        ? Colors.amber
-                        : Colors.white,
-                    elevation: 5,
-                    child: ListTile(
-                      tileColor: data[index]['isSelected'] == true
-                          ? Colors.amber
-                          : Colors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 0.0),
-                      onTap: () {
-                        setState(() {
-                          print(data[index]['isSelected']);
-                          (data[index]['isSelected'] == true )? data[index]['isSelected'] = false : data[index]['isSelected'] =  true;
-                          print(data[index]['isSelected']);
-                        });
-                      },
-                      title: Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            data[index]['id'].toString(),
-                            // style: GoogleFonts.poppins(fontSize: 11),
-                          )),
-                    ),
-                  ),
-                );
-              },
-            )));
   }
 }

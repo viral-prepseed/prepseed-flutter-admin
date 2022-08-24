@@ -130,8 +130,7 @@ class _TestScreenState extends State<TestScreen> {
                                       return ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             primary: Colors.white,
-                                            side: BorderSide(
-                                                width: 1, color: Colors.grey),
+                                            side: const BorderSide(width: 1, color: Colors.grey),
                                             elevation: 1, //elevation of button
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius
@@ -245,9 +244,6 @@ class _TestScreenState extends State<TestScreen> {
         // print(datas.first.name);
       }
     }
-
-/*  showDialogBox(){
-    Map<dynamic,List<SubInstructions>> maplist = {};
     Future.delayed(Duration.zero, () async {
       return showDialog(context: context, builder: (context){
         return Dialog(
@@ -324,7 +320,7 @@ class _TestScreenState extends State<TestScreen> {
         );
       });
     });
-  }*/
+
   }
 
 }
