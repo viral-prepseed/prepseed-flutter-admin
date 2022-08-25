@@ -146,7 +146,6 @@ class VideosProvider extends ChangeNotifier {
         }
       });
       map[element] = playList;
-      print(map);
     });
     strDoc.forEach((element) {
       List playList = [];
@@ -333,7 +332,7 @@ class VideosProvider extends ChangeNotifier {
   MenuItems menuItems = MenuItems();
   getSubscriptions() async{
     subscriptions = await providerClassRepo.getUserData();
-    config = false;
+
     subscriptions.forEach((element) {
       element.subgroups!.forEach((element) {
         element.phases!.forEach((element) {
@@ -343,6 +342,7 @@ class VideosProvider extends ChangeNotifier {
           }
           else{
             menuItems.all.remove([MenuItems.announcement,MenuItems.chats,MenuItems.doubt]);
+            config = false;
           }
         });
       });

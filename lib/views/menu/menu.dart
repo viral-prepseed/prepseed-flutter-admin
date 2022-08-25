@@ -24,7 +24,7 @@ class MenuItems{
   static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
   static const announcement = MainMenuItems('Announcements',Icons.announcement_outlined);
   static const doubt = MainMenuItems('Doubt', Icons.error);
-   static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
+  static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
   static const topicTests = MainMenuItems('Topic Tests',Icons.assignment_outlined);
   static const chats = MainMenuItems("Chats", Icons.message);
 
@@ -63,7 +63,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   var username,role,email;
-  var logo;
+  late var logo;
 
 
   @override

@@ -11,6 +11,7 @@ import 'package:prepseed/views/execute/test/test_.dart';
 import 'package:provider/provider.dart';
 
 import 'helper/provider/analysisProvider.dart';
+import 'helper/provider/practice/getquestion_provider.dart';
 import 'helper/provider/tests/assessmentWrappers.dart';
 import 'helper/provider/testsProvider.dart';
 import 'model/dataclass.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AssessmentWrappersClass>(create: (_) => AssessmentWrappersClass(),),
         ChangeNotifierProvider<ReportClass>(create: (_) => ReportClass(),),
         ChangeNotifierProvider<VideoAttendanceProviderClass>(create: (_) => VideoAttendanceProviderClass(),),
+        ChangeNotifierProvider<GetQuestionProvider>(create: (_) => GetQuestionProvider(),),
       ],
       child: MaterialApp(
         // title: 'Flutter Demo',

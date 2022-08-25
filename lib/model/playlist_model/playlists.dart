@@ -155,7 +155,7 @@ class Playlists {
 
   Playlists.fromJson(Map<String, dynamic> json) {
     title = json['title'];
-    thumbNailsUrls = json['thumbNailsUrls'].cast<String>();
+    thumbNailsUrls = json['thumbNailsUrls'];
     sId = json['_id'];
     if (json['items'] != null) {
       items = <Items>[];
