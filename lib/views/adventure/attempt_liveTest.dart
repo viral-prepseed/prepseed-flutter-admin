@@ -80,13 +80,6 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
         // print(questions.elementAt(_controller!.index).text);
       });
     });
-/*    questions.forEach((element) {
-      (element.options!.forEach((element) {
-        print(element.text);
-      }));
-    });*/
-
-    // print(listTopics.values.elementAt(0));
   }
 
   timeBetweenTaps(){
@@ -104,17 +97,29 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Column(
+        body: Wrap(
           children: [
-            actionWidgets(),
-            buildTopicTabs(),
-            bottomActionWidget()
+            buildBasics(),
+/*            buildTopicTabs(),
+            bottomActionWidget()*/
             // selectQueList(),
           ],
         ),
       ),
     );
   }
+
+  buildBasics(){
+    return Column(
+          children: [
+            actionWidgets(),
+            buildTopicTabs(),
+            bottomActionWidget()
+            // selectQueList(),
+          ],
+        );
+  }
+
 
   /*==================================================== bottomActionWidget  ============================================================*/
   bottomActionWidget(){

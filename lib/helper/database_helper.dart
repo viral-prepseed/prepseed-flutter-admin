@@ -107,7 +107,7 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $tableWords (
-            'question' INTEGER PRIMARY KEY,
+            'question' INTEGER NOT NULL,
             'section' INTEGER NOT NULL,
             'response' TEXT NOT NULL,
             'time' TEXT NOT NULL,
