@@ -16,6 +16,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/theme/style.dart';
 import '../../helper/api/functions.dart';
+import '../../helper/api/functions/formatDateTime.dart';
 import '../../helper/provider/analysisProvider.dart';
 import '../../helper/provider/reports/videoAttendanceProvider.dart';
 import '../../helper/provider/tests/assessmentWrappers.dart';
@@ -571,7 +572,6 @@ class _mainScreenState extends State<mainScreen> {
                                   fontSize: 15),
                             ),
                           ),
-                          // Style.divider(),
                           const SizedBox(height: 10.0,),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -582,9 +582,6 @@ class _mainScreenState extends State<mainScreen> {
                                     ? SfCartesianChart(
                                     primaryXAxis: NumericAxis(
                                         isVisible: false
-                                      /*minimum: 0,
-                              maximum: 100,
-                              interval: 10*/
                                     ),
 
                                     primaryYAxis:NumericAxis(
@@ -595,14 +592,7 @@ class _mainScreenState extends State<mainScreen> {
                                         minorTickLines: const MinorTickLines(size: 0)
                                     ),
                                     enableAxisAnimation: true,
-
-                                    // Chart title
-                                    // title: ChartTitle(text: '% Marks'),
-                                    // Enable legend
                                     legend: Legend(isVisible: false),
-                                    // Enable tooltip
-                                    // tooltipBehavior: _tooltipBehavior,
-
                                     series: <ChartSeries>[
                                       SplineAreaSeries<Percentage, int>(
                                           borderWidth: 3,
@@ -613,22 +603,7 @@ class _mainScreenState extends State<mainScreen> {
 
                                           List.generate(myModel.core!.hist!.length, (index) =>
                                               Percentage(index, myModel.core!.hist!.elementAt(index) ),
-                                          )
-                                          /*[
-                                  *//*Percentage(100, 4),
-                                  Percentage(10, 3),
-                                  Percentage(50, 11),
-                                  Percentage(50, 10),
-                                  Percentage(70, 2),
-                                  Percentage(90, 2),*//*
-
-                                  Percentage(' ', 4),
-                                  Percentage('Feb', 3),
-                                  Percentage('March', 11),
-                                  Percentage('Apr', 10),
-                                  Percentage('May', 2),
-                                  Percentage('June', 2),
-                                ]*/,
+                                          ),
                                           xValueMapper: (Percentage sales, _) => sales.student,
                                           yValueMapper: (Percentage sales, _) => sales.marks,
                                           // Enable data label
@@ -646,6 +621,8 @@ class _mainScreenState extends State<mainScreen> {
                     const SizedBox(
                       height: 15,
                     ),
+
+
                     Container(
                       decoration: conDecoration,
                       child: Column(
@@ -767,7 +744,7 @@ class _mainScreenState extends State<mainScreen> {
                 DataRow(
                 cells: [
                   DataCell(Text(element.details![0].name.toString())),
-                  DataCell(Text(element.details![0].availableFrom.toString())),
+                  DataCell(Text(FormatDateTime().dateTimeFormatter(element.details![0].availableFrom.toString()) )),
                   element.user != null ? element.user!.physics/*!.marks*/ != null ? DataCell(Text(element.user!.physics!.marks.toString()/*element['physics'].elementAt(0).toString()*/)) : const DataCell(Text("0")): const DataCell(Text("0")),
                   element.topper!.physics != null ? DataCell(Text(element.topper!.physics!.marks.toString())) : const DataCell(Text("0")),
                   element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.averageMarks.toString())) : const DataCell(Text("0")),

@@ -62,7 +62,7 @@ class TestProviderClass extends ChangeNotifier {
 
   set isReset(bool _val){
     _isReset = _val;
-    notifyListeners();
+    // notifyListeners();
   }
 
 /*  get tabLength => TabValues.toSet().toList().length;

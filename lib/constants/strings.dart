@@ -22,6 +22,7 @@ class Strings {
   static String getSubmissions = ASSESSMENT_BASE + '/getsubmissions';
   static String getranks = LEADERBOARD_BASE + '/getranks';
   static String getPhaseLeaderBoard = LEADERBOARD_BASE + '/getphaseleaderboard';
+  static String practiceQuestion = '/session/getQuestionAtPosition';
 
 /*
   static String logo_icon = BASEURL.replaceAll('/API/', '/')+'assets/img/logomob.png';

@@ -10,6 +10,7 @@ import '../../constants/colorPalate.dart';
 
 import 'package:provider/provider.dart';
 import '../../helper/api/functions.dart';
+import '../../helper/database_helper.dart';
 import '../../helper/provider/testsProvider.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -79,13 +80,6 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
         // print(questions.elementAt(_controller!.index).text);
       });
     });
-/*    questions.forEach((element) {
-      (element.options!.forEach((element) {
-        print(element.text);
-      }));
-    });*/
-
-    // print(listTopics.values.elementAt(0));
   }
 
   timeBetweenTaps(){
@@ -102,17 +96,29 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Column(
+        body: Wrap(
           children: [
-            actionWidgets(),
-            buildTopicTabs(),
-            bottomActionWidget()
+            buildBasics(),
+/*            buildTopicTabs(),
+            bottomActionWidget()*/
             // selectQueList(),
           ],
         ),
       ),
     );
   }
+
+  buildBasics(){
+    return Column(
+          children: [
+            actionWidgets(),
+            buildTopicTabs(),
+            bottomActionWidget()
+            // selectQueList(),
+          ],
+        );
+  }
+
 
   /*==================================================== bottomActionWidget  ============================================================*/
   bottomActionWidget(){
@@ -229,6 +235,41 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
   }
 
   /*==================================================== List Questions ============================================================*/
+
+  _read() async {
+    // query one word
+    DatabaseHelper helper = DatabaseHelper.instance;
+    int rowId = 2;
+    dynamic word = await helper.queryWord(rowId);
+    if (word == null) {
+      print('read row $rowId: empty');
+    } else {
+      print('read row $rowId: $word');
+    }
+
+    // query all
+    //
+    //DatabaseHelper helper = DatabaseHelper.instance;
+    //final words = await helper.queryAllWords();
+    //if (words != null) {
+    //  words.forEach((word) {
+    //    print('row ${word.id}: ${word.word} ${word.frequency}');
+    //  });
+    //}
+  }
+
+  _save(Map mapData) async {
+    // insert
+    Word word = Word();
+    word.word = 'hellooows';
+    word.frequency = 1521;
+    print(mapData['flow']);
+    FlowSync flowSync = FlowSync.fromMap(mapData['flow'][0]);
+    DatabaseHelper helper = DatabaseHelper.instance;
+    int id = await helper.insert(flowSync);
+    print('inserted row: $id');
+  }
+
   Widget selectQueList(){
     calQueTime();
     data = List.generate(topicQue.elementAt(_controller!.index),
@@ -269,7 +310,7 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                           onTap: () {
 
                             // print(data[index]['id'] + 1);
-/*                            Map postmap = {
+                            Map postmap = {
                               "flow":[
                                 {
                                   "section": _controller!.index,
@@ -279,10 +320,11 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
                                   "state": 1
                                 }
                               ]
-                            };*/
-
+                            };
+                            _save(postmap);
+                            _read();
                             // functions().postFlowLogs(postmap);
-                            // print(postmap);
+                            print(postmap);
                             // timeBetweenTaps();
                             setState(() {
                               setQID = data[index]['id'];
@@ -516,12 +558,12 @@ class _questionWidgetState extends State<questionWidget> {
     // print(s);
 
   var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
-/*  if(question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
+  if(question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
       question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'){
     Provider.of<TestProviderClass>(context,listen: false).isReset = true;
   }else{
     Provider.of<TestProviderClass>(context,listen: false).isReset = false;
-  }*/
+  }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -668,7 +710,8 @@ class _questionWidgetState extends State<questionWidget> {
 
     return Column(
         children: [
-          /*ExpansionTile(title: Flexible(child: Text(_linkText,
+
+/*          ExpansionTile(title: Flexible(child: Text(_linkText,
             overflow: TextOverflow.fade,
             maxLines: 1,
             softWrap: false,

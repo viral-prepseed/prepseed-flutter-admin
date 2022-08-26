@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prepseed/model/assesments/getwrapper.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:prepseed/views/adventure/_attempt_liveTest.dart';
 import '../../../constants/colorPalate.dart';
 import '../../../constants/theme/style.dart';
 import '../../../helper/api/functions.dart';
+import '../../../helper/api/functions/execute.dart';
 import '../../../helper/provider/testsProvider.dart';
 import '../../../helper/sharedPref.dart';
 import '../../../init/InitializeProviderScreen.dart';
@@ -164,8 +168,57 @@ class _TopicTestState extends State<TopicTest> {
       borderRadius: const BorderRadius.all(
           Radius.circular(10.0))
   );
-  showDialogBox(){
-    Map<dynamic,List<SubInstructions>> maplist = {};
+
+
+
+
+  showDialogBox() async {
+    var res = await executeFunc().assignment();
+    var response = json.decode(res.body);
+    // getCore(response);
+    Map<dynamic, List<SubInstructions>> maplist = {};
+    late var coreobjlist = [];
+    List topicList = [];
+    List subtopicList = [];
+    Map topic_subTopics = {};
+
+    for (var eleinst in response['core']['instructions']) {
+      var coreobj = Instructions.fromJson(eleinst);
+
+      // coreobj.instructions?.forEach((element) {
+      maplist[coreobj.instruction] =
+      (coreobj.subInstructions!.isNotEmpty) ? ((coreobj.subInstructions!)) : [];
+      coreobjlist.add(coreobj.instruction);
+      // });
+
+      setState(() {
+        maplist;
+        coreobjlist;
+      });
+    }
+
+    var syllabusObj = Syllabus
+        .fromJson(response['core']['syllabus'])
+        .topics;
+
+    for (var eleSyllabus in syllabusObj!) {
+      var data = await functions().getObjectsById(eleSyllabus.id!);
+      if (data.isNotEmpty) {
+        topicList.add(data.first.name);
+      }
+      // print(data.first.name);
+
+      for (var eleTopics in eleSyllabus.subTopics!) {
+        var datas = await functions().getObjectsBySubId(
+            eleSyllabus.id!, eleTopics.id!);
+        if (datas.isNotEmpty) {
+          subtopicList.add(datas.first.name);
+          topic_subTopics[data.first.name] = datas.first.name;
+        }
+        // print(datas.first.name);
+      }
+    }
+
     Future.delayed(Duration.zero, () async {
       return showDialog(context: context, builder: (context){
         return Dialog(
@@ -223,6 +276,96 @@ class _TopicTestState extends State<TopicTest> {
                               });
                               Navigator.of(context).pop();
 
+                              var route = MaterialPageRoute(builder: (BuildContext context) => attempt_liveTestt());
+                              Navigator.of(context).push(route);
+                            }, child: const Text('Begin Test')),
+                          ),
+                        ],
+                      ),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: List.generate(topic_subTopics.length, (index) => Column(
+                            children: [
+                              Text(topic_subTopics.keys.elementAt(index),
+                                  style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
+                              Text(topic_subTopics.values.elementAt(index)),
+                              const Divider(color: Colors.grey,)
+                            ],
+                          )),
+                        ),
+                      )
+                      // Container(child: Text('smdfnjskfb'),),
+                    ],
+                  ))
+                ],
+              ),
+            )
+        );
+      });
+    });
+
+/*  showDialogBox(){
+    Map<dynamic,List<SubInstructions>> maplist = {};
+    Future.delayed(Duration.zero, () async {
+      return showDialog(context: context, builder: (context){
+        return Dialog(
+            child: DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  TabBar(
+                    indicatorColor: Constants.blue,
+                    labelColor: Constants.white.withOpacity(0.8),
+                    unselectedLabelColor: Constants.white.withOpacity(0.5),
+                    labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 17),
+                    tabs: const [
+                      Tab(text: 'Instruction'),
+                      Tab(text: 'Syllabus'),
+                    ],
+                  ),
+                  Expanded(child: TabBarView(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: maplist.length,
+                                itemBuilder: (context,index ){
+                                  var keys = maplist.keys.elementAt(index);
+                                  List<SubInstructions> values = maplist.values.elementAt(index);
+
+                                  // print(values.runtimeType);
+                                  return Container(child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Text(keys,style: GoogleFonts.poppins(fontSize: 13,fontWeight: FontWeight.w600),),
+                                        ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            itemCount: values.length,
+                                            itemBuilder: (cntx,idx){
+                                              var data = values.elementAt(idx).instruction;
+                                              return Text(data??'', style: GoogleFonts.poppins(fontSize: 12,));
+                                            }),
+                                        const SizedBox(height: 5,)
+                                      ],
+                                    ),
+                                  ),);
+                                }),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: ElevatedButton(onPressed: (){
+                              setState(() {
+                                // activeSession = true;
+                              });
+                              Navigator.of(context).pop();
+
+
+
                               var route = MaterialPageRoute(builder: (BuildContext context) => attempt_liveTest());
                               Navigator.of(context).push(route);
                             }, child: const Text('Begin Test')),
@@ -239,5 +382,9 @@ class _TopicTestState extends State<TopicTest> {
         );
       });
     });
+  }*/
   }
+
+
+
 }
