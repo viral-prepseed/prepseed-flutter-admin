@@ -35,6 +35,10 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
   var setQID = 0;
   List<QuestionClass> questions = [];
   Map listTopics = {};
+  dynamic _value = 1;
+
+  bool isMarked = false;
+  var nextPrev = "Next";
 
 
   @override
@@ -54,21 +58,109 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
     listTopics = Provider.of<TestProviderClass>(context, listen: false).listTopics;
     questions = listTopics.values.elementAt(0);
     _controller = TabController(length: tabValues.length, vsync: this,animationDuration: Duration.zero);
+/*    reset1();
+    startTimer1();*/
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          actionWidgets(),
-          buildTopicTabs(),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            actionWidgets(),
+            buildTopicTabs(),
+            bottomActionWidget()
+          ],
+        ),
       ),
     );
   }
 
 
+  /*==================================================== bottomActionWidget  ============================================================*/
+  bottomActionWidget(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          height: 40, width: double.infinity,
+          /*color: Constants.blacklight.withOpacity(1),
+                padding: EdgeInsets.only(top: 20, bottom: 20),
+                margin: EdgeInsets.only(top:20),*/
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              /*Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      isMarked = !false;
+                      // _stackkey.currentState.
+                    });
+                  },
+                  child: Text("Mark", style: GoogleFonts.poppins(fontSize: 17,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+                ),
+              ),*/
+              (Provider.of<TestProviderClass>(context,listen: false).isReset == true) ?
+              Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      _value = -1;
+                      Provider.of<TestProviderClass>(context,listen: false).textController.clear();
+                      // Provider.of<TestProviderClass>(context,listen: false).selectedIndex.remove(value)
+                      Provider.of<TestProviderClass>(context, listen: false).optionVal = '';
+                    });
+                  },
+                  child: Text("Reset", style: GoogleFonts.poppins(fontSize: 15,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+              )
+                  : Container(),
+              Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      if(setQID+1 < data.length){
+                        nextPrev = "Next";
+                        setQID = setQID + 1;
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("You have reached end of the questions."),
+                        ));
+                        /*nextPrev = "Prev";
+                        setQID = setQID - 1;*/
+                      }
+                    });
+                  },
+                  child: Text(nextPrev, style: GoogleFonts.poppins(fontSize: 15,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
 
   /*==================================================== buildTopicTabs  ============================================================*/

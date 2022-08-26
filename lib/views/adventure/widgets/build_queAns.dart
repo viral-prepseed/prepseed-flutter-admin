@@ -26,12 +26,12 @@ class _questionWidgetState extends State<questionWidget> {
 
   String optionVal = '';
 
-
   @override
   Widget build(BuildContext context) {
 
     QuestionClass question = widget.queId;
     String s = (question.text);
+    Provider.of<TestProviderClass>(context,listen: false).textController.clear();
     // print(s);
 
     var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
@@ -91,7 +91,6 @@ class _questionWidgetState extends State<questionWidget> {
                                 image: image,
                                 height: MediaQuery.of(context).size.height / 6,
                                 width: MediaQuery.of(context).size.width,
-                                /*height: MediaQuery.of(context).size.height / 9,*/
                                 fit: BoxFit.contain,)
                           ),
                         ),

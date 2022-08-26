@@ -15,7 +15,7 @@ import '../../model/execute/tests/list_questions.dart';
 import '../../views/login/prepseed_loginScreen.dart';
 import '../sharedPref.dart';
 class TestProviderClass extends ChangeNotifier {
-  final _textController = TextEditingController();
+  var _textController = TextEditingController();
   bool isLoading = false;
   List emptyList = [];
   String _optionVal = '';
@@ -53,6 +53,11 @@ class TestProviderClass extends ChangeNotifier {
 /*  set selectedIndex(List list){
     emptyList = list;
   }*/
+
+  set textController(dynamic tcVal){
+    _textController = tcVal;
+    notifyListeners();
+  }
 
   set optionVal(String _opval){
     _optionVal = _opval;
