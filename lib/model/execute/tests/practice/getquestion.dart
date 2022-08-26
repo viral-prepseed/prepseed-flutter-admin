@@ -163,7 +163,7 @@ class RawContent {
         blocks!.add(new Blocks.fromJson(v));
       });
     }
-    if (json['entityMap'].isNotEmpty) {
+    if (json['entityMap'] != null) {
       entityMap = <EntityMap>[];
       json['entityMap'].values.forEach((v) {
         entityMap!.add(new EntityMap.fromJson(v));
@@ -191,7 +191,7 @@ class EntityMap{
     mutability = json['mutability'];
     if (json['data'] != null) {
       data = <Data>[];
-      json['data'].forEach((v) {
+      json['data'].values.forEach((v) {
         data!.add(new Data.fromJson(v));
       });
     }

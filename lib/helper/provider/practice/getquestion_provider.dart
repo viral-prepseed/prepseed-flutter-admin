@@ -13,7 +13,6 @@ class GetQuestionProvider extends ChangeNotifier{
   }
   CloseSession closeSession = CloseSession();
   closeQuestions() async {
-
     closeSession = await getQuestionRepo.closeSession();
     print(closeSession);
     notifyListeners();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prepseed/constants/theme/style.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:prepseed/model/execute/tests/list_questions.dart';
 import 'package:prepseed/views/execute/practice/practice.dart';
 import 'package:flutter/services.dart';
@@ -60,15 +61,12 @@ class _PracticeTestState extends State<PracticeTest> {
                     print(options);
                     return provMdl.getQuestionModel.question != null
                         ? Column(
-                       crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             actionWidgets(),
                             SizedBox(height: 20.0),
-                            TeXView(
-                              child: TeXViewColumn(children: [
-                                _teXViewWidget((provMdl.getQuestionModel.question!.core!.content!.rawContent!.blocks![0].text.toString()))
-                              ]),
-                            ),
+                            question(provMdl.getQuestionModel.question!.core!.content!.rawContent!),
+
                          /*   Text(provMdl.getQuestionModel.question!.core!.content!.rawContent!.blocks![0].text.toString(),
                               style: Style.textStyleBold13,
                               textAlign: TextAlign.justify,
@@ -101,6 +99,73 @@ class _PracticeTestState extends State<PracticeTest> {
           ],
         ),
       ),
+    );
+  }
+
+
+/*============================================ Questions ===================================================*/
+
+
+  Widget question(RawContent rawContent){
+    String? img;
+    if(rawContent.entityMap != null){
+      img = rawContent.entityMap!.first.data!.first.url;
+    }
+    return  Column(
+      children: [
+        TeXView(
+          child: TeXViewColumn(children: [
+            _teXViewWidget((rawContent.blocks![0].text.toString()))
+          ]),
+        ),
+        img != null ?
+        /*Image.network((question.queImage),
+            // height: 190,
+            fit: BoxFit.contain,)*/
+        GestureDetector(
+          onTap: (){
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      backgroundColor: Colors.transparent,
+                      actions: [
+                        InteractiveViewer(
+                          clipBehavior: Clip.none,
+                          minScale: 1,
+                          maxScale: 4,
+                          child: AspectRatio(
+                            aspectRatio: 2,
+                            child: CachedNetworkImage(
+                                imageUrl:img!,
+                                placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Constants.green,)),
+                                imageBuilder: (context, image) => Image(
+                                  image: image,
+                                  height: MediaQuery.of(context).size.height / 6,
+                                  width: MediaQuery.of(context).size.width,
+                                  /*height: MediaQuery.of(context).size.height / 9,*/
+                                  fit: BoxFit.contain,)
+                            ),
+                          ),
+                        ),
+                      ]
+                  );
+                }
+            );
+          },
+          child: CachedNetworkImage(
+              imageUrl: img,
+              placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Constants.green,)),
+              imageBuilder: (context, image) => Image(
+                image: image,
+                height: MediaQuery.of(context).size.height / 6,
+                width: MediaQuery.of(context).size.width,
+                /*height: MediaQuery.of(context).size.height / 9,*/
+                fit: BoxFit.contain,)
+          ),
+        ):
+        Container(),
+      ],
     );
   }
   Widget actionWidgets(){
@@ -207,6 +272,10 @@ class _PracticeTestState extends State<PracticeTest> {
         ],
       );
 
+
+/*======================================================== Options ================================================*/
+
+
   Widget option(List options){
     final provMdl = Provider.of<GetQuestionProvider>(context);
     Core question = Core();
@@ -216,6 +285,8 @@ class _PracticeTestState extends State<PracticeTest> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Text(question.type.toString()),
+            SizedBox(height: 5.0),
             question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT' ||
             question.type == "LINKED_MULTIPLE_CHOICE_MULTIPLE_CORRECT"  ?
           Column(
@@ -233,6 +304,9 @@ class _PracticeTestState extends State<PracticeTest> {
               // subtitle: Text(this.noteList[position].actn_on),
               value: selectedIndexes.contains(options[index].id),
               onChanged: (_) {
+                print(question.sId);
+                print(options[index].sId);
+                print(options[index].content.rawContent.blocks[0]);
                 if (selectedIndexes.contains(options[index].id)) {
                   selectedIndexes.remove(options[index].id);   // unselect
                 } else {
@@ -265,6 +339,8 @@ class _PracticeTestState extends State<PracticeTest> {
                 value: options[index].content.rawContent.blocks[0].text.toString(),
                 groupValue: Provider.of<TestProviderClass>(context, listen: false).optionVal,
                 onChanged: (value){
+                  print(question.sId);
+                  print(options[index].sId);
                   setState(() {
                     Provider.of<TestProviderClass>(context, listen: false).optionVal = value.toString();
                   });
@@ -294,8 +370,9 @@ class _PracticeTestState extends State<PracticeTest> {
   static TeXViewWidget _teXViewWidget( String body) {
     return TeXViewColumn(
         style: const TeXViewStyle(
-            margin: TeXViewMargin.all(10),
+           // margin: TeXViewMargin.all(10),
             padding: TeXViewPadding.all(10),
+            textAlign: TeXViewTextAlign.Center,
             borderRadius: TeXViewBorderRadius.all(10),
             border: TeXViewBorder.all(TeXViewBorderDecoration(
                 borderWidth: 2,
