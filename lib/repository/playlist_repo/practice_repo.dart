@@ -45,9 +45,32 @@ class GetQuestionRepo {
         'authorization': 'Bearer $token',
       });
       if (resp.statusCode == 200) {
-        model = GetQuestion.fromJson(json.decode(resp.body));
+        var data = json.decode(resp.body);
+        if(data['question']['core']['content']['rawContent'].runtimeType == String){
+          print('isString');
+          data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
+        }
+        else{
+          print('Not String');
+
+        }
+        if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
+          print('isString');
+          data['question']['core']['options'].forEach((element){
+            element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
+          });
+          // data['question']['core']['options']['content']['rawContent'] = json.decode(data['question']['core']['options']['content']['rawContent']);
+        }
+        else{
+          print('Not String');
+
+        }
+        print(data);
+        model = GetQuestion.fromJson(data);
+
+       // model.question.core.content.rawContent.runtimeType == String;
       }
-      print(resp);
+      print(model);
     }
     else{
       throw Exception('Failed to Get Questions');

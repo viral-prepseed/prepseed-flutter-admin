@@ -1,12 +1,12 @@
 class GetQuestion {
-  Questions? question;
+  Question? question;
   int? currentTime;
 
   GetQuestion({this.question, this.currentTime});
 
   GetQuestion.fromJson(Map<String, dynamic> json) {
     question = json['question'] != null
-        ? new Questions.fromJson(json['question'])
+        ? new Question.fromJson(json['question'])
         : null;
     currentTime = json['currentTime'];
   }
@@ -21,13 +21,13 @@ class GetQuestion {
   }
 }
 
-class Questions {
+class Question {
   Core? core;
   SessionSpecific? sessionSpecific;
 
-  Questions({this.core, this.sessionSpecific});
+  Question({this.core, this.sessionSpecific});
 
-  Questions.fromJson(Map<String, dynamic> json) {
+  Question.fromJson(Map<String, dynamic> json) {
     core = json['core'] != null ? new Core.fromJson(json['core']) : null;
     sessionSpecific = json['sessionSpecific'] != null
         ? new SessionSpecific.fromJson(json['sessionSpecific'])
@@ -136,7 +136,7 @@ class Content {
 
   Content({this.rawContent});
 
-  Content.fromJson(Map<dynamic, dynamic> json) {
+  Content.fromJson(Map<String, dynamic> json) {
     rawContent = json['rawContent'] != null
         ? new RawContent.fromJson(json['rawContent'])
         : null;
@@ -153,14 +153,20 @@ class Content {
 
 class RawContent {
   List<Blocks>? blocks;
-
-  RawContent({this.blocks});
+  List<EntityMap>? entityMap;
+  RawContent({this.blocks, this.entityMap});
 
   RawContent.fromJson(Map<String, dynamic> json) {
     if (json['blocks'] != null) {
       blocks = <Blocks>[];
       json['blocks'].forEach((v) {
         blocks!.add(new Blocks.fromJson(v));
+      });
+    }
+    if (json['entityMap'].isNotEmpty) {
+      entityMap = <EntityMap>[];
+      json['entityMap'].values.forEach((v) {
+        entityMap!.add(new EntityMap.fromJson(v));
       });
     }
   }
@@ -173,7 +179,35 @@ class RawContent {
     return data;
   }
 }
+class EntityMap{
+  String? type;
+  String? mutability;
+  List<Data>? data;
 
+  EntityMap({this.mutability,this.data,this.type});
+
+  EntityMap.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    mutability = json['mutability'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+  }
+}
+class Data{
+
+  String? url;
+
+  Data({this.url});
+
+  Data.fromJson(Map<String, dynamic> json){
+    url = json['url'];
+  }
+
+}
 class Blocks {
   String? key;
   String? text;
@@ -197,15 +231,15 @@ class Blocks {
     depth = json['depth'];
     if (json['inlineStyleRanges'] != null) {
       inlineStyleRanges = <Null>[];
-      json['inlineStyleRanges'].forEach((v) {
-       // inlineStyleRanges!.add(new Null.fromJson(v));
-      });
+      /*json['inlineStyleRanges'].forEach((v) {
+        inlineStyleRanges!.add(new Null.fromJson(v));
+      });*/
     }
     if (json['entityRanges'] != null) {
       entityRanges = <Null>[];
-      json['entityRanges'].forEach((v) {
-       // entityRanges!.add(new Null.fromJson(v));
-      });
+     /* json['entityRanges'].forEach((v) {
+        entityRanges!.add(Null.fromJson(v));
+      });*/
     }
   }
 
@@ -216,11 +250,11 @@ class Blocks {
     data['type'] = this.type;
     data['depth'] = this.depth;
     if (this.inlineStyleRanges != null) {
-      // data['inlineStyleRanges'] =
-         // this.inlineStyleRanges!.map((v) => v.toJson()).toList();
+      /*data['inlineStyleRanges'] =
+          this.inlineStyleRanges!.map((v) => v.toJson()).toList();*/
     }
     if (this.entityRanges != null) {
-      // data['entityRanges'] = this.entityRanges!.map((v) => v.toJson()).toList();
+      /*data['entityRanges'] = this.entityRanges!.map((v) => v.toJson()).toList();*/
     }
     return data;
   }
@@ -284,13 +318,13 @@ class SessionSpecific {
   }
 }
 
-class Question {
+class Questions {
   String? sId;
   List<Concepts>? concepts;
 
-  Question({this.sId, this.concepts});
+  Questions({this.sId, this.concepts});
 
-  Question.fromJson(Map<String, dynamic> json) {
+  Questions.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     if (json['concepts'] != null) {
       concepts = <Concepts>[];
@@ -313,7 +347,7 @@ class Question {
 class Attempt {
   PerfectTimeLimits? perfectTimeLimits;
   String? mode;
-  int? batch;
+  dynamic batch;
   bool? isAnswered;
   int? time;
   int? xpEarned;
@@ -383,9 +417,9 @@ class Attempt {
     }
     if (json['answerSelectionFlow'] != null) {
       answerSelectionFlow = <Null>[];
-      json['answerSelectionFlow'].forEach((v) {
-        // answerSelectionFlow!.add(new Null.fromJson(v));
-      });
+     /* json['answerSelectionFlow'].forEach((v) {
+        answerSelectionFlow!.add(new Null.fromJson(v));
+      });*/
     }
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -416,8 +450,8 @@ class Attempt {
       data['flow'] = this.flow!.map((v) => v.toJson()).toList();
     }
     if (this.answerSelectionFlow != null) {
-      // data['answerSelectionFlow'] =
-          // this.answerSelectionFlow!.map((v) => v.toJson()).toList();
+     /* data['answerSelectionFlow'] =
+          this.answerSelectionFlow!.map((v) => v.toJson()).toList();*/
     }
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;

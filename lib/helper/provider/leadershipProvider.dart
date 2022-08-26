@@ -59,7 +59,6 @@ class LeadershipClass extends ChangeNotifier {
       'authorization': 'Bearer $token',
     });
 
-
     if (200 == response.statusCode) {
       var responseJson = json.decode(response.body);
       getRanks ranks = getRanks.fromJson(responseJson);

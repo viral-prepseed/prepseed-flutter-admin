@@ -41,8 +41,13 @@ class _PracticeTestState extends State<PracticeTest> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10.0,),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(widget.topic.name.toString(),style: Style.textStyleBold13,),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Expanded(
@@ -55,22 +60,37 @@ class _PracticeTestState extends State<PracticeTest> {
                     print(options);
                     return provMdl.getQuestionModel.question != null
                         ? Column(
+                       crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             actionWidgets(),
                             SizedBox(height: 20.0),
-                            Text(provMdl.getQuestionModel.question!.core!.content!.rawContent!.blocks![0].text.toString(),
+                            TeXView(
+                              child: TeXViewColumn(children: [
+                                _teXViewWidget((provMdl.getQuestionModel.question!.core!.content!.rawContent!.blocks![0].text.toString()))
+                              ]),
+                            ),
+                         /*   Text(provMdl.getQuestionModel.question!.core!.content!.rawContent!.blocks![0].text.toString(),
                               style: Style.textStyleBold13,
                               textAlign: TextAlign.justify,
-                            ),
+                            ),*/
+                            SizedBox(height: 20.0,),
                             option(options),
-                            ElevatedButton(onPressed: (){
-                              provMdl.getQuestion(widget.topic.sId.toString());
-                            }, child: Text('next')),
-                            ElevatedButton(onPressed: () async {
-                              await provMdl.closeQuestions();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => practice(),));
-                            }, child: Text('End Session'))
+                            SizedBox(height: 20.0,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton(onPressed: (){
+                                  provMdl.getQuestion(widget.topic.sId.toString());
+                                }, child: Text('Next')),
+                                SizedBox(width: 20.0,),
+                                ElevatedButton(onPressed: () async {
+                                  await provMdl.closeQuestions();
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => practice(),));
+                                }, child: Text('End Session'))
+                              ],
+                            ),
+
                           ],
                         )
                         : Container();
@@ -193,19 +213,23 @@ class _PracticeTestState extends State<PracticeTest> {
     question = provMdl.getQuestionModel.question!.core!;
     var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
           children: [
             question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT' ||
             question.type == "LINKED_MULTIPLE_CHOICE_MULTIPLE_CORRECT"  ?
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(options.length, (index) {
             return CheckboxListTile(
               title:
-              /*TeXView(
+              TeXView(
                 child: TeXViewColumn(children: [
-                  _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
+                  _teXViewWidget((options[index].content.rawContent.blocks[0].text.toString())),
                 ]),
-              ),*/
-               Text(options[index].content.rawContent.blocks[0].text.toString()),
+              ),
+              // Text(options[index].content.rawContent.blocks[0].text.toString()),
               // subtitle: Text(this.noteList[position].actn_on),
               value: selectedIndexes.contains(options[index].id),
               onChanged: (_) {
@@ -223,6 +247,8 @@ class _PracticeTestState extends State<PracticeTest> {
         (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
             question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT') ?
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: List.generate(options.length, (index) {
             return RadioListTile(
                 title: /*TeXView(
@@ -230,7 +256,12 @@ class _PracticeTestState extends State<PracticeTest> {
                     _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
                   ]),
                 ),*/
-                Text(options[index].content.rawContent.blocks[0].text.toString()),
+                TeXView(
+                  child: TeXViewColumn(children: [
+                    _teXViewWidget((options[index].content.rawContent.blocks[0].text.toString())),
+                  ]),
+                ),
+                //Text(options[index].content.rawContent.blocks[0].text.toString()),
                 value: options[index].content.rawContent.blocks[0].text.toString(),
                 groupValue: Provider.of<TestProviderClass>(context, listen: false).optionVal,
                 onChanged: (value){
@@ -248,6 +279,8 @@ class _PracticeTestState extends State<PracticeTest> {
           decoration: const InputDecoration(labelText: "Your Answer"),
           keyboardType: TextInputType.number,
         ) : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
           children: List.generate(options.length, (index) {
             return ListTile(
               title: Text(options[index].content.rawContent.blocks[0].text.text),
@@ -257,5 +290,28 @@ class _PracticeTestState extends State<PracticeTest> {
 
           ],
         );
+  }
+  static TeXViewWidget _teXViewWidget( String body) {
+    return TeXViewColumn(
+        style: const TeXViewStyle(
+            margin: TeXViewMargin.all(10),
+            padding: TeXViewPadding.all(10),
+            borderRadius: TeXViewBorderRadius.all(10),
+            border: TeXViewBorder.all(TeXViewBorderDecoration(
+                borderWidth: 2,
+                // borderStyle: TeXViewBorderStyle.groove,
+                borderColor: Colors.green))),
+        children: [/*
+          TeXViewDocument(title,
+              style: const TeXViewStyle(
+                  padding: TeXViewPadding.all(10),
+                  borderRadius: TeXViewBorderRadius.all(10),
+                  // textAlign: TeXViewTextAlign.center,
+                  width: 250,
+                  margin: TeXViewMargin.zeroAuto(),
+                  backgroundColor: Colors.green)),*/
+          TeXViewDocument(body,
+              style: const TeXViewStyle(margin: TeXViewMargin.only(top: 10)))
+        ]);
   }
 }

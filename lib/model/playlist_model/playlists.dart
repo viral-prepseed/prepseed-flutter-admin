@@ -140,7 +140,7 @@ class PlaylistTypeLabels {
 
 class Playlists {
   String? title;
-  List<String>? thumbNailsUrls;
+  List<dynamic>? thumbNailsUrls;
   String? sId;
   List<Items>? items;
   Setting? setting;
@@ -153,7 +153,7 @@ class Playlists {
 
   Playlists({this.title, this.thumbNailsUrls, this.sId, this.items, this.setting, this.tags, this.resourceType, this.hasAccessToContent, this.serviceMachineNamesRequired, this.serviceMachineNames, this.subject});
 
-  Playlists.fromJson(Map<String, dynamic> json) {
+  Playlists.fromJson(Map<dynamic, dynamic> json) {
     title = json['title'];
     thumbNailsUrls = json['thumbNailsUrls'];
     sId = json['_id'];
