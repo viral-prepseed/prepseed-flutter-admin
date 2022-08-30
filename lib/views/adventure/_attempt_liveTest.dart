@@ -39,12 +39,21 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
 
   bool isMarked = false;
   var nextPrev = "Next";
-
-
+  int secondsLeft = 500;
+  late Timer countDown;
   @override
   void initState() {
 
+    countDown = Timer.periodic(Duration(seconds:1), (timer){
+      secondsLeft--;
+      if(secondsLeft <= 0)
+      {
+        timer.cancel();
+      }
+      setState((){});
+    });
 
+    // setQID = Provider.of<TestProviderClass>(context,listen: false).setQID;
     hours1 = int.parse("03");
     mints1 = int.parse("00");
     secs1 = int.parse("00");
@@ -118,6 +127,7 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
                   onPressed: (){
                     setState(() {
                       _value = -1;
+                      Provider.of<TestProviderClass>(context,listen: false).selectedRadioValues[setQID] = '';
                       Provider.of<TestProviderClass>(context,listen: false).textController.clear();
                       // Provider.of<TestProviderClass>(context,listen: false).selectedIndex.remove(value)
                       Provider.of<TestProviderClass>(context, listen: false).optionVal = '';
@@ -136,6 +146,9 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
                   elevation: 0,
                   onPressed: (){
                     setState(() {
+                      /*Provider.of<TestProviderClass>(context,listen: false).selectedRadioValues[setQID] =
+                      Provider.of<TestProviderClass>(context,listen: false).selectedIndex;*/
+                      Provider.of<TestProviderClass>(context,listen: false).selectedIndex.clear();
                       if(setQID+1 < data.length){
                         nextPrev = "Next";
                         setQID = setQID + 1;
@@ -252,7 +265,13 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
                             print(postmap);*/
                             // timeBetweenTaps();
                             setState(() {
+                              Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues[setQID] =
+                                  Provider.of<TestProviderClass>(context,listen: false).textController.text;
+                              print(setQID);
+                              print(Provider.of<TestProviderClass>(context,listen: false).textController.text);
                               setQID = data[index]['id'];
+                              Provider.of<TestProviderClass>(context, listen: false).selectedIndexes = [];
+                              print(Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues);
                               // print(questions.length);
                             });
                             /*_store.add(setQID);
@@ -280,7 +299,7 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
               ),
             ),
           ),
-          questionWidget(queId: questions.elementAt(setQID)),
+          questionWidget(queId: questions.elementAt(setQID),selectedQID: setQID),
         ],
       ),
     );
@@ -308,7 +327,7 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
         Column(
           children: [
             Text(
-              "Time Left",
+              "$secondsLeft Time Left",
               style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: Constants.grey),
             ),
             Container(

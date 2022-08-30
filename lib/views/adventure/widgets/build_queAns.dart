@@ -16,7 +16,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class questionWidget extends StatefulWidget {
   final dynamic queId;
-  const questionWidget({Key? key, required this.queId}) : super(key: key);
+  final dynamic selectedQID;
+  const questionWidget({Key? key, required this.queId,required this.selectedQID}) : super(key: key);
 
   @override
   _questionWidgetState createState() => _questionWidgetState();
@@ -25,16 +26,43 @@ class questionWidget extends StatefulWidget {
 class _questionWidgetState extends State<questionWidget> {
 
   String optionVal = '';
+  Map<dynamic,dynamic> selectedRadioValues = {};
+  var setQID;
+  var selectedIndexes = [];//Provider.of<TestProviderClass>(context, listen: false).selectedIndex
+
+  @override
+  void initState() {
+
+/*    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      for(int i=0;i<3;i++){
+        selectedRadioValues.putIfAbsent(i, () => "");
+      }
+    });*/
+  }
 
   @override
   Widget build(BuildContext context) {
+    setState((){
+      selectedIndexes = (Provider.of<TestProviderClass>(context, listen: false).selectedIndexes);
+      selectedRadioValues = (Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues);
 
+    });
+
+    setQID = widget.selectedQID;
     QuestionClass question = widget.queId;
     String s = (question.text);
-    Provider.of<TestProviderClass>(context,listen: false).textController.clear();
-    // print(s);
 
-    var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
+    if(question.type == "RANGE" && selectedRadioValues[setQID] != '' && selectedRadioValues[setQID] != null){
+      print(selectedRadioValues[setQID]);
+      setState((){
+        Provider.of<TestProviderClass>(context,listen: false).textController.text = selectedRadioValues[setQID].toString();
+      });
+    }else{
+      Provider.of<TestProviderClass>(context,listen: false).textController.clear();
+    }
+    // selectedRadioValues[setQID] = Provider.of<TestProviderClass>(context,listen: false).textController.text;
+    // print(selectedRadioValues);
+
     if(question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
         question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'){
       Provider.of<TestProviderClass>(context,listen: false).isReset = true;
@@ -47,7 +75,7 @@ class _questionWidgetState extends State<questionWidget> {
         children: [
           Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
           const SizedBox(height: 10,),
-          linked_ques(question),
+          // linked_ques(question),
           (s.toString() != '') ?
           TeXView(
             child: TeXViewColumn(children: [
@@ -125,14 +153,19 @@ class _questionWidgetState extends State<questionWidget> {
                 ),
                 // Text(question.options.elementAt(index).text.toString()),
                 // subtitle: Text(this.noteList[position].actn_on),
-                value: selectedIndexes.contains(question.options.elementAt(index).id),
+                // value: selectedIndexes.contains(question.options.elementAt(index).id),
+                value: (selectedRadioValues[setQID] != null)?(selectedRadioValues[setQID].contains(question.options.elementAt(index).id)) : false,
                 onChanged: (_) {
-                  if (selectedIndexes.contains(question.options.elementAt(index).id)) {
-                    selectedIndexes.remove(question.options.elementAt(index).id);   // unselect
-                  } else {
-                    selectedIndexes.add(question.options.elementAt(index).id);  // select
-                  }
-                  // print(selectedIndexes);
+                  setState((){
+                    if (selectedIndexes.contains(question.options.elementAt(index).id)) {
+                      selectedIndexes.remove(question.options.elementAt(index).id);   // unselect
+                    } else {
+                      selectedIndexes.add(question.options.elementAt(index).id);  // select
+                    }
+                  });
+                  selectedRadioValues[setQID] = selectedIndexes;
+                  print(selectedRadioValues);
+
                 },
                 controlAffinity: ListTileControlAffinity.leading,
               );
@@ -142,6 +175,15 @@ class _questionWidgetState extends State<questionWidget> {
               question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT') ?
           Column(
             children: List.generate(question.options.length, (index) {
+/*              return RadioButtonGroup(
+                onSelected: (String selected){
+                  setState(){
+                    selectedRadioValues[index] = selected;
+                  }
+                },
+                picked: selectedRadioValues[index],
+                labels: <String>[question.options.elementAt(index).text.toString()],
+              );*/
               return RadioListTile(
                   title: TeXView(
                     child: TeXViewColumn(children: [
@@ -149,11 +191,17 @@ class _questionWidgetState extends State<questionWidget> {
                     ]),
                   ),
                   // Text(question.options.elementAt(index).text.toString()),
-                  value: question.options.elementAt(index).text.toString(),
-                  groupValue: Provider.of<TestProviderClass>(context, listen: false).optionVal,
+                  value: question.options.elementAt(index).id.toString(),
+                  groupValue:
+                  // Provider.of<TestProviderClass>(context, listen: false).optionVal
+                  (selectedRadioValues[setQID] == question.options.elementAt(index).id.toString())?
+                  selectedRadioValues[setQID]
+                  : Provider.of<TestProviderClass>(context, listen: false).optionVal,
                   onChanged: (value){
                     setState(() {
+                      selectedRadioValues[setQID] = value;
                       Provider.of<TestProviderClass>(context, listen: false).optionVal = value.toString();
+                      print(selectedRadioValues);
                     });
                   });
             }),

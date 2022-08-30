@@ -1,6 +1,7 @@
 class QuestionClass{
   final String type;
   final String text;
+  final String id;
   final dynamic correctMarks;
   final dynamic incorrectMarks;
   dynamic queImage;
@@ -14,6 +15,7 @@ class QuestionClass{
   QuestionClass({
     required this.type,
     required this.text,
+    required this.id,
     required this.correctMarks,
     required this.incorrectMarks,
     this.queImage,
