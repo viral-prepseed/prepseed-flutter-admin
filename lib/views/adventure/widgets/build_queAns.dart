@@ -28,16 +28,12 @@ class _questionWidgetState extends State<questionWidget> {
   String optionVal = '';
   Map<dynamic,dynamic> selectedRadioValues = {};
   var setQID;
+  late String typeText;
   var selectedIndexes = [];//Provider.of<TestProviderClass>(context, listen: false).selectedIndex
 
   @override
   void initState() {
 
-/*    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      for(int i=0;i<3;i++){
-        selectedRadioValues.putIfAbsent(i, () => "");
-      }
-    });*/
   }
 
   @override
@@ -65,15 +61,20 @@ class _questionWidgetState extends State<questionWidget> {
 
     if(question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
         question.type == 'MULTIPLE_CHOICE_SINGLE_CORRECT'){
+      typeText = "Single Choice";
       Provider.of<TestProviderClass>(context,listen: false).isReset = true;
+    }else if(question.type == 'RANGE' ){
+      typeText = "Range";
+      Provider.of<TestProviderClass>(context,listen: false).isReset = false;
     }else{
+      typeText = "Multiple Choice";
       Provider.of<TestProviderClass>(context,listen: false).isReset = false;
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Text(question.type, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
+          Text(typeText, style: GoogleFonts.poppins(fontSize: 14,fontWeight: FontWeight.w500),),
           const SizedBox(height: 10,),
           // linked_ques(question),
           (s.toString() != '') ?
@@ -192,6 +193,7 @@ class _questionWidgetState extends State<questionWidget> {
                   ),
                   // Text(question.options.elementAt(index).text.toString()),
                   value: question.options.elementAt(index).id.toString(),
+                  // tileColor: (index==3)? Colors.red : (index==1)? Colors.deepOrange : Colors.transparent,
                   groupValue:
                   // Provider.of<TestProviderClass>(context, listen: false).optionVal
                   (selectedRadioValues[setQID] == question.options.elementAt(index).id.toString())?

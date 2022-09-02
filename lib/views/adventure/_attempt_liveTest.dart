@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:prepseed/views/adventure/widgets/build_queAns.dart';
+import 'package:prepseed/views/adventure/widgets/header.dart';
 
 import '../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,23 +36,15 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
   var setQID = 0;
   List<QuestionClass> questions = [];
   Map listTopics = {};
+  Map sectionListAnswer = {};
   dynamic _value = 1;
+  var prevTabValue = 0;
 
   bool isMarked = false;
   var nextPrev = "Next";
-  int secondsLeft = 500;
-  late Timer countDown;
   @override
   void initState() {
 
-    countDown = Timer.periodic(Duration(seconds:1), (timer){
-      secondsLeft--;
-      if(secondsLeft <= 0)
-      {
-        timer.cancel();
-      }
-      setState((){});
-    });
 
     // setQID = Provider.of<TestProviderClass>(context,listen: false).setQID;
     hours1 = int.parse("03");
@@ -67,7 +60,20 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
     listTopics = Provider.of<TestProviderClass>(context, listen: false).listTopics;
     questions = listTopics.values.elementAt(0);
     _controller = TabController(length: tabValues.length, vsync: this,animationDuration: Duration.zero);
-/*    reset1();
+    _controller!.addListener(() {
+      if(Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues.isNotEmpty){
+        sectionListAnswer[prevTabValue] = (Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues);
+      }
+        print(sectionListAnswer);
+      prevTabValue = _controller!.index;
+      questions = listTopics.values.elementAt(_controller!.index);
+      setState(() {
+        questions;
+        setQID = 0;
+        // print(questions.elementAt(_controller!.index).text);
+      });
+    });
+    /*    reset1();
     startTimer1();*/
   }
 
@@ -77,7 +83,8 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
       child: Scaffold(
         body: Column(
           children: [
-            actionWidgets(),
+            header(),
+            // actionWidgets(),
             buildTopicTabs(),
             bottomActionWidget()
           ],
@@ -175,7 +182,6 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
     );
   }
 
-
   /*==================================================== buildTopicTabs  ============================================================*/
   buildTopicTabs(){
     return Expanded(
@@ -205,8 +211,6 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
       ),
     );
   }
-
-
 
   Widget selectQueList(){
     // calQueTime();
@@ -265,8 +269,10 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
                             print(postmap);*/
                             // timeBetweenTaps();
                             setState(() {
-                              Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues[setQID] =
-                                  Provider.of<TestProviderClass>(context,listen: false).textController.text;
+                              if(questions[setQID].type == "RANGE"){
+                                Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues[setQID] =
+                                    Provider.of<TestProviderClass>(context,listen: false).textController.text;
+                              }
                               print(setQID);
                               print(Provider.of<TestProviderClass>(context,listen: false).textController.text);
                               setQID = data[index]['id'];
@@ -305,7 +311,6 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
     );
   }
 
-
   calLength(dataIndex){
     num addLength = 0;
     int i = _controller!.index;
@@ -327,7 +332,7 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
         Column(
           children: [
             Text(
-              "$secondsLeft Time Left",
+              "Time Left",
               style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: Constants.grey),
             ),
             Container(
