@@ -1,11 +1,11 @@
-class CloseSession {
+class SessionProgress {
   String? message;
   String? code;
   String? sessionId;
 
-  CloseSession({this.message, this.code, this.sessionId});
+  SessionProgress({this.message, this.code, this.sessionId});
 
-  CloseSession.fromJson(Map<String, dynamic> json) {
+  SessionProgress.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     code = json['code'];
     sessionId = json['sessionId'];

@@ -7,6 +7,7 @@ class Constants {
   static final backgroundColorlight = Color(0xE8C7C7C7);
   static final blue = Color(0xE8C7C7C7);
 
+  static final ligh_grey = Color(0xFFD3D3D3);
   static final whitetextcolor = Color(0xFFFFFFFF);
   static final d_white = Color(0xE8C7C7C7);
   static final textcolor = Color(0xFF949696);

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:prepseed/constants/theme/style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:prepseed/model/execute/tests/practice/getanswer.dart';
 //import 'package:prepseed/model/execute/tests/list_questions.dart';
 import 'package:prepseed/views/execute/practice/practice.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import '../../../constants/colorPalate.dart';
+import '../../../helper/api/functions.dart';
 import '../../../helper/provider/practice/getquestion_provider.dart';
 import '../../../helper/provider/testsProvider.dart';
 import '../../../model/execute/tests/practice/getquestion.dart';
@@ -17,7 +18,7 @@ import 'package:google_fonts/google_fonts.dart';
 class PracticeTest extends StatefulWidget {
 
   SubTopicsUsr topic;
-  PracticeTest({required this.topic});
+  PracticeTest({Key? key, required this.topic}) : super(key: key);
 
   @override
   _PracticeTestState createState() => _PracticeTestState();
@@ -26,14 +27,22 @@ class PracticeTest extends StatefulWidget {
 class _PracticeTestState extends State<PracticeTest> {
 
   GetQuestionProvider getQuestionProvider = GetQuestionProvider();
-  Duration duration1 = Duration();
+  Duration duration1 = const Duration();
+  bool check = false;
+  String? queId;
+  String? ansId;
+  bool isEnable = false;
+  bool optionColor = false;
+  Map<dynamic,dynamic> isTrue = {};
+  bool checkColor = false;
 
   @override
   void initState() {
 
-    final provMdl = Provider.of<GetQuestionProvider>(context, listen: false);
-    provMdl.getQuestion(widget.topic.sId.toString());
-   // getQuestionProvider.getQuestion(widget.topic.sId.toString());
+    isTrue = {};
+   // final provMdl = Provider.of<GetQuestionProvider>(context, listen: false);
+   //provMdl.getQuestion(widget.topic.sId.toString()) ;
+    //getQuestionProvider.getQuestion(widget.topic.sId.toString());
     super.initState();
   }
   @override
@@ -44,56 +53,39 @@ class _PracticeTestState extends State<PracticeTest> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 10.0,),
+            const SizedBox(height: 10.0,),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(widget.topic.name.toString(),style: Style.textStyleBold13,),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Expanded(
-                child: Consumer<GetQuestionProvider>(
-                  builder: (context, dataItems, _){
-                    List options = [];
-                    if(provMdl.getQuestionModel.question != null){
-                    options.addAll(provMdl.getQuestionModel.question!.core!.options!);
-                    }
-                    print(options);
-                    return provMdl.getQuestionModel.question != null
-                        ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            actionWidgets(),
-                            SizedBox(height: 20.0),
-                            question(provMdl.getQuestionModel.question!.core!.content!.rawContent!),
-
-                         /*   Text(provMdl.getQuestionModel.question!.core!.content!.rawContent!.blocks![0].text.toString(),
-                              style: Style.textStyleBold13,
-                              textAlign: TextAlign.justify,
-                            ),*/
-                            SizedBox(height: 20.0,),
-                            option(options),
-                            SizedBox(height: 20.0,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton(onPressed: (){
-                                  provMdl.getQuestion(widget.topic.sId.toString());
-                                }, child: Text('Next')),
-                                SizedBox(width: 20.0,),
-                                ElevatedButton(onPressed: () async {
-                                  await provMdl.closeQuestions();
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => practice(),));
-                                }, child: Text('End Session'))
-                              ],
-                            ),
-
-                          ],
-                        )
-                        : Container();
-                  },
-                ),
+            Expanded(
+              child: Consumer<GetQuestionProvider>(
+                builder: (context, dataItems, _){
+                  List<Options> options = [];
+                  if(provMdl.getQuestionModel.question != null){
+                  options.addAll(provMdl.getQuestionModel.question!.core!.options!);
+                  }
+                  return provMdl.getQuestionModel.question != null
+                      ? ListView(
+                       // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          actionWidgets(),
+                          const SizedBox(height: 20.0),
+                          question(provMdl.getQuestionModel.question!.core!),
+                       /*   Text(provMdl.getQuestionModel.question!.core!.content!.rawContent!.blocks![0].text.toString(),
+                            style: Style.textStyleBold13,
+                            textAlign: TextAlign.justify,
+                          ),*/
+                          const SizedBox(height: 20.0,),
+                          option(options),
+                          const SizedBox(height: 20.0,),
+                          check
+                          ? solutions(provMdl.getAnswers)
+                          : Container(),
+                        ],
+                      )
+                      : Container();
+                },
               ),
             )
           ],
@@ -102,22 +94,99 @@ class _PracticeTestState extends State<PracticeTest> {
     );
   }
 
+/*====================================================================Solutions=================================================================*/
+
+  Widget solutions(GetAnswer getAnswer){
+    List<String> _linkList = [];
+    String? _linkText;
+    /*String _linkImage;*/
+    for(var blockString in getAnswer.question!.core!.solution!.rawContent!.blocks!){
+      if(blockString.text!.trim().toString() != ""){
+      _linkList.add(functions().convertLetX(blockString.text.toString()));}
+    }
+    if(_linkList.isNotEmpty){
+    _linkText = _linkList.join('\n');
+    }
+    return Column(
+      children: [
+        Text(getAnswer.message.toString()),
+        const SizedBox(height: 10.0,),
+        _linkText != null ?
+        TeXView(
+          child: TeXViewColumn(children: [
+            _teXViewWidgetQuestion((_linkText.toString())),
+          ]),
+        ) : Container(),
+      //  getAnswer.question!.core!.solution!.rawContent!.entityMap != null ?
+        getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve != null ?
+
+       /* getAnswer.question!.core!.solution!.rawContent!.entityMap != null ?
+        getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve != null ?
+        TeXView(
+          child: TeXViewColumn(children: [
+            _teXViewWidgetQuestion((getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve!.data!.url.toString())),
+          ]),
+        )
+        : Container() :*/
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.network(getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve!.data!.url.toString()),
+        )
+            :  Container()
+
+     /*  // Text(getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve!.data!.url.toString())
+           */
+        /* :  TeXView(
+            child: TeXViewColumn(children: [
+              _teXViewWidgetQuestion((_linkText)),
+            ])
+        )    : Container()*/
+
+      ],
+    );
+  }
 
 /*============================================ Questions ===================================================*/
 
 
-  Widget question(RawContent rawContent){
+  Widget question(Core core){
+    RawContent rawContent = core.content!.rawContent!;
     String? img;
-    if(rawContent.entityMap != null){
-      img = rawContent.entityMap!.first.data!.first.url;
+    String? content;
+    if(rawContent.entityMap != null && rawContent.entityMap!.length != 0){
+      img = rawContent.entityMap![0].data!.url;
+      content =  rawContent.entityMap![0].data!.content;
+    }
+    List<String> _linkList = [];
+    String? _linkText;
+    /*String _linkImage;*/
+    for(var blockString in rawContent.blocks!){
+      if(blockString.text!.trim().toString() != ""){
+      _linkList.add(functions().convertLetX(blockString.text.toString()));}
+    }
+    if(_linkList.isNotEmpty){
+      _linkText = _linkList.join('\n');
     }
     return  Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(core.type.toString()),
+        ),
+        content != null ?
         TeXView(
           child: TeXViewColumn(children: [
-            _teXViewWidget((rawContent.blocks![0].text.toString()))
+            _teXViewWidgetQuestion((content.toString())),
           ]),
-        ),
+        ) : Container(),
+        _linkText != null ?
+        TeXView(
+          child: TeXViewColumn(children: [
+            _teXViewWidgetQuestion((_linkText.toString())),
+          ]),
+        ) : Container(),
         img != null ?
         /*Image.network((question.queImage),
             // height: 190,
@@ -168,6 +237,11 @@ class _PracticeTestState extends State<PracticeTest> {
       ],
     );
   }
+
+
+/*============================================ Time Duration ===============================================*/
+
+
   Widget actionWidgets(){
     return /*Row(
      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -182,7 +256,7 @@ class _PracticeTestState extends State<PracticeTest> {
             ),
             Container(
               // width: MediaQuery.of(cxontext).size.width/2,
-                margin: EdgeInsets.only(top: 5, bottom: 5),
+                margin: const EdgeInsets.only(top: 5, bottom: 5),
                 child: buildTime1()
             ),
           ],
@@ -226,7 +300,7 @@ class _PracticeTestState extends State<PracticeTest> {
     final minutes = twoDigits(duration1.inMinutes.remainder(60));
     final seconds = twoDigits(duration1.inSeconds.remainder(60));
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         // border: Border.all(color: Constants.grey)
       ),
       child: Row(
@@ -249,7 +323,7 @@ class _PracticeTestState extends State<PracticeTest> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               // color: Colors.white,
                 borderRadius: BorderRadius.circular(20)),
@@ -276,7 +350,7 @@ class _PracticeTestState extends State<PracticeTest> {
 /*======================================================== Options ================================================*/
 
 
-  Widget option(List options){
+  Widget option(List<Options>? options){
     final provMdl = Provider.of<GetQuestionProvider>(context);
     Core question = Core();
     question = provMdl.getQuestionModel.question!.core!;
@@ -285,37 +359,78 @@ class _PracticeTestState extends State<PracticeTest> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(question.type.toString()),
-            SizedBox(height: 5.0),
+            const SizedBox(height: 5.0),
             question.type == 'MULTIPLE_CHOICE_MULTIPLE_CORRECT' ||
             question.type == "LINKED_MULTIPLE_CHOICE_MULTIPLE_CORRECT"  ?
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(options.length, (index) {
-            return CheckboxListTile(
-              title:
-              TeXView(
-                child: TeXViewColumn(children: [
-                  _teXViewWidget((options[index].content.rawContent.blocks[0].text.toString())),
-                ]),
+          children: List.generate(options!.length, (index) {
+            String optionsValue = functions().convertLetX(options[index].content!.rawContent!.blocks![0].text.toString());
+            List<String> _linkList = [];
+            String? _linkText;
+            String? _linkImage;
+            if(options[index].content!.rawContent!.entityMap != null && options[index].content!.rawContent!.entityMap!.length != 0){
+            _linkImage = options[index].content!.rawContent!.entityMap![0].data!.url.toString();}
+            for(var blockString in options[index].content!.rawContent!.blocks!){
+              if(blockString.text!.trim().toString() != ""){
+                _linkList.add(functions().convertLetX(blockString.text.toString()));}
+            }
+            if(_linkList.isNotEmpty){
+              _linkText = _linkList.join('\n');
+              print(_linkText);
+            }
+            return
+                 CheckboxListTile(
+              title: Column(
+                children: [
+                  _linkText != null ?
+                  TeXView(
+                    child: TeXViewColumn(children: [
+                      _teXViewWidget(optionsValue.toString()),
+                    ]),
+                  )
+                       : Container(),
+                  _linkImage != null ?
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child:CachedNetworkImage(
+                            imageUrl: _linkImage.toString(),
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Constants.green,)),
+                            imageBuilder: (context, image) => Image(
+                              image: image,
+                              height: MediaQuery.of(context).size.height / 6,
+                              width: MediaQuery.of(context).size.width,
+                              /*height: MediaQuery.of(context).size.height / 9,*/
+                              fit: BoxFit.contain,)
+                        )
+                        //Image.network( options[index].content!.rawContent!.entityMap![0].data!.url.toString()),
+                      )
+                      : Container()
+                ],
               ),
-              // Text(options[index].content.rawContent.blocks[0].text.toString()),
-              // subtitle: Text(this.noteList[position].actn_on),
-              value: selectedIndexes.contains(options[index].id),
-              onChanged: (_) {
+              value: selectedIndexes.contains(options[index].sId),
+              onChanged: (_) async {
                 print(question.sId);
                 print(options[index].sId);
-                print(options[index].content.rawContent.blocks[0]);
-                if (selectedIndexes.contains(options[index].id)) {
-                  selectedIndexes.remove(options[index].id);   // unselect
+                setState(() {
+                  ansId = options[index].sId;
+                  queId =  question.sId.toString();
+                  isEnable = true;
+                });
+              //  await provMdl.getQuestion(widget.topic.sId.toString());
+               // provMdl.getAnswer(options[index].sId, question.sId.toString());
+                print(options[index].content!.rawContent!.blocks![0]);
+                if (selectedIndexes.contains(options[index].sId)) {
+                  selectedIndexes.remove(options[index].sId);   // unselect
                 } else {
-                  selectedIndexes.add(options[index].id);  // select
+                  selectedIndexes.add(options[index].sId);  // select
                 }
                 // print(selectedIndexes);
               },
               controlAffinity: ListTileControlAffinity.leading,
-            );
+            )
+            ;
           }),
         ):
         (question.type == 'LINKED_MULTIPLE_CHOICE_SINGLE_CORRECT' ||
@@ -323,28 +438,67 @@ class _PracticeTestState extends State<PracticeTest> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: List.generate(options.length, (index) {
+          children: List.generate(options!.length, (index) {
+            String optionsValue = functions().convertLetX(options[index].content!.rawContent!.blocks![0].text.toString());
+            List<String> _linkList = [];
+            String? _linkText;
+            String? _linkImage;
+            if(options[index].content!.rawContent!.entityMap != null && options[index].content!.rawContent!.entityMap!.length != 0){
+              _linkImage = options[index].content!.rawContent!.entityMap![0].data!.url.toString();}
+            for(var blockString in options[index].content!.rawContent!.blocks!){
+              if(blockString.text!.trim().toString() != ""){
+                _linkList.add(functions().convertLetX(blockString.text.toString()));}
+            }
+            if(_linkList.isNotEmpty){
+              _linkText = _linkList.join('\n');
+              print(_linkText);
+            }
             return RadioListTile(
-                title: /*TeXView(
-                  child: TeXViewColumn(children: [
-                    _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
-                  ]),
-                ),*/
-                TeXView(
-                  child: TeXViewColumn(children: [
-                    _teXViewWidget((options[index].content.rawContent.blocks[0].text.toString())),
-                  ]),
+              tileColor: optionColor ?  isTrue[options[index].sId] == "true" ? Colors.green :isTrue[options[index].sId] == "false" ? Colors.red : Colors.transparent : Colors.transparent,
+                title: Column(
+                  children: [
+                    _linkText != null ?
+                    TeXView(
+                      child: TeXViewColumn(children: [
+                        _teXViewWidget(optionsValue.toString()),
+                      ]),
+                    )
+                        : Container(),
+                    _linkImage != null ?
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CachedNetworkImage(
+                          imageUrl: _linkImage.toString(),
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Constants.green,)),
+                          imageBuilder: (context, image) => Image(
+                            image: image,
+                            height: MediaQuery.of(context).size.height / 6,
+                            width: MediaQuery.of(context).size.width,
+                            /*height: MediaQuery.of(context).size.height / 9,*/
+                            fit: BoxFit.contain,)
+                      ),
+                      //Image.network( options[index].content!.rawContent!.entityMap![0].data!.url.toString()),
+                    )
+                        : Container()
+                  ],
                 ),
                 //Text(options[index].content.rawContent.blocks[0].text.toString()),
-                value: options[index].content.rawContent.blocks[0].text.toString(),
+                value: options[index].sId.toString(),
                 groupValue: Provider.of<TestProviderClass>(context, listen: false).optionVal,
-                onChanged: (value){
+                onChanged: (value) async {
+                  //await provMdl.getQuestion(widget.topic.sId.toString());
+                 // provMdl.getAnswer(options[index].sId, question.sId.toString());
                   print(question.sId);
                   print(options[index].sId);
                   setState(() {
+                    ansId = options[index].sId;
+                    queId =  question.sId.toString();
+                    isEnable = true;
                     Provider.of<TestProviderClass>(context, listen: false).optionVal = value.toString();
                   });
-                });
+                }
+
+                );
           }),
         ) : (question.type == 'RANGE') ?
         TextField(
@@ -357,27 +511,103 @@ class _PracticeTestState extends State<PracticeTest> {
         ) : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
-          children: List.generate(options.length, (index) {
+          children: List.generate(options!.length, (index) {
             return ListTile(
-              title: Text(options[index].content.rawContent.blocks[0].text.text),
+              title: Text(options[index].content!.rawContent!.blocks![0].text.toString()),
             );
-          }))
+          })),
+           const SizedBox(height: 20.0,),
            // Text(options[ind].content.rawContent.blocks[0].text.toString()),
-
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                check ?
+                ElevatedButton(onPressed: () async {
+                  await provMdl.getQuestion(widget.topic.sId.toString());
+                  setState(() {
+                    provMdl.getAnswers.message == null;
+                    check = false;
+                    ansId = null;
+                    queId = null;
+                    isEnable = false;
+                    optionColor = false;
+                  });
+                 //Navigator.pop(context);
+                }, child: const Text('Next')):
+                ElevatedButton(onPressed: () async {
+                  isEnable ? await provMdl.getAnswer(ansId.toString(), queId.toString()) : null;
+                  isEnable ? setState(()  {
+                     check = true ;
+                     optionColor = true;
+                     print(provMdl.getAnswers.question!.core!.options);
+                     provMdl.getAnswers.question!.core!.options!.forEach((element) { //element.sId == Provider.of<TestProviderClass>(context, listen: false).optionVal &&
+                       if(element.isCorrect == true){
+                         checkColor = true;
+                         isTrue[element.sId] = "true";
+                       }
+                       else if(element.sId == Provider.of<TestProviderClass>(context, listen: false).optionVal && element.isCorrect == false){
+                         checkColor = false;
+                         isTrue[element.sId] = "false";
+                       }
+                       else{
+                         isTrue[element.sId] = "falsefalse";
+                       }
+                     });
+                  }) : null;
+                }, child: const Text('Check')),
+                const SizedBox(width: 20.0,),
+                ElevatedButton(onPressed: () async {
+                  await provMdl.closeQuestions();
+                  /*setState(() {
+                    provMdl.getAnswers.message == null;
+                  });*/
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const practice(),));
+                }, child: const Text('End Session'))
+              ],
+            ),
           ],
         );
   }
-  static TeXViewWidget _teXViewWidget( String body) {
+
+/*========================================================TextViewColumn==================================================*/
+
+  static TeXViewWidget _teXViewWidgetQuestion( String body) {
     return TeXViewColumn(
-        style: const TeXViewStyle(
-           // margin: TeXViewMargin.all(10),
-            padding: TeXViewPadding.all(10),
+        style:  TeXViewStyle(
+          backgroundColor: Colors.transparent,
+            margin: const TeXViewMargin.all(10),
+            padding: const TeXViewPadding.all(10),
             textAlign: TeXViewTextAlign.Center,
-            borderRadius: TeXViewBorderRadius.all(10),
+            borderRadius: const TeXViewBorderRadius.all(10),
             border: TeXViewBorder.all(TeXViewBorderDecoration(
                 borderWidth: 2,
                 // borderStyle: TeXViewBorderStyle.groove,
-                borderColor: Colors.green))),
+                borderColor: Constants.ligh_grey))),
+        children: [/*
+          TeXViewDocument(title,
+              style: const TeXViewStyle(
+                  padding: TeXViewPadding.all(10),
+                  borderRadius: TeXViewBorderRadius.all(10),
+                  // textAlign: TeXViewTextAlign.center,
+                  width: 250,
+                  margin: TeXViewMargin.zeroAuto(),
+                  backgroundColor: Colors.green)),*/
+          TeXViewDocument(body,
+              style: const TeXViewStyle(margin: TeXViewMargin.only(top: 10)))
+        ]);
+  }
+  static TeXViewWidget _teXViewWidget( String body) {
+    return TeXViewColumn(
+        style:  TeXViewStyle(
+          // margin: TeXViewMargin.all(10),
+            padding: const TeXViewPadding.all(10),
+            textAlign: TeXViewTextAlign.Center,
+            borderRadius: const TeXViewBorderRadius.all(10),
+            border: TeXViewBorder.all(TeXViewBorderDecoration(
+                borderWidth: 2,
+                // borderStyle: TeXViewBorderStyle.groove,
+                borderColor: Constants.ligh_grey))),
         children: [/*
           TeXViewDocument(title,
               style: const TeXViewStyle(

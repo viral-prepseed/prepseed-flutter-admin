@@ -100,8 +100,12 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
                                           scrollDirection: Axis.horizontal,
                                           itemCount: provMdl.map.values.elementAt(index).length,
                                           itemBuilder: (context, ind) {
-                                            String subSvg = provMdl.map.values.elementAt(index)[ind].thumbNailsUrls.toString();
-                                            String img = subSvg.split('.').last;
+                                            String? subSvg;
+                                            String? img;
+                                            if(provMdl.map.values.elementAt(index)[ind].thumbNailsUrls != null && provMdl.map.values.elementAt(index)[ind].thumbNailsUrls.length != 0 ){
+                                            subSvg = provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0].toString();
+                                            img = subSvg.split('.').last;
+                                            }
                                             return Stack(
                                               alignment: Alignment.topRight,
                                               children: [
@@ -115,15 +119,15 @@ class _VideosHomeScreenState extends State<VideosHomeScreen> {
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                       children: [
-                                                        provMdl.map.values.elementAt(index)[ind].thumbNailsUrls.length == 0
-                                                        ? Container()
-                                                        : img.contains('svg')
+                                                        subSvg == null ?
+                                                        Container()
+                                                        : img!.contains('svg')
                                                         ? SvgPicture.network(
                                                           provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],
                                                           fit: BoxFit.contain,
                                                           height: 45.0,
                                                          // placeholderBuilder: (context) => const CircularProgressIndicator(),
-                                                        ) : CachedNetworkImage(imageUrl: provMdl.map.values.elementAt(index)[ind].thumbNailsUrls[0],height: 45.0,),
+                                                        ) : CachedNetworkImage(imageUrl: subSvg,height: 45.0,),
                                                         const SizedBox(height: 30.0),
                                                         Text(
                                                             "${provMdl.map.values.elementAt(index)[ind].title}",

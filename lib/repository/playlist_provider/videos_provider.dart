@@ -140,7 +140,7 @@ class VideosProvider extends ChangeNotifier {
           if(playlistElement.resourceType == "Video"){
           playList.add(playlistElement);}
         }}
-        else{
+        else if(element == playlistElement.title){
           if(playlistElement.resourceType == "Video"){
             playList.add(playlistElement);}
         }

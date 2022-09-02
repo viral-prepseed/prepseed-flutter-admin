@@ -179,35 +179,87 @@ class RawContent {
     return data;
   }
 }
-class EntityMap{
+/*class EntityMap {
+  Solve? solve;
+
+  EntityMap({this.solve});
+
+  EntityMap.fromJson(Map<String, dynamic> json) {
+    solve = json['0'] != null ? new Solve.fromJson(json['0']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.solve != null) {
+      data['0'] = this.solve!.toJson();
+    }
+    return data;
+  }
+}*/
+/*
+
+class EntityMap {
+  Solve? solve;
+
+  EntityMap({this.solve});
+
+  EntityMap.fromJson(Map<String, dynamic> json) {
+    solve = json['0'] != null ? new Solve.fromJson(json['0']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.solve != null) {
+      data['0'] = this.solve!.toJson();
+    }
+    return data;
+  }
+}
+*/
+
+class EntityMap {
   String? type;
   String? mutability;
-  List<Data>? data;
+  Data? data;
 
-  EntityMap({this.mutability,this.data,this.type});
+  EntityMap({this.type, this.mutability, this.data});
 
   EntityMap.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     mutability = json['mutability'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].values.forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['mutability'] = this.mutability;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
     }
+    return data;
   }
 }
-class Data{
 
+class Data {
   String? url;
+  String? content;
+  Data({this.url,this.content});
 
-  Data({this.url});
-
-  Data.fromJson(Map<String, dynamic> json){
+  Data.fromJson(Map<String, dynamic> json) {
     url = json['url'];
+    content = json['content'];
   }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['url'] = this.url;
+    data['content'] = content;
+    return data;
+  }
 }
+
+
 class Blocks {
   String? key;
   String? text;

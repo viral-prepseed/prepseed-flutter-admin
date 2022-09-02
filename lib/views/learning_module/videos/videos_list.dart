@@ -77,11 +77,7 @@ class _PlaylistVideosState extends State<PlaylistVideos> {
                             children: [
                               CachedNetworkImage(
                                   imageUrl: widget.list!.items![index].resource!.thumbNailsUrls![0].toString(),
-                                  placeholder: (context, url) => Image(
-                                    image: AssetImage("assets/images/logo.png"),
-                                    width: MediaQuery.of(context).size.width / 4,
-                                    height: MediaQuery.of(context).size.height / 9,
-                                    fit: BoxFit.contain,),
+                                  placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
                                   imageBuilder: (context, image) => Image(
                                     image: image,
                                     width: MediaQuery.of(context).size.width / 4,
