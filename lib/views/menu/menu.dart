@@ -24,7 +24,7 @@ class MenuItems{
   static const quantizedSheet = MainMenuItems('Quantized Sheet',Icons.assignment_outlined);
   static const announcement = MainMenuItems('Announcements',Icons.announcement_outlined);
   static const doubt = MainMenuItems('Doubt', Icons.error);
-   static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
+  static const Tests = MainMenuItems('Tests',Icons.assignment_outlined);
   static const topicTests = MainMenuItems('Topic Tests',Icons.assignment_outlined);
   static const chats = MainMenuItems("Chats", Icons.message);
 
@@ -63,7 +63,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   var username,role,email;
-  var logo;
+  String? logo;
 
 
   @override
@@ -120,7 +120,7 @@ class _MenuScreenState extends State<MenuScreen> {
             //  ...MenuItems.all.map(buildMenuItem).toList(),
               SizedBox(height: 25.0,),
               CachedNetworkImage(
-                  imageUrl: logo,
+                  imageUrl: logo.toString(),
                   placeholder: (context, url) => Image(
                     image: const AssetImage("assets/images/logo.png"),
                     width: MediaQuery.of(context).size.width / 4,
@@ -135,7 +135,7 @@ class _MenuScreenState extends State<MenuScreen> {
               const SizedBox(height: 10.0,),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(username),
+                child: Text(username.toString()),
               ),
 /*              SizedBox(height: 10.0,),
               Text(email),*/

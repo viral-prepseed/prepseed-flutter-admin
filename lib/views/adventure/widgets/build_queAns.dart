@@ -271,7 +271,7 @@ class _questionWidgetState extends State<questionWidget> {
       }
 
       _linkText = _linkList.join('\n');
-      _linkImage = QuestionContents.fromJson(rawCont).entityMap;
+      // _linkImage = QuestionContents.fromJson(rawCont).entityMap;
 
 
       return Column(

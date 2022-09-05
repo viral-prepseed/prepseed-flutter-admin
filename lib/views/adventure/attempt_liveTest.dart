@@ -92,7 +92,6 @@ class _attempt_liveTestState extends State<attempt_liveTest> with SingleTickerPr
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -704,11 +703,14 @@ class _questionWidgetState extends State<questionWidget> {
       }
 
       _linkText = _linkList.join('\n');
+      if(QuestionContents.fromJson(rawCont).entityMap != null){
       _linkImage = QuestionContents.fromJson(rawCont).entityMap;
+      }
 
 
     return Column(
         children: [
+
 /*          ExpansionTile(title: Flexible(child: Text(_linkText,
             overflow: TextOverflow.fade,
             maxLines: 1,

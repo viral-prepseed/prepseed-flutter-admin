@@ -32,7 +32,6 @@ class AnnouncementRepo{
     else {
       throw Exception('Failed to get Playlist');
     }
-    print(_model);
     return _model;
   }
 

@@ -135,10 +135,12 @@ class _VimeoState extends State<Vimeo> {
                         padding: const EdgeInsets.fromLTRB(1.0, 1.0, 15.0, 1.0),
                         icon: const Icon(Icons.arrow_back_rounded)
                     ),
-                    Text(
-                      cmt.title.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15.0),
+                    Expanded(
+                      child: Text(
+                        cmt.title.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15.0),
+                      ),
                     ),
                   ],
                 ),

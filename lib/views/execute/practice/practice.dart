@@ -56,7 +56,7 @@ class _practiceState extends State<practice> {
       ),
       body: Consumer<UserClass>(builder: (context, userModel, child){
         // print(userModel.topicListFullData.length);
-        return Column(
+        return userModel.topicListFullData.isNotEmpty ? Column(
           children: [
             Expanded(
               child: GridView.builder(
@@ -103,7 +103,7 @@ class _practiceState extends State<practice> {
               ),
             ),
           ],
-        );
+        ) : Center(child: CircularProgressIndicator(),);
     })
     );
   }
