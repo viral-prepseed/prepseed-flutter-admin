@@ -6,6 +6,7 @@ import 'package:prepseed/model/execute/tests/practice/getanswer.dart';
 import 'package:prepseed/views/execute/practice/practice.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tex/flutter_tex.dart';
+import 'package:prepseed/views/execute/practice/practice_subTopics.dart';
 import '../../../constants/colorPalate.dart';
 import '../../../helper/api/functions.dart';
 import '../../../helper/provider/practice/getquestion_provider.dart';
@@ -35,11 +36,16 @@ class _PracticeTestState extends State<PracticeTest> {
   bool optionColor = false;
   Map<dynamic,dynamic> isTrue = {};
   bool checkColor = false;
-
+  var setPQID = 0;
+  var currentQid = 0;
   @override
   void initState() {
 
     isTrue = {};
+    Future.microtask(() async => {
+      Provider.of<GetQuestionProvider>(context, listen: false)
+          .getQuestionApiWithIndex("last"), //provider to call API and update data....
+    });
    // final provMdl = Provider.of<GetQuestionProvider>(context, listen: false);
    //provMdl.getQuestion(widget.topic.sId.toString()) ;
     //getQuestionProvider.getQuestion(widget.topic.sId.toString());
@@ -62,16 +68,19 @@ class _PracticeTestState extends State<PracticeTest> {
               child: Consumer<GetQuestionProvider>(
                 builder: (context, dataItems, _){
                   List<Options> options = [];
-                  if(provMdl.getQuestionModel.question != null){
-                  options.addAll(provMdl.getQuestionModel.question!.core!.options!);
+                  if(provMdl.getQuestionModel != null && provMdl.getQuestionModel!.question != null){
+                  options.addAll(provMdl.getQuestionModel!.question!.core!.options!);
                   }
-                  return provMdl.getQuestionModel.question != null
+                  return/* provMdl.sessionProgress!.sessionId != null*/
+                       provMdl.getQuestionModel!.question != null
                       ? ListView(
                        // crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+
                           actionWidgets(),
+                          selectIndex(),
                           const SizedBox(height: 20.0),
-                          question(provMdl.getQuestionModel.question!.core!),
+                          question(provMdl.getQuestionModel!.question!.core!),
                        /*   Text(provMdl.getQuestionModel.question!.core!.content!.rawContent!.blocks![0].text.toString(),
                             style: Style.textStyleBold13,
                             textAlign: TextAlign.justify,
@@ -85,6 +94,21 @@ class _PracticeTestState extends State<PracticeTest> {
                         ],
                       )
                       : Container();
+                      /*: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(provMdl.sessionProgress!.message.toString()),
+                            ElevatedButton(
+                                onPressed: (){
+                                  var newRoute = MaterialPageRoute(builder: (BuildContext context) => practice());
+                                      Navigator.of(context).push(newRoute);
+                                },
+                                child: Text("Back to Practice"))
+                          ],
+                        ),
+                      );*/
                 },
               ),
             )
@@ -94,6 +118,76 @@ class _PracticeTestState extends State<PracticeTest> {
     );
   }
 
+
+  Widget selectIndex(){
+    final provMdl = Provider.of<GetQuestionProvider>(context);
+    List<Map> data = List.generate(20,
+            (index) => {'id': index, 'name': 'Item $index', 'isSelected': false});
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            // width: double.maxFinite,
+            height: 60,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 780,
+                    childAspectRatio: 2 / 2,
+                    crossAxisSpacing: 50,
+                    mainAxisSpacing: 10
+                ),
+                // physics: NeverScrollableScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (context, index)
+                {
+                  // isMarked = false;
+                  return Stack(
+                    // key: _stackkey,
+                    children: [
+                      Card(
+                        key: ValueKey(data[index]['name']),
+                        color: (currentQid == index)
+                            ? Colors.green : Colors.white,
+                        elevation: 5,
+                        child: ListTile(
+                          enabled: setPQID >= index ? true : false,
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 0.0, horizontal: 0.0),
+                          onTap: () {
+                            provMdl.getQuestionApiWithIndex(index);
+                            setState(() {
+                              currentQid = index;print(currentQid);
+                            });
+                          },
+                          title: Align(
+                              alignment: Alignment.topCenter,
+                              child: Text(
+                                  (data[index]['id'] + 1).toString(),
+                                style: GoogleFonts.poppins(fontSize: 11),
+                              )),
+                        ),
+                      ),
+                      /*(index == setQID)? const Positioned(
+                        child: Icon(Icons.remove_red_eye_outlined, size: 12,),
+                        right: 0,
+                        top: -26,
+                        bottom: 0,
+                      ) : Container()*/
+                    ],
+                  ); },
+
+              ),
+            ),
+          ),
+         // questionWidget(queId: questions.elementAt(setQID),selectedQID: setQID),
+        ],
+      ),
+    );
+  }
 /*====================================================================Solutions=================================================================*/
 
   Widget solutions(GetAnswer getAnswer){
@@ -353,7 +447,7 @@ class _PracticeTestState extends State<PracticeTest> {
   Widget option(List<Options>? options){
     final provMdl = Provider.of<GetQuestionProvider>(context);
     Core question = Core();
-    question = provMdl.getQuestionModel.question!.core!;
+    question = provMdl.getQuestionModel!.question!.core!;
     var selectedIndexes = Provider.of<TestProviderClass>(context, listen: false).selectedIndex;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,8 +464,14 @@ class _PracticeTestState extends State<PracticeTest> {
             List<String> _linkList = [];
             String? _linkText;
             String? _linkImage;
+            String? contentText;
             if(options[index].content!.rawContent!.entityMap != null && options[index].content!.rawContent!.entityMap!.length != 0){
+              if(options[index].content!.rawContent!.entityMap![0].data!.url != null){
             _linkImage = options[index].content!.rawContent!.entityMap![0].data!.url.toString();}
+              else{
+                contentText = functions().convertLetX(options[index].content!.rawContent!.entityMap![0].data!.content.toString());
+              }
+            }
             for(var blockString in options[index].content!.rawContent!.blocks!){
               if(blockString.text!.trim().toString() != ""){
                 _linkList.add(functions().convertLetX(blockString.text.toString()));}
@@ -391,6 +491,13 @@ class _PracticeTestState extends State<PracticeTest> {
                     ]),
                   )
                        : Container(),
+                  contentText != null ?
+                  TeXView(
+                    child: TeXViewColumn(children: [
+                      _teXViewWidget(contentText.toString()),
+                    ]),
+                  )
+                      : Container(),
                   _linkImage != null ?
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -443,8 +550,14 @@ class _PracticeTestState extends State<PracticeTest> {
             List<String> _linkList = [];
             String? _linkText;
             String? _linkImage;
+            String? contentText;
             if(options[index].content!.rawContent!.entityMap != null && options[index].content!.rawContent!.entityMap!.length != 0){
-              _linkImage = options[index].content!.rawContent!.entityMap![0].data!.url.toString();}
+              if(options[index].content!.rawContent!.entityMap![0].data!.url != null){
+                _linkImage = options[index].content!.rawContent!.entityMap![0].data!.url.toString();}
+              else{
+                contentText = functions().convertLetX(options[index].content!.rawContent!.entityMap![0].data!.content.toString());
+              }
+            }
             for(var blockString in options[index].content!.rawContent!.blocks!){
               if(blockString.text!.trim().toString() != ""){
                 _linkList.add(functions().convertLetX(blockString.text.toString()));}
@@ -461,6 +574,13 @@ class _PracticeTestState extends State<PracticeTest> {
                     TeXView(
                       child: TeXViewColumn(children: [
                         _teXViewWidget(optionsValue.toString()),
+                      ]),
+                    )
+                        : Container(),
+                    contentText != null ?
+                    TeXView(
+                      child: TeXViewColumn(children: [
+                        _teXViewWidget(contentText.toString()),
                       ]),
                     )
                         : Container(),
@@ -523,7 +643,7 @@ class _PracticeTestState extends State<PracticeTest> {
               children: [
                 check ?
                 ElevatedButton(onPressed: () async {
-                  await provMdl.getQuestion(widget.topic.sId.toString());
+                  await provMdl.getQuestion(widget.topic.sId.toString(),widget.topic.name.toString());
                   setState(() {
                     provMdl.getAnswers.message == null;
                     check = false;
@@ -531,6 +651,8 @@ class _PracticeTestState extends State<PracticeTest> {
                     queId = null;
                     isEnable = false;
                     optionColor = false;
+                    setPQID ++;
+                    currentQid = setPQID;
                   });
                  //Navigator.pop(context);
                 }, child: const Text('Next')):
@@ -561,8 +683,7 @@ class _PracticeTestState extends State<PracticeTest> {
                   /*setState(() {
                     provMdl.getAnswers.message == null;
                   });*/
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const practice(),));
+                  Navigator.of(context).pop(practice());
                 }, child: const Text('End Session'))
               ],
             ),

@@ -157,7 +157,6 @@ class functions{
 
     var resp = await assessmentApiCall(qId);
 
-
     if(resp['success'] ==  false){
       return 'View Analysis';
     }else{
@@ -165,9 +164,5 @@ class functions{
     }
 
   }
-
-
-
-
 
 }

@@ -138,30 +138,16 @@ class _TestScreenState extends State<TestScreen> {
                                             ),
                                           ),
                                           onPressed: () {
-                                            var assessmentWrapperId = widget
-                                                .list[index].sId;
-                                            sharedPref().setSharedPref(
-                                                'assessmentWrapperId',
-                                                assessmentWrapperId);
-                                            Future.microtask(() async =>
-                                            {
-                                              Provider.of<TestProviderClass>(
-                                                  context, listen: false)
-                                                  .assessments(
-                                                  assessmentWrapperId),
-                                            });
-                                            var route = MaterialPageRoute(
-                                                builder: (
-                                                    BuildContext context) =>
+                                            var assessmentWrapperId = widget.list[index].sId;
+                                            sharedPref().setSharedPref('assessmentWrapperId', assessmentWrapperId);
+                                            Future.microtask(() async => {Provider.of<TestProviderClass>(context, listen: false).assessments(assessmentWrapperId),});
+                                            var route = MaterialPageRoute(builder: (BuildContext context) =>
                                                 // attempt_liveTest() :
                                                 InitializeProviderScreen());
                                             (snapshot.data!.contains('Attempt'))
                                                 ? showDialogBox()
                                                 :
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        InitializeProviderScreen())
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => InitializeProviderScreen())
                                             );
                                             // var route = MaterialPageRoute(builder: (BuildContext context) => AttemptTest());
                                           },
