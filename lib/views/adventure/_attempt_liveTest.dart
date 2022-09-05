@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:prepseed/views/adventure/widgets/build_queAns.dart';
+import 'package:prepseed/views/adventure/widgets/header.dart';
 
 import '../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,12 +36,17 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
   var setQID = 0;
   List<QuestionClass> questions = [];
   Map listTopics = {};
+  Map sectionListAnswer = {};
+  dynamic _value = 1;
+  var prevTabValue = 0;
 
-
+  bool isMarked = false;
+  var nextPrev = "Next";
   @override
   void initState() {
 
 
+    // setQID = Provider.of<TestProviderClass>(context,listen: false).setQID;
     hours1 = int.parse("03");
     mints1 = int.parse("00");
     secs1 = int.parse("00");
@@ -54,22 +60,127 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
     listTopics = Provider.of<TestProviderClass>(context, listen: false).listTopics;
     questions = listTopics.values.elementAt(0);
     _controller = TabController(length: tabValues.length, vsync: this,animationDuration: Duration.zero);
+    _controller!.addListener(() {
+      if(Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues.isNotEmpty){
+        sectionListAnswer[prevTabValue] = (Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues);
+      }
+        print(sectionListAnswer);
+      prevTabValue = _controller!.index;
+      questions = listTopics.values.elementAt(_controller!.index);
+      setState(() {
+        questions;
+        setQID = 0;
+        // print(questions.elementAt(_controller!.index).text);
+      });
+    });
+    /*    reset1();
+    startTimer1();*/
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          actionWidgets(),
-          buildTopicTabs(),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            header(),
+            // actionWidgets(),
+            buildTopicTabs(),
+            bottomActionWidget()
+          ],
+        ),
       ),
     );
   }
 
 
-
+  /*==================================================== bottomActionWidget  ============================================================*/
+  bottomActionWidget(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          height: 40, width: double.infinity,
+          /*color: Constants.blacklight.withOpacity(1),
+                padding: EdgeInsets.only(top: 20, bottom: 20),
+                margin: EdgeInsets.only(top:20),*/
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              /*Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      isMarked = !false;
+                      // _stackkey.currentState.
+                    });
+                  },
+                  child: Text("Mark", style: GoogleFonts.poppins(fontSize: 17,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+                ),
+              ),*/
+              (Provider.of<TestProviderClass>(context,listen: false).isReset == true) ?
+              Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      _value = -1;
+                      Provider.of<TestProviderClass>(context,listen: false).selectedRadioValues[setQID] = '';
+                      Provider.of<TestProviderClass>(context,listen: false).textController.clear();
+                      // Provider.of<TestProviderClass>(context,listen: false).selectedIndex.remove(value)
+                      Provider.of<TestProviderClass>(context, listen: false).optionVal = '';
+                    });
+                  },
+                  child: Text("Reset", style: GoogleFonts.poppins(fontSize: 15,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+              )
+                  : Container(),
+              Expanded(
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: (){
+                    setState(() {
+                      /*Provider.of<TestProviderClass>(context,listen: false).selectedRadioValues[setQID] =
+                      Provider.of<TestProviderClass>(context,listen: false).selectedIndex;*/
+                      Provider.of<TestProviderClass>(context,listen: false).selectedIndex.clear();
+                      if(setQID+1 < data.length){
+                        nextPrev = "Next";
+                        setQID = setQID + 1;
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("You have reached end of the questions."),
+                        ));
+                        /*nextPrev = "Prev";
+                        setQID = setQID - 1;*/
+                      }
+                    });
+                  },
+                  child: Text(nextPrev, style: GoogleFonts.poppins(fontSize: 15,
+                      color: Constants.backgroundColor.withOpacity(1),
+                      fontWeight: FontWeight.bold,letterSpacing: 2),),
+                  // colorBrightness: Brightness.dark,
+                  color: Constants.grey.withOpacity(1),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   /*==================================================== buildTopicTabs  ============================================================*/
   buildTopicTabs(){
@@ -100,8 +211,6 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
       ),
     );
   }
-
-
 
   Widget selectQueList(){
     // calQueTime();
@@ -160,7 +269,15 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
                             print(postmap);*/
                             // timeBetweenTaps();
                             setState(() {
+                              if(questions[setQID].type == "RANGE"){
+                                Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues[setQID] =
+                                    Provider.of<TestProviderClass>(context,listen: false).textController.text;
+                              }
+                              print(setQID);
+                              print(Provider.of<TestProviderClass>(context,listen: false).textController.text);
                               setQID = data[index]['id'];
+                              Provider.of<TestProviderClass>(context, listen: false).selectedIndexes = [];
+                              print(Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues);
                               // print(questions.length);
                             });
                             /*_store.add(setQID);
@@ -188,12 +305,11 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
               ),
             ),
           ),
-          questionWidget(queId: questions.elementAt(setQID)),
+          questionWidget(queId: questions.elementAt(setQID),selectedQID: setQID),
         ],
       ),
     );
   }
-
 
   calLength(dataIndex){
     num addLength = 0;

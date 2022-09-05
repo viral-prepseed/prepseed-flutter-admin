@@ -15,11 +15,12 @@ import '../../model/execute/tests/list_questions.dart';
 import '../../views/login/prepseed_loginScreen.dart';
 import '../sharedPref.dart';
 class TestProviderClass extends ChangeNotifier {
-  final _textController = TextEditingController();
+  var _textController = TextEditingController();
   bool isLoading = false;
   List emptyList = [];
   String _optionVal = '';
   bool _isReset = false;
+  var _setQID = 10;
   List<AssessmentWrappers> post = [];
   list_questions? _assessment;
   List TabValues = [];
@@ -27,6 +28,8 @@ class TestProviderClass extends ChangeNotifier {
   List type = [];
   List strVal = [];
   List dataValue = [];
+  List _selectedIndexes = [];
+  Map<dynamic,dynamic> _selectedRadioValues = {};
   Map<dynamic,dynamic> map ={};
   Map<dynamic,dynamic> mapList ={};
   Map<dynamic,dynamic> mapData = {};
@@ -39,8 +42,11 @@ class TestProviderClass extends ChangeNotifier {
   list_questions get assessment => _assessment!;
   List<QuestionClass> get questionsList => questions;
   Map get listTopics => mapTopic;
+  Map get selectedRadioValues => _selectedRadioValues;
   String get optionVal => _optionVal;
   bool get isReset => _isReset;
+  get setQID => _setQID;
+  List get selectedIndexes => _selectedIndexes;
   List<AssessmentWrappers> tagValue = [];
   TextEditingController get textController => _textController;
 
@@ -50,18 +56,35 @@ class TestProviderClass extends ChangeNotifier {
   get tabValues => TabValues.toSet().toList();
   List get selectedIndex => emptyList;
 
-/*  set selectedIndex(List list){
-    emptyList = list;
-  }*/
+  set selectedIndexes(List list){
+    _selectedIndexes = list;
+    notifyListeners();
+  }
+
+
+  set textController(TextEditingController tcVal){
+    _textController = tcVal;
+    notifyListeners();
+  }
 
   set optionVal(String _opval){
     _optionVal = _opval;
     notifyListeners();
   }
 
+  set setQID(dynamic qID){
+    _setQID = qID;
+    // notifyListeners();
+  }
+
 
   set isReset(bool _val){
     _isReset = _val;
+    // notifyListeners();
+  }
+
+  set selectedRadioValues(dynamic _val){
+    _selectedRadioValues = _val;
     // notifyListeners();
   }
 
@@ -340,6 +363,7 @@ class TestProviderClass extends ChangeNotifier {
                 correctMarks: elementQue.correctMark,
                 incorrectMarks: elementQue.incorrectMark,
                 type: elementQue.question!.type!,
+                id: elementQue.question!.sId.toString(),
                 text: functions().convertLetX(QuestionContents.fromJson(rawCont).blocks!.first.text!),
                 queImage: _queImage,
                 optImage: _optImage,
