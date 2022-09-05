@@ -9,6 +9,7 @@ import 'package:prepseed/model/questions.dart';
 import '../../../constants/colorPalate.dart';
 
 import 'package:provider/provider.dart';
+import '../../../constants/common/textViewWidget.dart';
 import '../../../helper/api/functions.dart';
 import '../../../helper/provider/testsProvider.dart';
 import 'package:flutter_tex/flutter_tex.dart';
@@ -533,7 +534,7 @@ class _questionWidgetState extends State<questionWidget> {
           (s.toString() != '') ?
           TeXView(
           child: TeXViewColumn(children: [
-            _teXViewWidget((s.toString())),
+            TexViewWidget().teXViewWidget((s.toString())),
             // TeXViewDocument(s ?? '', style: TeXViewStyle.fromCSS('padding: 15px; color: white; background: green'))
           ]),
         style: const TeXViewStyle(
@@ -561,7 +562,7 @@ class _questionWidgetState extends State<questionWidget> {
                 title:
                 TeXView(
                   child: TeXViewColumn(children: [
-                    _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
+                    TexViewWidget().teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
                   ]),
                 ),
                 // Text(question.options.elementAt(index).text.toString()),
@@ -586,7 +587,7 @@ class _questionWidgetState extends State<questionWidget> {
               return RadioListTile(
                 title: TeXView(
                   child: TeXViewColumn(children: [
-                    _teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
+                    TexViewWidget().teXViewWidget((question.options.elementAt(index).text.toString()) ?? ''),
                     ]),
                 ),
                 // Text(question.options.elementAt(index).text.toString()),
@@ -618,7 +619,7 @@ class _questionWidgetState extends State<questionWidget> {
     );
   }
 
-  static TeXViewWidget _teXViewWidget( String body) {
+/*  static TeXViewWidget _teXViewWidget( String body) {
     return TeXViewColumn(
         style: const TeXViewStyle(
             margin: TeXViewMargin.all(10),
@@ -628,7 +629,7 @@ class _questionWidgetState extends State<questionWidget> {
                 borderWidth: 2,
                 // borderStyle: TeXViewBorderStyle.groove,
                 borderColor: Colors.green))),
-        children: [/*
+        children: [*//*
           TeXViewDocument(title,
               style: const TeXViewStyle(
                   padding: TeXViewPadding.all(10),
@@ -636,11 +637,11 @@ class _questionWidgetState extends State<questionWidget> {
                   // textAlign: TeXViewTextAlign.center,
                   width: 250,
                   margin: TeXViewMargin.zeroAuto(),
-                  backgroundColor: Colors.green)),*/
+                  backgroundColor: Colors.green)),*//*
           TeXViewDocument(body,
               style: const TeXViewStyle(margin: TeXViewMargin.only(top: 10)))
         ]);
-  }
+  }*/
 
 
   linked_ques(QuestionClass question){
@@ -674,7 +675,7 @@ class _questionWidgetState extends State<questionWidget> {
             style: GoogleFonts.poppins(),)),
             children: [TeXView(
               child: TeXViewColumn(children: [
-                _teXViewWidget((_linkText)),
+                TexViewWidget().teXViewWidget((_linkText)),
               ]),
             ),],
 

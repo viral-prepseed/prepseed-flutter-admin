@@ -60,6 +60,7 @@ class GetQuestionRepo {
       model = GetQuestion.fromJson(data);
     }
     else if(response.statusCode == 422) {
+      final isImageUrl = RegExp(r'data:image/(.+?);base64');
       closeSessionModel = SessionProgress.fromJson(json.decode(response.body));
       var url = Uri.parse("https://napi.prepseed.com/session/newQuestion?id="+"${closeSessionModel!.sessionId}");
       var resp = await http.get(url, headers: {
@@ -106,12 +107,14 @@ class GetQuestionRepo {
           else{
             data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["content"] = null;
           }
-        }
-        final isImageUrl = RegExp(r'data:image/(.+?);base64');
 
-        if(isImageUrl.hasMatch(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]) == true){
-          data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"] = networkImageToBase64(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]);
+          if(isImageUrl.hasMatch(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]) == true){
+            data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"] = networkImageToBase64(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]);
+          }
         }
+
+
+
         model = GetQuestion.fromJson(data);
        // model.question.core.content.rawContent.runtimeType == String;
       }
