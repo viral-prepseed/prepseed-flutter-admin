@@ -755,7 +755,7 @@ class _mainScreenState extends State<mainScreen> {
                   element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.averageMarks.toString())) : const DataCell(Text("0")),
                   element.user != null ? DataCell(Text(element.user!.overall!.marks.toString()/*element['overall'].elementAt(0).toString()*/)) : const DataCell(Text("0")),
                   element.topper!.overall!.marks != null ? DataCell(Text(element.topper!.overall!.marks.toString())) : const DataCell(Text("0")),
-                  DataCell(Text(element.statsBySection!.overall!.averageMarks.toString())),
+                  element.statsBySection!.overall != null ? DataCell(Text(element.statsBySection!.overall!.averageMarks.toString())): const DataCell(Text("0")),
                   DataCell(Text(element.maxMarks!.overall.toString())),
                   element.user != null ? DataCell(Text(
                       (element.user!.overall!.marks! / element.maxMarks!.overall!*100).toString().substring(0,3)))
@@ -763,7 +763,7 @@ class _mainScreenState extends State<mainScreen> {
                   element.statsBySection!.physics != null ? DataCell(Text(element.statsBySection!.physics!.percentile.toString())) : const DataCell(Text("0")),
                   element.statsBySection!.mathematics != null ? DataCell(Text(element.statsBySection!.mathematics!.percentile.toString())) : const DataCell(Text("0")),
                   element.statsBySection!.chemistry != null ? DataCell(Text(element.statsBySection!.chemistry!.percentile.toString())) : const DataCell(Text("0")),
-                  DataCell(Text(element.statsBySection!.overall!.percentile.toString())),
+                  element.statsBySection!.overall != null ? DataCell(Text(element.statsBySection!.overall!.percentile.toString())): const DataCell(Text("0")),
                 ]
             )).toList()
           ),

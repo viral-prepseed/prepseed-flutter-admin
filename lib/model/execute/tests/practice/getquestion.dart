@@ -1,12 +1,14 @@
+import 'getanswer.dart';
+
 class GetQuestion {
-  Question? question;
+  MainQuestion? question;
   int? currentTime;
 
   GetQuestion({this.question, this.currentTime});
 
   GetQuestion.fromJson(Map<String, dynamic> json) {
     question = json['question'] != null
-        ? new Question.fromJson(json['question'])
+        ? new MainQuestion.fromJson(json['question'])
         : null;
     currentTime = json['currentTime'];
   }
@@ -21,13 +23,13 @@ class GetQuestion {
   }
 }
 
-class Question {
+class MainQuestion {
   Core? core;
   SessionSpecific? sessionSpecific;
 
-  Question({this.core, this.sessionSpecific});
+  MainQuestion({this.core, this.sessionSpecific});
 
-  Question.fromJson(Map<String, dynamic> json) {
+  MainQuestion.fromJson(Map<String, dynamic> json) {
     core = json['core'] != null ? new Core.fromJson(json['core']) : null;
     sessionSpecific = json['sessionSpecific'] != null
         ? new SessionSpecific.fromJson(json['sessionSpecific'])
@@ -56,6 +58,7 @@ class Core {
   List<Concepts>? concepts;
   Content? content;
   List<Options>? options;
+  Solution? solution;
 
   Core(
       {this.type,
@@ -66,7 +69,8 @@ class Core {
         this.subTopic,
         this.concepts,
         this.content,
-        this.options});
+        this.options,
+        this.solution});
 
   Core.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -89,6 +93,7 @@ class Core {
         options!.add(new Options.fromJson(v));
       });
     }
+    solution = json["solution"] != null ? Solution.fromJson(json["solution"]) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -242,7 +247,7 @@ class EntityMap {
 }
 
 class Data {
-  String? url;
+  dynamic url;
   String? content;
   Data({this.url,this.content});
 
@@ -314,12 +319,15 @@ class Blocks {
 
 class Options {
   String? sId;
+  bool? isCorrect;
   Content? content;
 
-  Options({this.sId, this.content});
+  Options({this.sId, this.isCorrect, this.content});
 
   Options.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    isCorrect =
+    json['isCorrect'] != null ? json['isCorrect'] : null;
     content =
     json['content'] != null ? new Content.fromJson(json['content']) : null;
   }
@@ -395,8 +403,26 @@ class Questions {
     return data;
   }
 }
+class Answer {
+  String? type;
+  String? data;
 
+  Answer({this.type, this.data});
+
+  Answer.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    data = json['data'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['data'] = this.data;
+    return data;
+  }
+}
 class Attempt {
+  Answer? answer;
   PerfectTimeLimits? perfectTimeLimits;
   String? mode;
   dynamic batch;
@@ -408,9 +434,9 @@ class Attempt {
   String? user;
   String? question;
   String? startTime;
-  Null? endTime;
-  Null? speed;
-  Null? isCorrect;
+  dynamic endTime;
+  dynamic speed;
+  dynamic isCorrect;
   dynamic medianTime;
   int? demoRank;
   List<Flow>? flow;
@@ -420,7 +446,8 @@ class Attempt {
   int? iV;
 
   Attempt(
-      {this.perfectTimeLimits,
+      {this.answer,
+        this.perfectTimeLimits,
         this.mode,
         this.batch,
         this.isAnswered,
@@ -445,6 +472,9 @@ class Attempt {
   Attempt.fromJson(Map<String, dynamic> json) {
     perfectTimeLimits = json['perfectTimeLimits'] != null
         ? new PerfectTimeLimits.fromJson(json['perfectTimeLimits'])
+        : null;
+    answer = json['answer'] != null
+        ? new Answer.fromJson(json['answer'])
         : null;
     mode = json['mode'];
     batch = json['batch'];
