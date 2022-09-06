@@ -102,14 +102,16 @@ class _PracticeSubTopicsState extends State<PracticeSubTopics> {
                           )
                               : Container(),
                           SizedBox(height: 10,),
-                          ElevatedButton(onPressed: () async {
-                            var newRoute = MaterialPageRoute(builder: (BuildContext context) => PracticeTest(topic: subList.elementAt(index),));
-                            final provMdl = Provider.of<GetQuestionProvider>(context, listen: false);
-                            await provMdl.getQuestion(subList.elementAt(index).sId.toString());
-                            provMdl.sessionProgress != null ?
-                                showSessionStatus(provMdl,subList.elementAt(index)) :
-                            Navigator.of(context).push(newRoute);
-                          }, child: const Text('Practice Now'))
+                          Container(
+                            child: ElevatedButton(onPressed: () async {
+                              var newRoute = MaterialPageRoute(builder: (BuildContext context) => PracticeTest(topic: subList.elementAt(index),));
+                              final provMdl = Provider.of<GetQuestionProvider>(context, listen: false);
+                              await provMdl.getQuestion(subList.elementAt(index).sId.toString(),subList.elementAt(index).name.toString());
+                              provMdl.sessionProgress!.sessionId != null ?
+                                  showSessionStatus(provMdl,subList.elementAt(index)) :
+                              Navigator.of(context).push(newRoute);
+                            }, child: const Text('Practice Now')),
+                          )
                         ],
                       ),
                     ),
@@ -134,7 +136,7 @@ class _PracticeSubTopicsState extends State<PracticeSubTopics> {
           children: [
             ElevatedButton(
                 onPressed: ()async{
-                 // await provMdl.getQuestion(element.sId.toString());
+                  await provMdl.getQuestionRepo.closeSession();
                   Navigator.of(context).push(newRoute);
                 },
                 child: Text('Start New Session')),
