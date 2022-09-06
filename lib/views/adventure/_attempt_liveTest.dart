@@ -45,7 +45,7 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
   @override
   void initState() {
 
-
+    Provider.of<TestProviderClass>(context, listen: false).selectedIndexes = [];
     // setQID = Provider.of<TestProviderClass>(context,listen: false).setQID;
     hours1 = int.parse("03");
     mints1 = int.parse("00");
@@ -263,6 +263,7 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
                                 }
                               ]
                             };
+                            //local DB
                             _save(postmap);
                             _read();
                             // functions().postFlowLogs(postmap);
@@ -273,7 +274,7 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
                                 Provider.of<TestProviderClass>(context, listen: false).selectedRadioValues[setQID] =
                                     Provider.of<TestProviderClass>(context,listen: false).textController.text;
                               }
-                              print(setQID);
+                              // print(setQID);
                               print(Provider.of<TestProviderClass>(context,listen: false).textController.text);
                               setQID = data[index]['id'];
                               Provider.of<TestProviderClass>(context, listen: false).selectedIndexes = [];

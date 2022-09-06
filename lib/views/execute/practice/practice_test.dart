@@ -495,7 +495,7 @@ class _PracticeTestState extends State<PracticeTest> {
                   contentText != null ?
                   TeXView(
                     child: TeXViewColumn(children: [
-                      _teXViewWidget(contentText.toString()),
+                      TexViewWidget().teXViewWidget(contentText.toString()),
                     ]),
                   )
                       : Container(),
@@ -581,7 +581,7 @@ class _PracticeTestState extends State<PracticeTest> {
                     contentText != null ?
                     TeXView(
                       child: TeXViewColumn(children: [
-                        _teXViewWidget(contentText.toString()),
+                        TexViewWidget().teXViewWidget(contentText.toString()),
                       ]),
                     )
                         : Container(),
