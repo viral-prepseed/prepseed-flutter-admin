@@ -13,14 +13,20 @@ class functions{
 
   /*============================== Convert to Letx ==============================*/
 
-  convertLetX(String text){
+  convertLetX(String text, [int flag = 0]){
+    String appendFirst = r"\(";
+    String appendLast = r"\)";
     var count = text.length - text.replaceAll("\$","").length;
     // print(count);
     // String _text = text.replaceAll(r'\+', r'\');
     // replaceData(_text);
     String _response = text;
     for(int i=0; i<=count/2; i++){
-      _response = replaceData(_response);
+      if(_response.contains("\$")) {
+        _response = replaceData(_response);
+      }else if(flag == 1){
+        _response = appendFirst + text + appendLast;
+      }
     }
 
 /*  String _response = replaceData(_text);
@@ -37,12 +43,18 @@ class functions{
   replaceData(String replaceableText){
     String? _textData;
     String? _text_sec_Data;
-    // if(replaceableText.contains(r'$')){
+
+     if(replaceableText.contains(r'$')){
+
     _textData = replaceableText.replaceFirst('\$', r'\(');
     _text_sec_Data = _textData.replaceFirst('\$', r'\)');
     // convertLetX(_text_sec_Data);
     // replaceData(_text_sec_Data);
-    // }else{}
+    }else{
+       /*_textData = replaceableText.replaceFirst(r'\', r'\(');
+       _text_sec_Data = _textData.replaceFirst(r'\', r'\)');*/
+
+     }
 /*
     // print(_text_sec_Data);
     if(_text_sec_Data != null){
@@ -53,6 +65,7 @@ class functions{
         return _text_sec_Data;
       }
     }*/
+   // _text_sec_Data.
     return _text_sec_Data;
   }
 

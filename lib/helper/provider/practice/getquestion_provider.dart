@@ -28,10 +28,13 @@ class GetQuestionProvider extends ChangeNotifier{
     if(getQuestionRepo.queLength != null){
       queLength = getQuestionRepo.queLength;
     }
+    if(getQuestionRepo.getAnswers != null){
+      getAnswers = getQuestionRepo.getAnswers;
+    }
     getQuestionModel = getQuestionRepo.model;
+    print(getQuestionModel);
     notifyListeners();
   }
-
 
   SessionProgress closeSession = SessionProgress();
   closeQuestions() async {

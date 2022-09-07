@@ -86,13 +86,15 @@ class Solution {
 
   Solution({this.rawContent});
 
-  Solution.fromJson(dynamic json) {
-    if(json.runtimeType == String){
-      json = json.decode(json);
+  Solution.fromJson(dynamic _json) {
+    if(_json['rawContent'].runtimeType == String &&  _json['rawContent'] != null){
+      rawContent = RawContents.fromJson(json.decode(_json['rawContent']));
     }
-    rawContent = json['rawContent'] != null
-        ? new RawContents.fromJson(json['rawContent'])
-        : null;
+    else {
+      rawContent = _json['rawContent'] != null
+          ? RawContents.fromJson(_json['rawContent'])
+          : null;
+    }
   }
 
   Map<String, dynamic> toJson() {

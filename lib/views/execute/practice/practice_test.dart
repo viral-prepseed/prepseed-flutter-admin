@@ -210,6 +210,8 @@ class _PracticeTestState extends State<PracticeTest> {
 /*====================================================================Solutions=================================================================*/
 
   Widget solutions(GetAnswer getAnswer){
+    final provMdl = Provider.of<GetQuestionProvider>(context);
+    print(provMdl.getQuestionModel!.question!.core!.sId);
     List<String> _linkList = [];
     String? _linkText;
     /*String _linkImage;*/
@@ -222,7 +224,7 @@ class _PracticeTestState extends State<PracticeTest> {
     }
     return Column(
       children: [
-        Text(getAnswer.message.toString()),
+        getAnswer.message != null ? Text(getAnswer.message.toString()) : Container(),
         const SizedBox(height: 10.0,),
         _linkText != null ?
         TeXView(
@@ -231,8 +233,8 @@ class _PracticeTestState extends State<PracticeTest> {
           ]),
         ) : Container(),
       //  getAnswer.question!.core!.solution!.rawContent!.entityMap != null ?
+        getAnswer.question!.core!.solution!.rawContent!.entityMap != null ?
         getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve != null ?
-
        /* getAnswer.question!.core!.solution!.rawContent!.entityMap != null ?
         getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve != null ?
         TeXView(
@@ -241,13 +243,34 @@ class _PracticeTestState extends State<PracticeTest> {
           ]),
         )
         : Container() :*/
-
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image.network(getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve!.data!.url.toString()),
         )
             :  Container()
-
+            :  Container(
+          margin: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+              ),
+              borderRadius: const BorderRadius.all(
+                  Radius.circular(10.0))
+          ),
+          padding: EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Solution not available yet.'),
+              ElevatedButton(
+                  onPressed: (){
+                    provMdl.getQuestionRepo.requestSolution(provMdl.getQuestionModel!.question!.core!.sId.toString());
+                      print(provMdl.getQuestionModel!.question!.core!.sId);
+                  },
+                  child: Text('Request Solution'))
+            ],
+          ),
+        ),
      /*  // Text(getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve!.data!.url.toString())
            */
         /* :  TeXView(
@@ -255,10 +278,10 @@ class _PracticeTestState extends State<PracticeTest> {
               _teXViewWidgetQuestion((_linkText)),
             ])
         )    : Container()*/
-
       ],
     );
   }
+
 
 /*============================================ Questions ===================================================*/
 
@@ -574,7 +597,7 @@ class _PracticeTestState extends State<PracticeTest> {
               if(options[index].content!.rawContent!.entityMap![0].data!.url != null){
                 _linkImage = options[index].content!.rawContent!.entityMap![0].data!.url.toString();}
               else{
-                contentText = functions().convertLetX(options[index].content!.rawContent!.entityMap![0].data!.content.toString());
+                contentText = functions().convertLetX(options[index].content!.rawContent!.entityMap![0].data!.content.toString(),1);
               }
             }
             for(var blockString in options[index].content!.rawContent!.blocks!){
@@ -586,7 +609,7 @@ class _PracticeTestState extends State<PracticeTest> {
               print(_linkText);
             }
             return RadioListTile(
-              tileColor: optionColor ?  isTrue[options[index].sId] == "true" ? Colors.green :isTrue[options[index].sId] == "false" ? Colors.red : Colors.transparent : Colors.transparent,
+             tileColor: optionColor ? isTrue[options[index].sId] == "true" ? Colors.green :isTrue[options[index].sId] == "false" ? Colors.red : Colors.white : Colors.white,
                 title: Column(
                   children: [
                     _linkText != null ?
@@ -599,7 +622,7 @@ class _PracticeTestState extends State<PracticeTest> {
                     contentText != null ?
                     TeXView(
                       child: TeXViewColumn(children: [
-                        _teXViewWidget(contentText.toString()),
+                        _teXViewWidget(contentText.toString()),//\frac{d.v_2^2}{v_1^2+v_2^2}
                       ]),
                     )
                         : Container(),

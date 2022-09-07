@@ -48,7 +48,7 @@ class GetQuestionRepo {
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       sessionId = data['session']["_id"];
-      if(data['question']['core']['content']['rawContent'].runtimeType == String){
+     /* if(data['question']['core']['content']['rawContent'].runtimeType == String){
         print('isString');
         data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
       }
@@ -65,7 +65,7 @@ class GetQuestionRepo {
       else{
         print('Not String');
 
-      }
+      }*/
       model = GetQuestion.fromJson(data);
     }
     else if(response.statusCode == 422) {
@@ -88,7 +88,7 @@ class GetQuestionRepo {
         if (resp.statusCode == 200) {
           try{
             var data = json.decode(resp.body);
-            if(data['question']['core']['content']['rawContent'].runtimeType == String){
+            /*if(data['question']['core']['content']['rawContent'].runtimeType == String){
               print('isString');
               data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
             }
@@ -105,7 +105,7 @@ class GetQuestionRepo {
             else{
               print('Not String');
 
-            }
+            }*/
             if(data['question']['core']['content']['rawContent']['entityMap'].runtimeType == String){
               print('isString');
               data['question']['core']['options'].forEach((element){
@@ -120,7 +120,6 @@ class GetQuestionRepo {
               if(data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"].keys.toString() == "(content)"){
                 data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"] ==
                     data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"];
-
               }}
             print(data);
             final isImageUrl = RegExp(r'data:image/(.+?);base64');
@@ -190,7 +189,7 @@ class GetQuestionRepo {
     );
       if (resp.statusCode == 200) {
         var data = json.decode(resp.body);
-        if(data['question']['core']['solution']['rawContent'].runtimeType == String){
+       /* if(data['question']['core']['solution']['rawContent'].runtimeType == String){
           print('isString');
           data['question']['core']['solution']['rawContent'] = json.decode(data['question']['core']['solution']['rawContent']);
         }
@@ -208,15 +207,15 @@ class GetQuestionRepo {
         else{
           print('Not String');
 
-        }
+        }*/
         print(data);
 
         if(data['question']['core']['solution']['rawContent']["entityMap"] != null && data['question']['core']['solution']['rawContent']["entityMap"].length != 0){
           /*if(){
 
           }*/
-        DataUrl ans = DataUrl.fromJson(data['question']['core']['solution']['rawContent']["entityMap"]["0"]["data"]);
-        print(ans);
+          DataUrl ans = DataUrl.fromJson(data['question']['core']['solution']['rawContent']["entityMap"]["0"]["data"]);
+          print(ans);
         }
 
         getAnswers = GetAnswer.fromJson(data);
@@ -246,14 +245,23 @@ class GetQuestionRepo {
       }
       else{
         print('Not String');
-
       }
-      if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
+      if(data['question']['core']['solution'] != null){
+       /* if(data['question']['core']['solution']['rawContent'].runtimeType == String){
+          print('isString');
+          data['question']['core']['solution']['rawContent'] = json.decode(data['question']['core']['solution']['rawContent']);
+        }
+        else{
+          print('Not String');
+        }*/
+        getAnswers = GetAnswer.fromJson(data);
+      }
+      /*if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
         print('isString');
         data['question']['core']['options'].forEach((element){
           element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
         });
-      }
+      }*/
       print(data);
       final isImageUrl = RegExp(r'data:image/(.+?);base64');
       if(data['question']['core']['content']['rawContent']['entityMap'] != null && data['question']['core']['content']['rawContent']['entityMap'].length != 0) {
@@ -291,7 +299,6 @@ class GetQuestionRepo {
         // closeSession();
       }
       else{
-
         closeSessionModel = SessionProgress.fromJson(data);
         var url = Uri.parse("https://napi.prepseed.com/session/newQuestion?id="+"$sessionId");
         //sharedPref().setSharedPref('currentSessionId', closeSessionModel!.sessionId);
@@ -302,15 +309,15 @@ class GetQuestionRepo {
         if (resp.statusCode == 200) {
           try{
             var data = json.decode(resp.body);
-            if(data['question']['core']['content']['rawContent'].runtimeType == String){
+            /*if(data['question']['core']['content']['rawContent'].runtimeType == String){
               print('isString');
               data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
             }
             else{
               print('Not String');
 
-            }
-            if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
+            }*/
+           /* if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
               print('isString');
               data['question']['core']['options'].forEach((element){
                 element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
@@ -319,7 +326,7 @@ class GetQuestionRepo {
             else{
               print('Not String');
 
-            }
+            }*/
             if(data['question']['core']['content']['rawContent']['entityMap'].runtimeType == String){
               print('isString');
               data['question']['core']['options'].forEach((element){
@@ -369,6 +376,19 @@ class GetQuestionRepo {
     else{
       throw Exception('Failed to Get Questions');
     }
+  }
 
+  requestSolution(String id) async{
+    var token = await sharedPref().getSharedPref('token');
+    var url = Uri.parse("https://napi.prepseed.com/discussion/requestSolution");
+    var response = await http.post(url,headers: {
+      'Content-type' : 'application/json',
+      'authorization': 'Bearer $token',
+    },
+      body: jsonEncode({
+        "questionId" : id,
+      }),
+    );
+    print(response);
   }
 }

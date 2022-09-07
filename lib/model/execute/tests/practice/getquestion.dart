@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'getanswer.dart';
 
 class GetQuestion {
@@ -141,10 +143,15 @@ class Content {
 
   Content({this.rawContent});
 
-  Content.fromJson(Map<String, dynamic> json) {
-    rawContent = json['rawContent'] != null
-        ? new RawContent.fromJson(json['rawContent'])
-        : null;
+  Content.fromJson(Map<String, dynamic> _json) {
+    if(_json['rawContent'].runtimeType == String &&  _json['rawContent'] != null){
+      rawContent = RawContent.fromJson(json.decode(_json['rawContent']));
+    }
+    else {
+      rawContent = _json['rawContent'] != null
+          ? RawContent.fromJson(_json['rawContent'])
+          : null;
+    }
   }
 
   Map<String, dynamic> toJson() {
