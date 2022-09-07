@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class GetAnswer {
   int? xpEarned;
   String? message;
@@ -84,7 +86,10 @@ class Solution {
 
   Solution({this.rawContent});
 
-  Solution.fromJson(Map<String, dynamic> json) {
+  Solution.fromJson(dynamic json) {
+    if(json.runtimeType == String){
+      json = json.decode(json);
+    }
     rawContent = json['rawContent'] != null
         ? new RawContents.fromJson(json['rawContent'])
         : null;

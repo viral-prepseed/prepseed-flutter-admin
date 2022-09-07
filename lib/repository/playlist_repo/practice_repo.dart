@@ -17,12 +17,17 @@ import 'package:api_cache_manager/models/cache_db_model.dart';
 import '../../constants/common/imageurl.dart';
 import '../../model/execute/tests/practice/close_session.dart';
 import '../../model/execute/tests/practice/getanswer.dart';
+import '../../model/execute/tests/practice/getquestionwithanswers.dart';
+import '../../model/execute/tests/practice/question_answer.dart';
 
 class GetQuestionRepo {
   EndQuestion endQuestion = EndQuestion();
   SessionProgress? closeSessionModel;
   GetQuestion? model;
   var sessionId;
+  var queLength;
+  Session? getQuestionWithAnswers;
+  MainQuestion? questionsAnswer;
 
   getQuestions(String id, String name) async {
     var token = await sharedPref().getSharedPref('token');
@@ -130,9 +135,10 @@ class GetQuestionRepo {
               }
               if(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"] != null){
                 if(isImageUrl.hasMatch(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]) == true){
-                  data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"] = networkImageToBase64(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]);
+                  data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"] = await networkImageToBase64(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]);
                 }}
             }
+            print(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]);
             model = GetQuestion.fromJson(data);
             print(model);
           }
@@ -152,6 +158,7 @@ class GetQuestionRepo {
     }
 
   }
+
   closeSession() async {
     var token = await sharedPref().getSharedPref('token');
     var sessionId = await sharedPref().getSharedPref("currentSessionId");
@@ -219,15 +226,20 @@ class GetQuestionRepo {
 
   }
 
-  getQuestionApiWithIndex(dynamic index) async {
+  getQuestionApiWithIndex(dynamic index,int isFirst) async {
     var token = await sharedPref().getSharedPref('token');
-    var url = Uri.parse("https://napi.prepseed.com/session/getQuestionAtPosition?position=$index&id=$sessionId&si=1");
+    var url = Uri.parse("https://napi.prepseed.com/session/getQuestionAtPosition?position=$index&id=$sessionId&si=$isFirst");
     var response = await http.get(url, headers: {
       'Content-type' : 'application/json',
       'authorization': 'Bearer $token',
     });
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
+      print(data);
+
+     /* print(questionsAnswer);
+      print(getQuestionWithAnswers);
+      print(queLength);*/
       if(data['question']['core']['content']['rawContent'].runtimeType == String){
         print('isString');
         data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
@@ -242,9 +254,31 @@ class GetQuestionRepo {
           element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
         });
       }
+      print(data);
+      final isImageUrl = RegExp(r'data:image/(.+?);base64');
+      if(data['question']['core']['content']['rawContent']['entityMap'] != null && data['question']['core']['content']['rawContent']['entityMap'].length != 0) {
+        if (data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]
+            .keys.toString() == "(content)") {
+          data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["content"] =
+          data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["content"];
+        }
+        else{
+          data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["content"] = null;
+        }
+        if(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"] != null){
+          if(isImageUrl.hasMatch(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]) == true){
+            data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"] = await networkImageToBase64(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]);
+          }}
+      }
       else{
         print('Not String');
-
+      }
+      if(isFirst == 1){
+        queLength = data['session']['questions'].length;
+        getQuestionWithAnswers = Session.fromJson(data['session']);
+      }
+      else{
+        questionsAnswer = MainQuestion.fromJson(data['question']);
       }
       model = GetQuestion.fromJson(data);
     }
@@ -257,9 +291,10 @@ class GetQuestionRepo {
         // closeSession();
       }
       else{
+
         closeSessionModel = SessionProgress.fromJson(data);
-        var url = Uri.parse("https://napi.prepseed.com/session/newQuestion?id="+"${closeSessionModel!.sessionId}");
-        sharedPref().setSharedPref('currentSessionId', closeSessionModel!.sessionId);
+        var url = Uri.parse("https://napi.prepseed.com/session/newQuestion?id="+"$sessionId");
+        //sharedPref().setSharedPref('currentSessionId', closeSessionModel!.sessionId);
         var resp = await http.get(url, headers: {
           'Content-type' : 'application/json',
           'authorization': 'Bearer $token',

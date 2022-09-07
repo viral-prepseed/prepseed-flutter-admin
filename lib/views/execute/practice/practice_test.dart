@@ -44,8 +44,12 @@ class _PracticeTestState extends State<PracticeTest> {
 
     isTrue = {};
     Future.microtask(() async => {
-      Provider.of<GetQuestionProvider>(context, listen: false)
-          .getQuestionApiWithIndex("last"), //provider to call API and update data....
+      await Provider.of<GetQuestionProvider>(context, listen: false)
+          .getQuestionApiWithIndex("last",1),
+      setPQID = Provider.of<GetQuestionProvider>(context, listen: false).queLength - 1,
+      currentQid = Provider.of<GetQuestionProvider>(context, listen: false).queLength - 1,
+
+      //provider to call API and update data....
     });
    // final provMdl = Provider.of<GetQuestionProvider>(context, listen: false);
    //provMdl.getQuestion(widget.topic.sId.toString()) ;
@@ -122,7 +126,10 @@ class _PracticeTestState extends State<PracticeTest> {
 
   Widget selectIndex(){
     final provMdl = Provider.of<GetQuestionProvider>(context);
-    List<Map> data = List.generate(20,
+  /*  print(provMdl.queLength);
+    currentQid = provMdl.queLength;
+    setPQID = provMdl.queLength;*/
+    List<Map> data = List.generate(provMdl.queLength > 20 ? provMdl.queLength : 20,
             (index) => {'id': index, 'name': 'Item $index', 'isSelected': false});
     return SingleChildScrollView(
       child: Column(
@@ -158,10 +165,22 @@ class _PracticeTestState extends State<PracticeTest> {
                           enabled: setPQID >= index ? true : false,
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 0.0),
-                          onTap: () {
-                            provMdl.getQuestionApiWithIndex(index);
+                          onTap: () async {
+                            await provMdl.getQuestionApiWithIndex(index,0);
+
                             setState(() {
-                              currentQid = index;print(currentQid);
+                              if(provMdl.getQuestionRepo.questionsAnswer!.sessionSpecific!.attempt!.isAnswered == true){
+                                check = true;
+                                isTrue = {};
+                                optionColor = true;
+                               isTrue =  provMdl.isTrueIds(provMdl.getQuestionRepo.questionsAnswer!.core!.options!,provMdl.getQuestionRepo.questionsAnswer!.sessionSpecific!.attempt!.answer!.data.toString());
+                               print(isTrue);
+                              }
+                              else{
+                                check = false;
+                                optionColor = false;
+                              }
+                                currentQid = index;print(currentQid);
                             });
                           },
                           title: Align(
@@ -247,7 +266,7 @@ class _PracticeTestState extends State<PracticeTest> {
 
   Widget question(Core core){
     RawContent rawContent = core.content!.rawContent!;
-    String? img;
+    dynamic img;
     String? content;
     if(rawContent.entityMap != null && rawContent.entityMap!.length != 0){
       img = rawContent.entityMap![0].data!.url;
@@ -300,14 +319,14 @@ class _PracticeTestState extends State<PracticeTest> {
                           maxScale: 4,
                           child: AspectRatio(
                             aspectRatio: 2,
-                            child: CachedNetworkImage(
+                            child:img.runtimeType != String ? Image.memory(img) : CachedNetworkImage(
                                 imageUrl:img!,
                                 placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Constants.green,)),
                                 imageBuilder: (context, image) => Image(
                                   image: image,
                                   height: MediaQuery.of(context).size.height / 6,
                                   width: MediaQuery.of(context).size.width,
-                                  /*height: MediaQuery.of(context).size.height / 9,*/
+                                //  height: MediaQuery.of(context).size.height / 9,
                                   fit: BoxFit.contain,)
                             ),
                           ),
@@ -317,14 +336,14 @@ class _PracticeTestState extends State<PracticeTest> {
                 }
             );
           },
-          child: CachedNetworkImage(
-              imageUrl: img,
+          child: img.runtimeType != String ? Image.memory(img) : CachedNetworkImage(
+              imageUrl:img!,
               placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Constants.green,)),
               imageBuilder: (context, image) => Image(
                 image: image,
                 height: MediaQuery.of(context).size.height / 6,
                 width: MediaQuery.of(context).size.width,
-                /*height: MediaQuery.of(context).size.height / 9,*/
+                //  height: MediaQuery.of(context).size.height / 9,
                 fit: BoxFit.contain,)
           ),
         ):
@@ -644,7 +663,9 @@ class _PracticeTestState extends State<PracticeTest> {
               children: [
                 check ?
                 ElevatedButton(onPressed: () async {
-                  await provMdl.getQuestion(widget.topic.sId.toString(),widget.topic.name.toString());
+                  //await provMdl.getQuestion(widget.topic.sId.toString(),widget.topic.name.toString());
+                  await Provider.of<GetQuestionProvider>(context, listen: false)
+                      .getQuestionApiWithIndex(currentQid + 1,0);
                   setState(() {
                     provMdl.getAnswers.message == null;
                     check = false;
@@ -663,19 +684,7 @@ class _PracticeTestState extends State<PracticeTest> {
                      check = true ;
                      optionColor = true;
                      print(provMdl.getAnswers.question!.core!.options);
-                     provMdl.getAnswers.question!.core!.options!.forEach((element) { //element.sId == Provider.of<TestProviderClass>(context, listen: false).optionVal &&
-                       if(element.isCorrect == true){
-                         checkColor = true;
-                         isTrue[element.sId] = "true";
-                       }
-                       else if(element.sId == Provider.of<TestProviderClass>(context, listen: false).optionVal && element.isCorrect == false){
-                         checkColor = false;
-                         isTrue[element.sId] = "false";
-                       }
-                       else{
-                         isTrue[element.sId] = "falsefalse";
-                       }
-                     });
+                     isTrue = provMdl.isTrueIds(provMdl.getAnswers.question!.core!.options!, Provider.of<TestProviderClass>(context,listen: false).optionVal);
                   }) : null;
                 }, child: const Text('Check')),
                 const SizedBox(width: 20.0,),
