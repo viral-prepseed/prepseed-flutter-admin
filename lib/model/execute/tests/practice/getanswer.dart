@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'getquestion.dart';
+
 class GetAnswer {
   int? xpEarned;
   String? message;
@@ -243,14 +245,14 @@ class EntityMap {
 class Solve {
   String? type;
   String? mutability;
-  DataUrl? data;
+  Data? data;
 
   Solve({this.type, this.mutability, this.data});
 
   Solve.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     mutability = json['mutability'];
-    data = json['data'] != null ? new DataUrl.fromJson(json['data']) : null;
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -264,7 +266,7 @@ class Solve {
   }
 }
 
-class DataUrl {
+/*class DataUrl {
   String? url;
 
   DataUrl({this.url});
@@ -278,7 +280,7 @@ class DataUrl {
     data['url'] = this.url;
     return data;
   }
-}
+}*/
 
 class OptionsAnswers {
   bool? isAlternateCorrect;

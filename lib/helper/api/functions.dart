@@ -51,6 +51,7 @@ class functions{
     // convertLetX(_text_sec_Data);
     // replaceData(_text_sec_Data);
     }else{
+       print('hyy');
        /*_textData = replaceableText.replaceFirst(r'\', r'\(');
        _text_sec_Data = _textData.replaceFirst(r'\', r'\)');*/
 

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:prepseed/views/execute/practice/practice_subTopics.dart';
 import '../../../constants/colorPalate.dart';
+import '../../../constants/common/imageurl.dart';
 import '../../../helper/api/functions.dart';
 import '../../../helper/provider/practice/getquestion_provider.dart';
 import '../../../helper/provider/testsProvider.dart';
@@ -36,17 +37,20 @@ class _PracticeTestState extends State<PracticeTest> {
   bool optionColor = false;
   Map<dynamic,dynamic> isTrue = {};
   bool checkColor = false;
-  var setPQID = 0;
-  var currentQid = 0;
+  int? setPQID = 0;
+  int? currentQid = 0;
   @override
   void initState() {
-
+    setState((){
+     setPQID = Provider.of<GetQuestionProvider>(context, listen: false).setPQID;
+    currentQid = Provider.of<GetQuestionProvider>(context, listen: false).currentQid;
+   });
     isTrue = {};
     Future.microtask(() async => {
       await Provider.of<GetQuestionProvider>(context, listen: false)
           .getQuestionApiWithIndex("last",1),
-      setPQID = Provider.of<GetQuestionProvider>(context, listen: false).queLength - 1,
-      currentQid = Provider.of<GetQuestionProvider>(context, listen: false).queLength - 1,
+      Provider.of<GetQuestionProvider>(context, listen: false).setPQID = Provider.of<GetQuestionProvider>(context, listen: false).queLength - 1,
+       Provider.of<GetQuestionProvider>(context, listen: false).currentQid = Provider.of<GetQuestionProvider>(context, listen: false).queLength - 1,
 
       //provider to call API and update data....
     });
@@ -57,7 +61,9 @@ class _PracticeTestState extends State<PracticeTest> {
   }
   @override
   Widget build(BuildContext context) {
+
     final provMdl = Provider.of<GetQuestionProvider>(context);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -75,7 +81,7 @@ class _PracticeTestState extends State<PracticeTest> {
                   if(provMdl.getQuestionModel != null && provMdl.getQuestionModel!.question != null){
                   options.addAll(provMdl.getQuestionModel!.question!.core!.options!);
                   }
-                  return/* provMdl.sessionProgress!.sessionId != null*/
+                  return provMdl.getQuestionModel != null ?
                        provMdl.getQuestionModel!.question != null
                       ? ListView(
                        // crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,7 +103,8 @@ class _PracticeTestState extends State<PracticeTest> {
                           : Container(),
                         ],
                       )
-                      : Container();
+                      : Container()
+                      : Center(child: CircularProgressIndicator(color: Colors.green),);
                       /*: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -157,11 +164,11 @@ class _PracticeTestState extends State<PracticeTest> {
                     children: [
                       Card(
                         key: ValueKey(data[index]['name']),
-                        color: (currentQid == index)
+                        color: (provMdl.currentQid == index)
                             ? Colors.green : Colors.white,
                         elevation: 5,
                         child: ListTile(
-                          enabled: setPQID >= index ? true : false,
+                          enabled: provMdl.setPQID >= index ? true : false,
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 0.0),
                           onTap: () async {
@@ -179,7 +186,8 @@ class _PracticeTestState extends State<PracticeTest> {
                                 check = false;
                                 optionColor = false;
                               }
-                                currentQid = index;print(currentQid);
+                              provMdl.currentQid = index;
+                              print("current id : $provMdl.currentQid");
                             });
                           },
                           title: Align(
@@ -210,8 +218,7 @@ class _PracticeTestState extends State<PracticeTest> {
 /*====================================================================Solutions=================================================================*/
 
   Widget solutions(GetAnswer getAnswer){
-    final provMdl = Provider.of<GetQuestionProvider>(context);
-    print(provMdl.getQuestionModel!.question!.core!.sId);
+
     List<String> _linkList = [];
     String? _linkText;
     /*String _linkImage;*/
@@ -248,29 +255,7 @@ class _PracticeTestState extends State<PracticeTest> {
           child: Image.network(getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve!.data!.url.toString()),
         )
             :  Container()
-            :  Container(
-          margin: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-              ),
-              borderRadius: const BorderRadius.all(
-                  Radius.circular(10.0))
-          ),
-          padding: EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Solution not available yet.'),
-              ElevatedButton(
-                  onPressed: (){
-                    provMdl.getQuestionRepo.requestSolution(provMdl.getQuestionModel!.question!.core!.sId.toString());
-                      print(provMdl.getQuestionModel!.question!.core!.sId);
-                  },
-                  child: Text('Request Solution'))
-            ],
-          ),
-        ),
+            :  requestSolution()
      /*  // Text(getAnswer.question!.core!.solution!.rawContent!.entityMap!.solve!.data!.url.toString())
            */
         /* :  TeXView(
@@ -283,15 +268,52 @@ class _PracticeTestState extends State<PracticeTest> {
   }
 
 
+  Widget requestSolution(){
+    final provMdl = Provider.of<GetQuestionProvider>(context);
+    print(provMdl.getQuestionModel!.question!.core!.sId);
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+          ),
+          borderRadius: const BorderRadius.all(
+              Radius.circular(10.0))
+      ),
+      padding: EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Solution not available yet.'),
+          ElevatedButton(
+              onPressed: (){
+                provMdl.getQuestionRepo.requestSolution(provMdl.getQuestionModel!.question!.core!.sId.toString());
+                print(provMdl.getQuestionModel!.question!.core!.sId);
+              },
+              child: Text('Request Solution'))
+        ],
+      ),
+    );
+  }
 /*============================================ Questions ===================================================*/
 
 
   Widget question(Core core){
+    networkimagecall(url) {
+      var _url;
+      _url =  networkImageToBase64(url);
+      print(_url);
+      return _url;
+    }
     RawContent rawContent = core.content!.rawContent!;
-    dynamic img;
+     dynamic img;
     String? content;
     if(rawContent.entityMap != null && rawContent.entityMap!.length != 0){
-      img = rawContent.entityMap![0].data!.url;
+      if(rawContent.entityMap![0].data!.url.runtimeType != String){
+      img = networkimagecall(rawContent.entityMap![0].data!.url);}
+      else{
+        img = rawContent.entityMap![0].data!.url;
+      }
       content =  rawContent.entityMap![0].data!.content;
     }
     List<String> _linkList = [];
@@ -320,7 +342,7 @@ class _PracticeTestState extends State<PracticeTest> {
         _linkText != null ?
         TeXView(
           child: TeXViewColumn(children: [
-            _teXViewWidgetQuestion((_linkText.toString())),
+            _teXViewWidgetQuestion(r'\(Let \( A\) be the set of \( 4\) digit number \(  a_{1} a_{2} a_{3} a_{4}\) , where \(  a_{1} < a_{2} < a_{3}<  a_{4}\) , then \( n(A)\)   is equal to\)'),
           ]),
         ) : Container(),
         img != null ?
@@ -358,7 +380,14 @@ class _PracticeTestState extends State<PracticeTest> {
                 }
             );
           },
-          child: img.runtimeType != String ? Image.memory(img) : CachedNetworkImage(
+          child: img.runtimeType != String
+           ? /*FutureBuilder(
+            future: img,
+             builder: (context,snapshot) {
+               return Image.memory(img);
+             }
+           )*/Image.memory(img)
+           : CachedNetworkImage(
               imageUrl:img!,
               placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Constants.green,)),
               imageBuilder: (context, image) => Image(
@@ -687,7 +716,7 @@ class _PracticeTestState extends State<PracticeTest> {
                 ElevatedButton(onPressed: () async {
                   //await provMdl.getQuestion(widget.topic.sId.toString(),widget.topic.name.toString());
                   await Provider.of<GetQuestionProvider>(context, listen: false)
-                      .getQuestionApiWithIndex(currentQid + 1,0);
+                      .getQuestionApiWithIndex(provMdl.currentQid! + 1,0);
                   setState(() {
                     provMdl.getAnswers.message == null;
                     check = false;
@@ -695,8 +724,9 @@ class _PracticeTestState extends State<PracticeTest> {
                     queId = null;
                     isEnable = false;
                     optionColor = false;
-                    setPQID ++;
-                    currentQid = setPQID;
+                    /*setPQID ++;
+                    currentQid = setPQID;*/
+                    print('currentId Next : $provMdl.currentQid');
                   });
                  //Navigator.pop(context);
                 }, child: const Text('Next')):

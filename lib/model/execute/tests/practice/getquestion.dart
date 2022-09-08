@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../../../../constants/common/imageurl.dart';
 import 'getanswer.dart';
 
 class GetQuestion {
@@ -175,7 +176,7 @@ class RawContent {
         blocks!.add(new Blocks.fromJson(v));
       });
     }
-    if (json['entityMap'] != null) {
+    if (json['entityMap'] != null && json['entityMap'].length != 0) {
       entityMap = <EntityMap>[];
       json['entityMap'].values.forEach((v) {
         entityMap!.add(new EntityMap.fromJson(v));
@@ -253,14 +254,24 @@ class EntityMap {
   }
 }
 
+
+
 class Data {
   dynamic url;
   String? content;
+  final isImageUrl = RegExp(r'data:image/(.+?);base64');
   Data({this.url,this.content});
 
   Data.fromJson(Map<String, dynamic> json) {
-    url = json['url'];
-    content = json['content'];
+    /*if(json["url"] != null){
+    if(isImageUrl.hasMatch(json["url"]) == true){
+      url = networkimagecall(json["url"]);
+    }
+    else{
+
+    }}*/
+    url = json['url'] != null ? json['url'] : null;
+    content = json['content'] != null ? json['content'] : null;
   }
 
   Map<String, dynamic> toJson() {
