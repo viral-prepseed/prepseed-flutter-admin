@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:prepseed/views/adventure/widgets/build_queAns.dart';
 import 'package:prepseed/views/adventure/widgets/header.dart';
+import 'package:prepseed/views/execute/test/viewAnalysis.dart';
 
 import '../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -349,6 +350,11 @@ class _attempt_liveTesttState extends State<attempt_liveTestt> with SingleTicker
         ElevatedButton(
           onPressed: (){
             print('Finish');
+            /*var assessmentWrapperId = list[index].sId;
+            sharedPref().setSharedPref('assessmentWrapperId', assessmentWrapperId);*/
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>viewAnalysis())
+            );
           },
           child: Text('Finish Test'),
         )

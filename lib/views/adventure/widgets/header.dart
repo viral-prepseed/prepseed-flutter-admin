@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../../../constants/colorPalate.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../execute/test/viewAnalysis.dart';
+
 class header extends StatefulWidget {
   const header({Key? key}) : super(key: key);
 
@@ -56,6 +58,9 @@ class _headerState extends State<header> with SingleTickerProviderStateMixin  {
         ElevatedButton(
           onPressed: (){
             print('Finish');
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>viewAnalysis())
+            );
           },
           child: Text('Finish Test'),
         )
