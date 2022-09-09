@@ -721,7 +721,7 @@ class _WrapperScreenState extends State<WrapperScreen> {
                                                                 if (kDebugMode) {
                                                                   print(dateTime);
                                                                 }
-                                                                // var time = DateTime.parse("2018-08-16T11:00:00.000Z");
+                                                                  // var time = DateTime.parse("2018-08-16T11:00:00.000Z");
                                                                 var d = DateFormat("yyyy-MM-dd").format(dateTime);
                                                                 if (kDebugMode) {
                                                                   print("Date: $d");
