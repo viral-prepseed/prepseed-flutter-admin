@@ -6,11 +6,29 @@ import 'package:prepseed/repository/playlist_repo/practice_repo.dart';
 import 'package:provider/provider.dart';
 
 class GetQuestionProvider extends ChangeNotifier{
+
   GetQuestion? getQuestionModel;
   GetQuestionRepo getQuestionRepo = GetQuestionRepo();
   SessionProgress? sessionProgress;
   dynamic endQuestion;
   var queLength;
+
+  int setPQID = 0;
+  int? currentQid;
+
+ /* get setPQid => setPQID;
+  get currentQID => currentQid;
+
+  set currentQID(value){
+    getQuestionRepo.currentQid = value;
+    notifyListeners();
+  }
+
+  set setPQid(value){
+    getQuestionRepo.setPQID = value;
+    notifyListeners();
+  }
+*/
   getQuestion(String id,String name) async {
      await getQuestionRepo.getQuestions(id, name);
      if(getQuestionRepo.closeSessionModel != null){
@@ -25,26 +43,39 @@ class GetQuestionProvider extends ChangeNotifier{
   getQuestionApiWithIndex(dynamic index,int isFirst) async {
     await getQuestionRepo.getQuestionApiWithIndex(index,isFirst);
     print(queLength);
+
     if(getQuestionRepo.queLength != null){
       queLength = getQuestionRepo.queLength;
     }
+
+    if(getQuestionRepo.getAnswers != null){
+      getAnswers = getQuestionRepo.getAnswers;
+    }
+    if(getQuestionRepo.setPQID != null){
+    setPQID = getQuestionRepo.setPQID!;}
+    print(setPQID);
+    currentQid = getQuestionRepo.currentQid;
     getQuestionModel = getQuestionRepo.model;
+print(currentQid);
+    //print(getQuestionModel);
     notifyListeners();
   }
 
-
   SessionProgress closeSession = SessionProgress();
+
   closeQuestions() async {
     closeSession = await getQuestionRepo.closeSession();
     print(closeSession);
     notifyListeners();
   }
+
   GetAnswer getAnswers = GetAnswer();
   getAnswer  (String ansId, String queId) async {
     getAnswers = await getQuestionRepo.getAnswer(ansId, queId);
     notifyListeners();
     print(getAnswers);
   }
+
   Map isTrue = {};
   isTrueIds(List options, String userId){
     options.forEach((element) { //element.sId == Provider.of<TestProviderClass>(context, listen: false).optionVal &&
@@ -60,4 +91,5 @@ class GetQuestionProvider extends ChangeNotifier{
     });
     return isTrue;
   }
+
 }

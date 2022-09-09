@@ -15,6 +15,7 @@ import 'package:api_cache_manager/api_cache_manager.dart';
 import 'package:api_cache_manager/models/cache_db_model.dart';
 
 import '../../constants/common/imageurl.dart';
+import '../../helper/provider/practice/getquestion_provider.dart';
 import '../../model/execute/tests/practice/close_session.dart';
 import '../../model/execute/tests/practice/getanswer.dart';
 import '../../model/execute/tests/practice/getquestionwithanswers.dart';
@@ -28,6 +29,8 @@ class GetQuestionRepo {
   var queLength;
   Session? getQuestionWithAnswers;
   MainQuestion? questionsAnswer;
+  int? currentQid;
+  int? setPQID;
 
   getQuestions(String id, String name) async {
     var token = await sharedPref().getSharedPref('token');
@@ -48,7 +51,7 @@ class GetQuestionRepo {
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       sessionId = data['session']["_id"];
-      if(data['question']['core']['content']['rawContent'].runtimeType == String){
+      /* if(data['question']['core']['content']['rawContent'].runtimeType == String){
         print('isString');
         data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
       }
@@ -65,7 +68,7 @@ class GetQuestionRepo {
       else{
         print('Not String');
 
-      }
+      }*/
       model = GetQuestion.fromJson(data);
     }
     else if(response.statusCode == 422) {
@@ -88,7 +91,7 @@ class GetQuestionRepo {
         if (resp.statusCode == 200) {
           try{
             var data = json.decode(resp.body);
-            if(data['question']['core']['content']['rawContent'].runtimeType == String){
+            /*if(data['question']['core']['content']['rawContent'].runtimeType == String){
               print('isString');
               data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
             }
@@ -105,7 +108,7 @@ class GetQuestionRepo {
             else{
               print('Not String');
 
-            }
+            }*/
             if(data['question']['core']['content']['rawContent']['entityMap'].runtimeType == String){
               print('isString');
               data['question']['core']['options'].forEach((element){
@@ -120,7 +123,6 @@ class GetQuestionRepo {
               if(data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"].keys.toString() == "(content)"){
                 data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"] ==
                     data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"];
-
               }}
             print(data);
             final isImageUrl = RegExp(r'data:image/(.+?);base64');
@@ -190,34 +192,34 @@ class GetQuestionRepo {
     );
     if (resp.statusCode == 200) {
       var data = json.decode(resp.body);
-      if(data['question']['core']['solution']['rawContent'].runtimeType == String){
-        print('isString');
-        data['question']['core']['solution']['rawContent'] = json.decode(data['question']['core']['solution']['rawContent']);
-      }
-      else{
-        print('Not String');
+      /* if(data['question']['core']['solution']['rawContent'].runtimeType == String){
+          print('isString');
+          data['question']['core']['solution']['rawContent'] = json.decode(data['question']['core']['solution']['rawContent']);
+        }
+        else{
+          print('Not String');
 
-      }
-      if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
-        print('isString');
-        data['question']['core']['options'].forEach((element){
-          element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
-        });
-        // data['question']['core']['options']['content']['rawContent'] = json.decode(data['question']['core']['options']['content']['rawContent']);
-      }
-      else{
-        print('Not String');
+        }
+        if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
+          print('isString');
+          data['question']['core']['options'].forEach((element){
+            element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
+          });
+          // data['question']['core']['options']['content']['rawContent'] = json.decode(data['question']['core']['options']['content']['rawContent']);
+        }
+        else{
+          print('Not String');
 
-      }
+        }*/
       print(data);
 
-      if(data['question']['core']['solution']['rawContent']["entityMap"] != null && data['question']['core']['solution']['rawContent']["entityMap"].length != 0){
-        /*if(){
+      /*if(data['question']['core']['solution']['rawContent']["entityMap"] != null && data['question']['core']['solution']['rawContent']["entityMap"].length != 0){
+          *//*if(){
 
-          }*/
-        DataUrl ans = DataUrl.fromJson(data['question']['core']['solution']['rawContent']["entityMap"]["0"]["data"]);
-        print(ans);
-      }
+          }*//*
+          DataUrl ans = DataUrl.fromJson(data['question']['core']['solution']['rawContent']["entityMap"]["0"]["data"]);
+          print(ans);
+        }*/
 
       getAnswers = GetAnswer.fromJson(data);
       // model.question.core.content.rawContent.runtimeType == String;
@@ -227,6 +229,8 @@ class GetQuestionRepo {
   }
 
   getQuestionApiWithIndex(dynamic index,int isFirst) async {
+
+    // final getQuestionProvider = Provider.of<GetQuestionProvider>(context);
     var token = await sharedPref().getSharedPref('token');
     var url = Uri.parse("https://napi.prepseed.com/session/getQuestionAtPosition?position=$index&id=$sessionId&si=$isFirst");
     var response = await http.get(url, headers: {
@@ -237,25 +241,38 @@ class GetQuestionRepo {
       var data = json.decode(response.body);
       print(data);
 
-     /* print(questionsAnswer);
+      if(index.runtimeType != String){
+        currentQid = index ;
+      }
+      print(currentQid);
+      /* print(questionsAnswer);
       print(getQuestionWithAnswers);
       print(queLength);*/
-      if(data['question']['core']['content']['rawContent'].runtimeType == String){
+      /*  if(data['question']['core']['content']['rawContent'].runtimeType == String){
         print('isString');
         data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
       }
       else{
         print('Not String');
-
+      }*/
+      if(data['question']['core']['solution'] != null){
+        /* if(data['question']['core']['solution']['rawContent'].runtimeType == String){
+          print('isString');
+          data['question']['core']['solution']['rawContent'] = json.decode(data['question']['core']['solution']['rawContent']);
+        }
+        else{
+          print('Not String');
+        }*/
+        getAnswers = GetAnswer.fromJson(data);
       }
-      if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
+      /*if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
         print('isString');
         data['question']['core']['options'].forEach((element){
           element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
         });
-      }
+      }*/
       print(data);
-      final isImageUrl = RegExp(r'data:image/(.+?);base64');
+      /*  final isImageUrl = RegExp(r'data:image/(.+?);base64');
       if(data['question']['core']['content']['rawContent']['entityMap'] != null && data['question']['core']['content']['rawContent']['entityMap'].length != 0) {
         if (data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]
             .keys.toString() == "(content)") {
@@ -272,7 +289,7 @@ class GetQuestionRepo {
       }
       else{
         print('Not String');
-      }
+      }*/
       if(isFirst == 1){
         queLength = data['session']['questions'].length;
         getQuestionWithAnswers = Session.fromJson(data['session']);
@@ -291,7 +308,6 @@ class GetQuestionRepo {
         // closeSession();
       }
       else{
-
         closeSessionModel = SessionProgress.fromJson(data);
         var url = Uri.parse("https://napi.prepseed.com/session/newQuestion?id="+"$sessionId");
         //sharedPref().setSharedPref('currentSessionId', closeSessionModel!.sessionId);
@@ -302,15 +318,17 @@ class GetQuestionRepo {
         if (resp.statusCode == 200) {
           try{
             var data = json.decode(resp.body);
-            if(data['question']['core']['content']['rawContent'].runtimeType == String){
+            setPQID == index + 1;
+            currentQid = setPQID ;
+            /*if(data['question']['core']['content']['rawContent'].runtimeType == String){
               print('isString');
               data['question']['core']['content']['rawContent'] = json.decode(data['question']['core']['content']['rawContent']);
             }
             else{
               print('Not String');
 
-            }
-            if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
+            }*/
+            /* if(data['question']['core']['options'][0]['content']['rawContent'].runtimeType == String){
               print('isString');
               data['question']['core']['options'].forEach((element){
                 element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
@@ -319,8 +337,8 @@ class GetQuestionRepo {
             else{
               print('Not String');
 
-            }
-            if(data['question']['core']['content']['rawContent']['entityMap'].runtimeType == String){
+            }*/
+            /*  if(data['question']['core']['content']['rawContent']['entityMap'].runtimeType == String){
               print('isString');
               data['question']['core']['options'].forEach((element){
                 element['content']['rawContent'] =  json.decode( element['content']['rawContent']);
@@ -329,15 +347,16 @@ class GetQuestionRepo {
             else{
               print('Not String');
 
-            }
-            if(data['question']["core"]["options"][0]['content']['rawContent']['enityMap'] != null && data['question']["core"]["options"][0]['content']['rawContent']['enityMap'].length != 0){
+            }*/
+            /* if(data['question']["core"]["options"][0]['content']['rawContent']['enityMap'] != null && data['question']["core"]["options"][0]['content']['rawContent']['enityMap'].length != 0){
               if(data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"].keys.toString() == "(content)"){
                 data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"] ==
                     data['question']["core"]["options"][0]['content']['rawContent']['entityMap']["0"]["data"];
 
               }}
+          */
             print(data);
-            final isImageUrl = RegExp(r'data:image/(.+?);base64');
+            /*   final isImageUrl = RegExp(r'data:image/(.+?);base64');
             if(data['question']['core']['content']['rawContent']['entityMap'] != null && data['question']['core']['content']['rawContent']['entityMap'].length != 0) {
               if (data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]
                   .keys.toString() == "(content)") {
@@ -352,6 +371,7 @@ class GetQuestionRepo {
                   data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"] = networkImageToBase64(data['question']['core']['content']['rawContent']['entityMap']["0"]["data"]["url"]);
                 }}
             }
+          */
             model = GetQuestion.fromJson(data);
             print(model);
           }
@@ -369,6 +389,19 @@ class GetQuestionRepo {
     else{
       throw Exception('Failed to Get Questions');
     }
+  }
 
+  requestSolution(String id) async{
+    var token = await sharedPref().getSharedPref('token');
+    var url = Uri.parse("https://napi.prepseed.com/discussion/requestSolution");
+    var response = await http.post(url,headers: {
+      'Content-type' : 'application/json',
+      'authorization': 'Bearer $token',
+    },
+      body: jsonEncode({
+        "questionId" : id,
+      }),
+    );
+    print(response);
   }
 }
